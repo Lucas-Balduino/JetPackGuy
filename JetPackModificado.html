@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Jogo - WebGL com Cores</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; position: relative; font-family: 'Pixelify Sans', sans-serif; }
+    canvas { background: #eee; display: block; margin: auto; }
+    #pontuation { position: absolute; top: 10px; left: 10px; color: #333; background: rgba(255,255,255,0.8); padding: 5px 8px; border-radius: 4px; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <div id="pontuation">0000 m</div>
+  <canvas id="canvas" width="500" height="500"></canvas>
+<script>
+(async function() {
+  const pontuation = document.getElementById('pontuation');
+  const canvas = document.getElementById('canvas');
+  const gl = canvas.getContext('webgl');
+
+  // Shaders
+  const vsSource = `
+    attribute vec2 coordinates;
+    attribute vec3 aColor;
+    uniform vec2 translation;
+    varying vec3 vColor;
+    void main(void) {
+      gl_Position = vec4(coordinates + translation, 0.0, 1.0);
+      vColor = aColor;
+      gl_PointSize = 2.0;
+    }
+  `;
+  const fsSource = `
+    precision mediump float;
+    varying vec3 vColor;
+    void main(void) {
+      gl_FragColor = vec4(vColor, 1.0);
+    }
+  `;
+  function createShader(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+    return s;
+  }
+  const program = gl.createProgram();
+  gl.attachShader(program, createShader(gl.VERTEX_SHADER, vsSource));
+  gl.attachShader(program, createShader(gl.FRAGMENT_SHADER, fsSource));
+  gl.linkProgram(program);
+  gl.useProgram(program);
+
+  const coordLoc = gl.getAttribLocation(program, 'coordinates');
+  const colorLoc = gl.getAttribLocation(program, 'aColor');
+  const transLoc = gl.getUniformLocation(program, 'translation');
+
+  function initBuffer(data) {
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+    return buf;
+  }
+
+  async function getJsonData(url, w, h) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Erro ao carregar ${url}: ${res.status}`);
+    const pixels = await res.json();
+    const pos = [], col = [];
+    pixels.forEach(p => {
+      const x = (p.x / w) * 2 - 1;
+      const y = -(p.y / h) * 2 + 1;
+      pos.push(x, y);
+      const m = /rgba\((\d+),(\d+),(\d+),/.exec(p.color.replace(/\s*/g, ''));
+      const r = m ? +m[1] : 0;
+      const g = m ? +m[2] : 0;
+      const b = m ? +m[3] : 0;
+      col.push(r/255, g/255, b/255);
+    });
+    return { pos: new Float32Array(pos), col: new Float32Array(col) };
+  }
+
+  // Inicializa buffers
+  const { pos, col } = await getJsonData('pixels.json', canvas.width, canvas.height);
+  const posBuf = initBuffer(pos);
+  const colBuf = initBuffer(col);
+  const vCount = pos.length / 2;
+
+  const floorBuf = initBuffer(new Float32Array([-1, -1, 1, -1]));
+  const ceilBuf  = initBuffer(new Float32Array([-1, 0.5, 1, 0.5]));
+  const vertObsBuf = initBuffer(new Float32Array([-0.05, -0.05, 0.05, -0.05, 0.05, 0.35, -0.05, 0.35, -0.05, -0.05]));
+  const horzObsBuf = initBuffer(new Float32Array([-0.25, -0.05, 0.25, -0.05, 0.25, 0.05, -0.25, 0.05, -0.25, -0.05]));
+  const obsCount = 5;
+
+  let y = -0.8, vel = 0, grav = -0.001;
+  let x1 = 1, x2 = 1, y1 = 0, y2 = 0, y3 = 0;
+  let baseVel = 0.03;
+  let meters = 0;
+
+  // Atualiza pontuação e velocidade
+  setInterval(() => {
+    meters += 1;
+    baseVel += 0.0005;
+    pontuation.textContent = meters.toString().padStart(4, '0') + ' m';
+  }, 100);
+
+  // Controle de salto
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space' || e.code === 'ArrowUp') vel = 0.03;
+  });
+
+  function drawColor(mode, tx, ty) {
+    gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+    gl.vertexAttribPointer(coordLoc, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(coordLoc);
+    gl.bindBuffer(gl.ARRAY_BUFFER, colBuf);
+    gl.vertexAttribPointer(colorLoc, 3, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(colorLoc);
+    gl.uniform2fv(transLoc, [tx, ty]);
+    gl.drawArrays(mode, 0, vCount);
+  }
+  function drawSimple(buf, mode, tx, ty, count) {
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.vertexAttribPointer(coordLoc, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(coordLoc);
+    gl.uniform2fv(transLoc, [tx, ty]);
+    gl.drawArrays(mode, 0, count);
+  }
+  function rand(min, max) { return Math.random() * (max - min) + min; }
+
+  function animate() {
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    // física do salto
+    y += vel; vel += grav;
+    if (y < -0.8) { y = -0.8; vel = 0; }
+    if (y > 0.5) { y = 0.5; vel = 0; }
+    // obstáculos
+    x1 -= baseVel; if (x1 <= -1) { x1 = 1; y1 = rand(-0.8, 0.4); }
+    x2 -= baseVel; if (x2 <= -1.4) { x2 = 1; y2 = rand(-0.8, 0.4); y3 = rand(-0.8, 0.4); }
+    // desenha
+    drawSimple(floorBuf, gl.LINES, 0, 0, 2);
+    drawSimple(ceilBuf, gl.LINES, 0, 0, 2);
+    drawColor(gl.POINTS, 0, y - 0.93);
+    drawSimple(vertObsBuf, gl.LINE_STRIP, x1, y1, obsCount);
+    drawSimple(vertObsBuf, gl.LINE_STRIP, x2 + 0.5, y2, obsCount);
+    drawSimple(horzObsBuf, gl.LINE_STRIP, x2 + 0.5, y3, obsCount);
+    requestAnimationFrame(animate);
+  }
+
+  gl.viewport(0, 0, canvas.width, canvas.height);
+  animate();
+})();
+</script>
+</body>
+</html>

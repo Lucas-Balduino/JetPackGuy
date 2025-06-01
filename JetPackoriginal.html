@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Jogo - WebGL</title>
+  <style>
+    body { margin: 0; }
+    canvas { background: #eee; display: block; margin: auto; }
+  </style>
+</head>
+<body>
+<canvas id="canvas" width="500" height="500"></canvas>
+
+<script>
+const canvas = document.getElementById("canvas");
+const gl = canvas.getContext("webgl");
+
+// Shader de vértice com translação
+const vertexShaderSource = `
+  attribute vec2 coordinates;
+  uniform vec2 translation;
+  void main(void) {
+    gl_Position = vec4(coordinates + translation, 0.0, 1.0);
+  }
+`;
+
+// Shader de fragmento (preto)
+const fragmentShaderSource = `
+  void main(void) {
+    gl_FragColor = vec4(0.1, 0.1, 0.1, 1.0);
+  }
+`;
+
+// Compilação dos shaders
+function createShader(type, source) {
+  const shader = gl.createShader(type);
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  return shader;
+}
+
+function inicializeBuffer(objectBuffer, objectVertices) {
+    gl.bindBuffer(gl.ARRAY_BUFFER, objectBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, objectVertices, gl.STATIC_DRAW);
+}
+
+function objectInicialization(objectBuffer, translationXLocation, translationYLocation, objectVerticesNumber){
+    gl.bindBuffer(gl.ARRAY_BUFFER, objectBuffer);
+    gl.vertexAttribPointer(coord, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(coord);  
+    gl.uniform2fv(translationLocation, [translationXLocation, translationYLocation]);
+    gl.drawArrays(gl.LINE_STRIP, 0, objectVerticesNumber);
+    return translationLocation;
+}
+
+const vertexShader = createShader(gl.VERTEX_SHADER, vertexShaderSource);
+const fragmentShader = createShader(gl.FRAGMENT_SHADER, fragmentShaderSource);
+
+// Criar programa
+const shaderProgram = gl.createProgram();
+gl.attachShader(shaderProgram, vertexShader);
+gl.attachShader(shaderProgram, fragmentShader);
+gl.linkProgram(shaderProgram);
+gl.useProgram(shaderProgram);
+
+// Coordenadas do personagem (centro na origem)
+const characterVertices = new Float32Array([
+  0, -0.04,
+   0.04, 0,
+   0,  0.04,
+  -0.04,  0,
+  0, -0.04,
+  0,-0.06,
+  -0.04, -0.1,
+  0,-0.06,
+  0.04, -0.1,
+  0,-0.06,
+  0,-0.12,
+  -0.03, -0.2 ,
+  0,-0.12,
+  0.03, -0.2,
+]);
+
+const characterBuffer = gl.createBuffer();
+inicializeBuffer(characterBuffer,characterVertices);
+
+// Coordenadas do chao (centro na origem)
+const floorVertices = new Float32Array([
+    -1 , -1,
+    1 , -1,
+])
+
+const floorBuffer = gl.createBuffer();
+inicializeBuffer(floorBuffer,floorVertices);
+
+// Coordenadas do teto (centro na origem)
+const ceilingVertices = new Float32Array([
+    -1 , 0.5,
+    1 , 0.5
+])
+
+const ceilingBuffer = gl.createBuffer();
+inicializeBuffer(ceilingBuffer,ceilingVertices);
+
+//Coordenadas do primeiro obstaculo
+const obstacleVertices = new Float32Array([
+    -0.05, -0.05,
+    0.05, -0.05,
+    0.05,  0.05,
+    -0.05,  0.05,
+    -0.05, -0.05
+])
+
+const obstacleBuffer = gl.createBuffer();
+inicializeBuffer(obstacleBuffer, obstacleVertices);
+
+const coord = gl.getAttribLocation(shaderProgram, "coordinates");
+const translationLocation = gl.getUniformLocation(shaderProgram, "translation");
+
+let x1 = 1;
+let x2 = 1;
+let y = -0.8;
+let velocity = 0;
+let gravity = -0.001;
+let obstacleVelocity = 0.03;
+let obstacleVelocity2 = 0.02;
+let jumping = false;
+
+// Detecção da tecla espaço
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space" || e.code === "Right") {
+    velocity = 0.03; // força do salto
+    jumping = true;
+  }
+});
+
+// Função de animação
+function animate() {
+  gl.clearColor(1.0, 1.0, 1.0, 1.0);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  y += velocity;
+  velocity += gravity;
+
+  if (y <= -0.8) { // chão
+      y = -0.8;
+      velocity = 0;
+      jumping = false;
+    } 
+  
+  if (y > 0.45){
+    jumping = false;
+    y = 0.45;
+  }
+
+  // Atualiza posição com gravidade
+//   if (jumping) {
+//   }
+
+  x1-= obstacleVelocity;
+  if(x1 <= -1){
+    x1 = 1  
+  }
+
+  x2 -= obstacleVelocity2;
+  if(x2 <= -1.4 ){
+    x2 = 1  
+  }
+
+  // function obstacleCollision (){
+  //   if (){
+
+  //   }
+  // }
+
+  objectInicialization(floorBuffer,0,0,2);
+  objectInicialization(ceilingBuffer,0,0,2);
+  objectInicialization(characterBuffer,0,y,14);
+  objectInicialization(obstacleBuffer,x1,-0.94,5);
+  objectInicialization(obstacleBuffer,(x2 + 0.5),-0.45,5); 
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+</body>
+</html>
