@@ -3,7 +3,7 @@ import json
 import os
 
 # Caminho da sua imagem
-img_path = r"Aula29.04\JetPack\PixelArtJetPackGuy.png"
+img_path = r"PixelArtJetPackGuy.png"
 img = Image.open(img_path).convert("RGBA")
 pixels = img.load()
 width, height = img.size
