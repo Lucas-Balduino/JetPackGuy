@@ -86,10 +86,20 @@
     }
   
     // Inicializa buffers dos objetos
-    const jsonData = await getJsonData('pixels.json', canvas.width, canvas.height);
-    const posBuffer   = initBuffer(jsonData.positionArray);
-    const colorBuffer = initBuffer(jsonData.colorArray);
-    const vertexCount = jsonData.positionArray.length / 2;
+    const JetPacKjsonData = await getJsonData('JetPackGuyPixels.json', canvas.width, canvas.height);
+    const posBuffer   = initBuffer(JetPacKjsonData.positionArray);
+    const colorBuffer = initBuffer(JetPacKjsonData.colorArray);
+    const vertexCount = JetPacKjsonData.positionArray.length / 2;
+    
+    const VerticalObstaclejsonData = await getJsonData('VerticalObstaclePixels.json', canvas.width, canvas.height);
+    const posVerticalBuffer   = initBuffer(VerticalObstaclejsonData.positionArray);
+    const colorVerticalBuffer = initBuffer(VerticalObstaclejsonData.colorArray);
+    const vertexVerticalCount = VerticalObstaclejsonData.positionArray.length / 2;
+    
+    const HorizontalObstaclejsonData = await getJsonData('HorizontalObstaclePixels.json', canvas.width, canvas.height);
+    const posHorizontalBuffer   = initBuffer(HorizontalObstaclejsonData.positionArray);
+    const colorHorizontalBuffer = initBuffer(HorizontalObstaclejsonData.colorArray);
+    const vertexHorizontalCount = HorizontalObstaclejsonData.positionArray.length / 2;
   
     const floorBuffer   = initBuffer(new Float32Array([-1, -1, 1, -1]));
     const pointBuffer = initBuffer(new Float32Array([-1, 0, 1, 0]));
@@ -117,7 +127,7 @@
   
     // Estado do jogo
     let y = -0.8, velocity = 0, gravity = -0.001;
-    let x1 = 1, x2 = 1;
+    let x1 = 1, x2 = 1, x3 = 1;
     let obstacleVelocity = 0.01;
     let y1,y2,y3 = 0;
     let jumping = false;
@@ -143,7 +153,7 @@
     });
   
     //Desenho de Objetos Pixelados
-    function draw(buffer, count, mode, translation) {
+    function draw(buffer,colorBuffer, count, mode, translation) {
       // Posiciona vértices
       gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
       gl.vertexAttribPointer(coordLoc, 2, gl.FLOAT, false, 0, 0);
@@ -197,6 +207,7 @@
   
       //Obstaculos Verticais
       x2 -= obstacleVelocity; 
+      x3 -= obstacleVelocity + 0.5;
       if (x2 <= -1.5){
         x2 = 1.05;
         y2 = getRandomFloat(-0.8, 0.3);
@@ -205,20 +216,36 @@
         while (Math.abs(y2 - y3) <= 0.8){ 
           y2 = getRandomFloat(-0.8, 0.3);
           y3 = getRandomFloat(-0.8, 0.3);
+
+          //--- Obstaculos Verticais != Obs Horizontais ---
+        //   if(Math.abs(y1 - y2) < 0.25){
+        //     y2 = getRandomFloat(-0.8, 0.3);
+        //   }
+
+        //   if(Math.abs(y1 - y3) < 0.25){
+        //     y2 = getRandomFloat(-0.8, 0.3);
+        //   }
         }
       }
+
+      //------------------------------------------------
+
+      
   
       // desenha chão e teto
       drawSimple(floorBuffer, 2, gl.LINES, [0,0]);
       drawSimple(pointBuffer, 2, gl.LINES, [0,0]);
       drawSimple(ceilingBuffer, 2, gl.LINES, [0,0]);
       // desenha personagem com cores
-      draw(posBuffer, vertexCount, gl.POINTS, [0, (y-0.91)]);
+      draw(posHorizontalBuffer, colorHorizontalBuffer,vertexHorizontalCount,gl.POINTS,[(x1 + 0.8), (y1-0.8)]);
+      draw(posVerticalBuffer, colorVerticalBuffer,vertexVerticalCount,gl.POINTS,[(x2 + 0.8), (y2-0.8)]);
+      draw(posVerticalBuffer, colorVerticalBuffer,vertexVerticalCount,gl.POINTS,[(x2 + 1.3), (y3-0.8)]);
+      draw(posBuffer,colorBuffer, vertexCount, gl.POINTS, [0, (y-0.91)]);
       // desenha obstáculos
       drawSimple(horizontalObstacleBuffer, obsCount, gl.LINE_STRIP, [x1, y1]);
       drawSimple(verticalObstacleBuffer, obsCount, gl.LINE_STRIP, [x2, y2]);
       drawSimple(verticalObstacleBuffer, obsCount, gl.LINE_STRIP, [x2+0.5, y3]);
-  
+      
       requestAnimationFrame(animate);
   
       //Conferir colisao do jogador com obstaculos
