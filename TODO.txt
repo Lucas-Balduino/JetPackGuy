@@ -1,8 +1,8 @@
 TODO List
- - Colisao
+ - Colisao 
  - Obstaculos no Mesmo Lugar 1/2 V
  - Obstaculos Fora do Cenário V
- - Pixel Art Ambiente
- - Pixel Art Obstaculos
+ - Pixel Art Ambiente V
+ - Pixel Art Obstaculos V
  - Menu
  - Tela de Morte

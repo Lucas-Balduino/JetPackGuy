@@ -100,6 +100,11 @@
     const posHorizontalBuffer   = initBuffer(HorizontalObstaclejsonData.positionArray);
     const colorHorizontalBuffer = initBuffer(HorizontalObstaclejsonData.colorArray);
     const vertexHorizontalCount = HorizontalObstaclejsonData.positionArray.length / 2;
+    
+    const BackgroundjsonData = await getJsonData('BackgroundPixels.json', canvas.width, canvas.height);
+    const posBackgroundBuffer   = initBuffer(BackgroundjsonData.positionArray);
+    const colorBackgroundBuffer = initBuffer(BackgroundjsonData.colorArray);
+    const vertexBackgroundCount = BackgroundjsonData.positionArray.length / 2;
   
     const floorBuffer   = initBuffer(new Float32Array([-1, -1, 1, -1]));
     const pointBuffer = initBuffer(new Float32Array([-1, 0, 1, 0]));
@@ -124,10 +129,18 @@
     const horizontalObstacleBuffer = initBuffer(horizontalObstacleVerts);
     
     const obsCount = horizontalObstacleVerts.length / 2;
+
+    /* 
+    const playerVerts = new Float32Array([
+    -0.1
+
+    ])
+    */
   
     // Estado do jogo
     let y = -0.8, velocity = 0, gravity = -0.001;
     let x1 = 1, x2 = 1, x3 = 1;
+    let backgroundX = 0;
     let obstacleVelocity = 0.01;
     let y1,y2,y3 = 0;
     let jumping = false;
@@ -147,7 +160,12 @@
     //EventListener Pulo, SpaceBar/Seta
     document.addEventListener('keydown', e => {
       if ((e.code === 'Space' || e.code === 'ArrowUp')) {
-        velocity = 0.03;
+        if (y > -0.7) {
+          velocity = 0.023;
+        } else{
+          velocity = 0.03;
+
+        }
         jumping = true;
       }
     });
@@ -182,13 +200,18 @@
       gl.clearColor(1,1,1,1);
       gl.clear(gl.COLOR_BUFFER_BIT);
       
+      backgroundX -= obstacleVelocity;
+      if (backgroundX <= -1.5){
+        backgroundX = 0;
+      }
+
       // Física do salto
       y += velocity;
       velocity += gravity;
   
       //Chão
-      if (y <= -0.8) { 
-          y = -0.8; 
+      if (y <= -0.7) { 
+          y = -0.7; 
           velocity = 0; 
           jumping = false; 
       }
@@ -208,6 +231,32 @@
       //Obstaculos Verticais
       x2 -= obstacleVelocity; 
       x3 -= obstacleVelocity + 0.5;
+
+      if (x2 <= -1.5){
+        x2 = 1.05;
+        
+        // Gera posições evitando colisões entre obstáculos
+        let attempts = 0;
+        const maxAttempts = 50;
+        
+        do {
+          y2 = getRandomFloat(-0.7, 0.3);
+          y3 = getRandomFloat(-0.7, 0.3);
+          attempts++;
+          
+          // Se não conseguir encontrar posição válida, relaxa as condições
+          if (attempts > maxAttempts) {
+            console.warn("Muitas tentativas - usando posições com menor restrição");
+            break;
+          }
+        } while (
+          Math.abs(y2 - y3) <= 0.8 ||           // Verticais muito próximos entre si
+          Math.abs(y1 - y2) < 0.25 ||           // Vertical 1 muito próximo do horizontal
+          Math.abs(y1 - y3) < 0.25              // Vertical 2 muito próximo do horizontal
+        );
+      }
+
+      /*
       if (x2 <= -1.5){
         x2 = 1.05;
         y2 = getRandomFloat(-0.8, 0.3);
@@ -216,6 +265,7 @@
         while (Math.abs(y2 - y3) <= 0.8){ 
           y2 = getRandomFloat(-0.8, 0.3);
           y3 = getRandomFloat(-0.8, 0.3);
+          */
 
           //--- Obstaculos Verticais != Obs Horizontais ---
         //   if(Math.abs(y1 - y2) < 0.25){
@@ -225,10 +275,7 @@
         //   if(Math.abs(y1 - y3) < 0.25){
         //     y2 = getRandomFloat(-0.8, 0.3);
         //   }
-        }
-      }
-
-      //------------------------------------------------
+          //------------------------------------------------
 
       
   
@@ -237,6 +284,9 @@
       drawSimple(pointBuffer, 2, gl.LINES, [0,0]);
       drawSimple(ceilingBuffer, 2, gl.LINES, [0,0]);
       // desenha personagem com cores
+      draw(posBackgroundBuffer, colorBackgroundBuffer,vertexBackgroundCount,gl.POINTS,[(backgroundX + 0), (-0.5)]);
+      draw(posBackgroundBuffer, colorBackgroundBuffer,vertexBackgroundCount,gl.POINTS,[(backgroundX + 1.5), (-0.5)]);
+      draw(posBackgroundBuffer, colorBackgroundBuffer,vertexBackgroundCount,gl.POINTS,[(backgroundX + 3), (-0.5)]);
       draw(posHorizontalBuffer, colorHorizontalBuffer,vertexHorizontalCount,gl.POINTS,[(x1 + 0.8), (y1-0.8)]);
       draw(posVerticalBuffer, colorVerticalBuffer,vertexVerticalCount,gl.POINTS,[(x2 + 0.8), (y2-0.8)]);
       draw(posVerticalBuffer, colorVerticalBuffer,vertexVerticalCount,gl.POINTS,[(x2 + 1.3), (y3-0.8)]);
@@ -245,10 +295,13 @@
       drawSimple(horizontalObstacleBuffer, obsCount, gl.LINE_STRIP, [x1, y1]);
       drawSimple(verticalObstacleBuffer, obsCount, gl.LINE_STRIP, [x2, y2]);
       drawSimple(verticalObstacleBuffer, obsCount, gl.LINE_STRIP, [x2+0.5, y3]);
+      //drawSimple(posBuffer, vertexCount, gl.LINE_STRIP, [0, (y-0.91)]);
       
       requestAnimationFrame(animate);
   
       //Conferir colisao do jogador com obstaculos
+      
+
     }
   
     gl.viewport(0, 0, canvas.width, canvas.height);

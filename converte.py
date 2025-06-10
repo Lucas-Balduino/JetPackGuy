@@ -3,7 +3,7 @@ import json
 import os
 
 # Caminho da sua imagem
-img_path = r"PixelArtObstaculoHorizontal.png"
+img_path = r"PixelArtBackground.png"
 img = Image.open(img_path).convert("RGBA")
 pixels = img.load()
 width, height = img.size
