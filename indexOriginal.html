@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>JetPack Joyride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Global reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Pixelify Sans', sans-serif;
+      background: url('MolduraPixelArt.png') no-repeat center center;
+      background-size: 700px;
+      height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .game-frame {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: url('MolduraPixelArt.png') no-repeat center center;
+      background-size: contain;
+      padding: 50px;
+    }
+    #visor {
+      background: url('PixelArtVisor.png') no-repeat center center;
+      background-size: cover;
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 50px;
+      color: #fff;
+      font-size: 24px;
+      line-height: 50px;
+      text-align: center;
+      border-radius: 8px;
+      z-index: 10;
+    }
+    canvas {
+      display: block;
+      width: 500px;
+      height: 500px;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-frame">
+    <div id="visor">0000 m</div>
+    <canvas id="canvas" width="500" height="500"></canvas>
+  </div>
+  <script src="JetPackJogo.js"></script>
+</body>
+</html>

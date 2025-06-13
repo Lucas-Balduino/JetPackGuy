@@ -10,16 +10,21 @@
         return;
     }
 
-    // Vertex shader
+    // Vertex shader - CORRIGIDO: invertemos o Y para corrigir orientação
     const vsSource = `
         attribute vec2 coordinates;
         attribute vec3 aColor;
         uniform vec2 translation;
+        uniform float isBackground;
         varying vec3 vColor;
         void main(void) {
-            gl_Position = vec4(coordinates + translation, 0.0, 1.0);
+            vec2 pos = coordinates;
+            if (isBackground < 0.5) {
+                pos = vec2(coordinates.x, -coordinates.y);
+            }
+            gl_Position = vec4(pos + translation, 0.0, 1.0);
             vColor = aColor;
-            gl_PointSize = 2.0;
+            gl_PointSize = 4.0;
         }
     `;
 
@@ -65,6 +70,7 @@
     const coordLoc = gl.getAttribLocation(program, "coordinates");
     const colorLoc = gl.getAttribLocation(program, "aColor");
     const transLoc = gl.getUniformLocation(program, "translation");
+    const isBackgroundLoc = gl.getUniformLocation(program, "isBackground");
 
     function initBuffer(dataArray) {
         const buf = gl.createBuffer();
@@ -73,50 +79,140 @@
         return buf;
     }
 
+    // Definir dimensões dos sprites
+    const spriteWidth = 100;
+    const spriteHeight = 100;
+
     async function getJsonData(url, w, h) {
         try {
             const res = await fetch(url);
             if (!res.ok) throw new Error(`Erro ao carregar ${url}: ${res.status}`);
             const pixels = await res.json();
+            
+            if (!pixels || pixels.length === 0) {
+                console.warn(`Arquivo ${url} está vazio ou não contém pixels válidos`);
+                return {
+                    positionArray: new Float32Array([]),
+                    colorArray: new Float32Array([])
+                };
+            }
+            
             const positions = [];
             const colors = [];
+            
             for (const p of pixels) {
-                const x = (p.x / w) * 2 - 1;
-                const y = -(p.y / h) * 2 + 1;
+                let x, y;
+                if (url === 'BackgroundPixels.json') {
+                    x = (p.x / w) * 2 - 1;
+                    y = -((p.y / h) * 2 - 1);
+                } else {
+                    const scale = 0.3;
+                    x = (p.x / w) * scale - scale / 2;
+                    y = (p.y / h) * scale - scale / 2;
+                }
                 positions.push(x, y);
+                
+                // Parse da cor
                 const match = /rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/.exec(p.color);
                 let r = 0, g = 0, b = 0;
                 if (match) {
                     r = Number(match[1]);
                     g = Number(match[2]);
                     b = Number(match[3]);
+                } else if (p.color.startsWith('#')) {
+                    const hex = p.color.slice(1);
+                    r = parseInt(hex.substr(0, 2), 16);
+                    g = parseInt(hex.substr(2, 2), 16);
+                    b = parseInt(hex.substr(4, 2), 16);
                 }
                 colors.push(r / 255, g / 255, b / 255);
             }
+            
+            console.log(`Carregado ${url}: ${pixels.length} pixels`);
             return {
                 positionArray: new Float32Array(positions),
                 colorArray: new Float32Array(colors)
             };
         } catch (error) {
             console.error("Erro ao carregar JSON:", error);
-            return null;
+            return {
+                positionArray: new Float32Array([]),
+                colorArray: new Float32Array([])
+            };
         }
     }
 
-    // Carrega JSONs com tratamento de erro
-    const jsonFiles = [
-        'JetPackGuyPixels.json',
-        'VerticalObstaclePixels.json',
-        'HorizontalObstaclePixels.json',
-        'BackgroundPixels.json'
-    ];
-    const jsonData = {};
-    for (const file of jsonFiles) {
-        jsonData[file] = await getJsonData(file, canvas.width, canvas.height);
-        if (!jsonData[file]) {
-            console.error(`Falha ao carregar ${file}. Verifique se o arquivo existe e está no caminho correto.`);
-            return;
+    // Função para criar sprites de fallback
+    function createFallbackSprite(width, height, color) {
+        const positions = [];
+        const colors = [];
+        const scale = 0.1;
+        
+        for (let x = 0; x < width; x += 2) {
+            for (let y = 0; y < height; y += 2) {
+                const normX = (x / width) * scale - scale / 2;
+                const normY = (y / height) * scale - scale / 2;
+                positions.push(normX, normY);
+                colors.push(color[0], color[1], color[2]);
+            }
         }
+        
+        return {
+            positionArray: new Float32Array(positions),
+            colorArray: new Float32Array(colors)
+        };
+    }
+
+    // Cria background que cobre toda a tela
+    function createFullBackground() {
+        const positions = [];
+        const colors = [];
+        // Gera pontos de -1 a 1 cobrindo toda a tela
+        for (let x = 0; x <= 540; x += 6) {
+            for (let y = 0; y <= 540; y += 6) {
+                // Normaliza para -1 a 1
+                const nx = (x / 540) * 2 - 1;
+                const ny = -((y / 540) * 2 - 1); // Inverte Y para ficar igual ao JetPackJogo.js
+                positions.push(nx, ny);
+                // Gradiente azul escuro
+                const intensity = 0.1 + Math.random() * 0.1;
+                colors.push(0, intensity, intensity * 2);
+            }
+        }
+        return {
+            positionArray: new Float32Array(positions),
+            colorArray: new Float32Array(colors)
+        };
+    }
+
+    // Carrega JSONs
+    const jsonData = {};
+    
+    jsonData['JetPackGuyPixels.json'] = await getJsonData('JetPackGuyPixels.json', 100, 100);
+    jsonData['VerticalObstaclePixels.json'] = await getJsonData('VerticalObstaclePixels.json', 100, 100);
+    jsonData['HorizontalObstaclePixels.json'] = await getJsonData('HorizontalObstaclePixels.json', 100, 100);
+    jsonData['BackgroundPixels.json'] = await getJsonData('BackgroundPixels.json', 375, 375);
+
+    // Usa sprites de fallback se necessário
+    if (jsonData['JetPackGuyPixels.json'].positionArray.length === 0) {
+        console.log("Usando sprite de fallback para o jogador");
+        jsonData['JetPackGuyPixels.json'] = createFallbackSprite(20, 20, [0, 1, 0]);
+    }
+    
+    if (jsonData['VerticalObstaclePixels.json'].positionArray.length === 0) {
+        console.log("Usando sprite de fallback para obstáculo vertical");
+        jsonData['VerticalObstaclePixels.json'] = createFallbackSprite(10, 40, [1, 1, 0]);
+    }
+    
+    if (jsonData['HorizontalObstaclePixels.json'].positionArray.length === 0) {
+        console.log("Usando sprite de fallback para obstáculo horizontal");
+        jsonData['HorizontalObstaclePixels.json'] = createFallbackSprite(40, 10, [1, 1, 0]);
+    }
+
+    // Background que cobre toda a tela
+    if (jsonData['BackgroundPixels.json'].positionArray.length === 0) {
+        console.log("Criando background completo");
+        jsonData['BackgroundPixels.json'] = createFullBackground();
     }
 
     // Inicializa buffers
@@ -136,55 +232,33 @@
     const colorBackgroundBuffer = initBuffer(jsonData['BackgroundPixels.json'].colorArray);
     const vertexBackgroundCount = jsonData['BackgroundPixels.json'].positionArray.length / 2;
 
-    const floorBuffer = initBuffer(new Float32Array([-1, -1, 1, -1]));
-    const pointBuffer = initBuffer(new Float32Array([-1, 0, 1, 0]));
-    const ceilingBuffer = initBuffer(new Float32Array([-1, 0.5, 1, 0.5]));
-
-    const verticalObstacleVerts = new Float32Array([
-        -0.05, -0.2,
-        0.05, -0.2,
-        0.05, 0.2,
-        -0.05, 0.2,
-        -0.05, -0.2
-    ]);
-    const verticalObstacleBuffer = initBuffer(verticalObstacleVerts);
-
-    const horizontalObstacleVerts = new Float32Array([
-        -0.2, -0.05,
-        0.2, -0.05,
-        0.2, 0.05,
-        -0.2, 0.05,
-        -0.2, -0.05
-    ]);
-    const horizontalObstacleBuffer = initBuffer(horizontalObstacleVerts);
-
-    const obsCount = horizontalObstacleVerts.length / 2;
-
     // Estado do jogo
-    let y = -0.8, velocity = 0, gravity = -0.001;
-    let x1 = 1, x2 = 1, x3 = 1;
-    let obstacleVelocity = 0.01;
+    let y = -0.5, velocity = 0, gravity = -0.0015;
+    let x1 = 1.2, x2 = 1.8, x3 = 2.4;
+    let obstacleVelocity = 0.015;
     let y1 = 0, y2 = 0, y3 = 0;
     let jumping = false;
     let points = 0;
     let gameOver = false;
     let gameStarted = false;
+    let backgroundX = 0;
+    let paused = false;
 
     const player = {
-        width: 0.15,
-        height: 0.15,
-        x: 0,
+        width: 0.08,
+        height: 0.08,
+        x: -0.7,
         y: y
     };
 
     const horizontalObstacle = {
-        width: 0.4,
-        height: 0.1
+        width: 0.25,
+        height: 0.06
     };
 
     const verticalObstacle = {
-        width: 0.1,
-        height: 0.4
+        width: 0.06,
+        height: 0.25
     };
 
     let pointsInterval;
@@ -205,12 +279,12 @@
     function resetGame() {
         gameOver = false;
         gameStarted = false;
-        y = -0.8;
+        y = -0.5;
         velocity = 0;
-        x1 = 1;
-        x2 = 1;
-        x3 = 1;
-        obstacleVelocity = 0.01;
+        x1 = 1.2;
+        x2 = 1.8;
+        x3 = 2.4;
+        obstacleVelocity = 0.015;
         y1 = 0;
         y2 = 0;
         y3 = 0;
@@ -233,6 +307,14 @@
 
     function checkAllCollisions() {
         player.y = y;
+        
+        // Colisão com bordas da tela
+        if (y <= -0.85 || y >= 0.85) {
+            gameOver = true;
+            clearInterval(pointsInterval);
+            return;
+        }
+
         const horizontalObstRect = {
             x: x1 - horizontalObstacle.width / 2,
             y: y1 - horizontalObstacle.height / 2,
@@ -248,7 +330,7 @@
         };
 
         const verticalObst2Rect = {
-            x: (x2 + 0.5) - verticalObstacle.width / 2,
+            x: x3 - verticalObstacle.width / 2,
             y: y3 - verticalObstacle.height / 2,
             width: verticalObstacle.width,
             height: verticalObstacle.height
@@ -276,13 +358,34 @@
                 resetGame();
             } else {
                 startGame();
-                velocity = 0.03;
+                velocity = 0.028;
                 jumping = true;
             }
         }
     });
 
-    function draw(buffer, colorBuffer, count, mode, translation) {
+    canvas.addEventListener('click', () => {
+        if (gameOver) {
+            resetGame();
+        } else {
+            startGame();
+            velocity = 0.028;
+            jumping = true;
+        }
+    });
+
+    document.getElementById('pauseBtn').onclick = function() {
+        if (!gameOver) setPaused(!paused);
+    };
+
+    document.addEventListener('keydown', e => {
+        if (e.code === 'KeyP' && !gameOver) {
+            setPaused(!paused);
+        }
+    });
+
+    function draw(buffer, colorBuffer, count, mode, translation, isBackground = false) {
+        if (count === 0) return;
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
         gl.vertexAttribPointer(coordLoc, 2, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(coordLoc);
@@ -292,14 +395,7 @@
         gl.enableVertexAttribArray(colorLoc);
 
         gl.uniform2fv(transLoc, translation);
-        gl.drawArrays(mode, 0, count);
-    }
-
-    function drawSimple(buffer, count, mode, translation) {
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.vertexAttribPointer(coordLoc, 2, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(coordLoc);
-        gl.uniform2fv(transLoc, translation);
+        gl.uniform1f(isBackgroundLoc, isBackground ? 1.0 : 0.0);
         gl.drawArrays(mode, 0, count);
     }
 
@@ -309,12 +405,13 @@
         gameOverDiv.style.top = '50%';
         gameOverDiv.style.left = '50%';
         gameOverDiv.style.transform = 'translate(-50%, -50%)';
-        gameOverDiv.style.color = 'red';
-        gameOverDiv.style.fontSize = '24px';
+        gameOverDiv.style.color = '#ff4444';
+        gameOverDiv.style.fontSize = '28px';
         gameOverDiv.style.fontWeight = 'bold';
         gameOverDiv.style.textAlign = 'center';
         gameOverDiv.style.pointerEvents = 'none';
-        gameOverDiv.innerHTML = 'GAME OVER<br>Pressione ESPAÇO para reiniciar';
+        gameOverDiv.style.zIndex = '100';
+        gameOverDiv.innerHTML = 'GAME OVER<br><span style="font-size: 18px;">Pressione ESPAÇO ou clique para reiniciar</span>';
         gameOverDiv.id = 'gameOverText';
 
         const existingText = document.getElementById('gameOverText');
@@ -325,70 +422,135 @@
         document.body.appendChild(gameOverDiv);
     }
 
+    function setPaused(value) {
+        paused = value;
+        if (paused) {
+            clearInterval(pointsInterval);
+            showPauseOverlay();
+        } else {
+            if (gameStarted && !gameOver) {
+                pointsInterval = setInterval(() => {
+                    if (!gameOver && !paused) {
+                        points += 1;
+                        obstacleVelocity += 0.00003;
+                        pontuation.textContent = points.toString().padStart(4, '0') + ' m';
+                    }
+                }, 100);
+            }
+            hidePauseOverlay();
+        }
+    }
+
+    function showPauseOverlay() {
+        let pauseDiv = document.getElementById('pauseOverlay');
+        if (!pauseDiv) {
+            pauseDiv = document.createElement('div');
+            pauseDiv.id = 'pauseOverlay';
+            pauseDiv.style.position = 'absolute';
+            pauseDiv.style.top = '50%';
+            pauseDiv.style.left = '50%';
+            pauseDiv.style.transform = 'translate(-50%, -50%)';
+            pauseDiv.style.color = '#fff';
+            pauseDiv.style.fontSize = '32px';
+            pauseDiv.style.fontWeight = 'bold';
+            pauseDiv.style.textAlign = 'center';
+            pauseDiv.style.pointerEvents = 'none';
+            pauseDiv.style.zIndex = '101';
+            pauseDiv.style.textShadow = '0 0 10px #000';
+            pauseDiv.innerHTML = 'PAUSADO';
+            document.body.appendChild(pauseDiv);
+        }
+    }
+
+    function hidePauseOverlay() {
+        const pauseDiv = document.getElementById('pauseOverlay');
+        if (pauseDiv) pauseDiv.remove();
+    }
+
     function animate() {
-        gl.clearColor(1, 1, 1, 1);
+        gl.clearColor(0.02, 0.05, 0.15, 1);
         gl.clear(gl.COLOR_BUFFER_BIT);
 
-        if (!gameOver) {
-            const gameOverText = document.getElementById('gameOverText');
-            if (gameOverText) {
-                gameOverText.remove();
+        // Só atualiza movimento se não estiver pausado e não estiver em game over
+        if (!gameOver && !paused) {
+            // Atualize o deslocamento do fundo
+            backgroundX -= obstacleVelocity * 0.5; // ajuste a velocidade do fundo aqui
+            if (backgroundX <= -1.5) {
+                backgroundX = 0;
             }
 
-            if (gameStarted) {
-                y += velocity;
-                velocity += gravity;
-            }
-
-            if (y <= -0.8) {
-                y = -0.8;
-                velocity = 0;
-                jumping = false;
-            }
-            if (y >= 0.5) {
-                y = 0.5;
-                jumping = false;
-            }
-
-            if (gameStarted) {
-                x1 -= obstacleVelocity;
-                if (x1 <= -1.4) {
-                    x1 = 1.4;
-                    y1 = getRandomFloat(-0.8, 0.4);
+            if (!gameOver) {
+                const gameOverText = document.getElementById('gameOverText');
+                if (gameOverText) {
+                    gameOverText.remove();
                 }
 
-                x2 -= obstacleVelocity;
-                x3 -= obstacleVelocity;
-                if (x2 <= -1.5) {
-                    x2 = 1.5;
-                    y2 = getRandomFloat(-0.8, 0.3);
-                    y3 = getRandomFloat(-0.8, 0.3);
+                if (gameStarted) {
+                    y += velocity;
+                    velocity += gravity;
                 }
 
-                checkAllCollisions();
+                // Limites da tela
+                if (y <= -0.8) {
+                    y = -0.8;
+                    velocity = 0;
+                    jumping = false;
+                }
+                if (y >= 0.8) {
+                    y = 0.8;
+                    velocity = Math.min(velocity, 0);
+                }
+
+                if (gameStarted) {
+                    x1 -= obstacleVelocity;
+                    if (x1 <= -1.5) {
+                        x1 = 1.5;
+                        y1 = getRandomFloat(-0.8, 0.8);
+                    }
+
+                    x2 -= obstacleVelocity;
+                    if (x2 <= -1.5) {
+                        x2 = 1.8;
+                        y2 = getRandomFloat(-0.8, 0.8);
+                    }
+
+                    x3 -= obstacleVelocity;
+                    if (x3 <= -1.5) {
+                        x3 = 2.1;
+                        y3 = getRandomFloat(-0.8, 0.8);
+                    }
+
+                    checkAllCollisions();
+                }
+            } else {
+                drawGameOverText();
             }
-        } else {
+        } else if (gameOver) {
             drawGameOverText();
         }
 
-        // Desenha chão e teto
-        drawSimple(floorBuffer, 2, gl.LINES, [0, 0]);
-        drawSimple(ceilingBuffer, 2, gl.LINES, [0, 0]);
-
-        // Desenha fundo
-        draw(posBackgroundBuffer, colorBackgroundBuffer, vertexBackgroundCount, gl.POINTS, [x1, -0.5]);
-
-        // Desenha obstáculos
+        // Sempre desenha a cena (para mostrar overlay de pausa/game over)
+        if (vertexBackgroundCount > 0) {
+            draw(posBackgroundBuffer, colorBackgroundBuffer, vertexBackgroundCount, gl.POINTS, [backgroundX, 0], true);
+            draw(posBackgroundBuffer, colorBackgroundBuffer, vertexBackgroundCount, gl.POINTS, [backgroundX + 1.5, 0], true);
+            draw(posBackgroundBuffer, colorBackgroundBuffer, vertexBackgroundCount, gl.POINTS, [backgroundX + 3.0, 0], true);
+        }
         draw(posHorizontalBuffer, colorHorizontalBuffer, vertexHorizontalCount, gl.POINTS, [x1, y1]);
         draw(posVerticalBuffer, colorVerticalBuffer, vertexVerticalCount, gl.POINTS, [x2, y2]);
         draw(posVerticalBuffer, colorVerticalBuffer, vertexVerticalCount, gl.POINTS, [x3, y3]);
-
-        // Desenha jogador
-        draw(posBuffer, colorBuffer, vertexCount, gl.POINTS, [0, y]);
+        draw(posBuffer, colorBuffer, vertexCount, gl.POINTS, [player.x, y]);
 
         requestAnimationFrame(animate);
     }
 
+    // Log de debug
+    console.log("Inicializando jogo...");
+    console.log("Vértices do jogador:", vertexCount);
+    console.log("Vértices obstáculo vertical:", vertexVerticalCount);
+    console.log("Vértices obstáculo horizontal:", vertexHorizontalCount);
+    console.log("Vértices background:", vertexBackgroundCount);
+
     gl.viewport(0, 0, canvas.width, canvas.height);
     animate();
 })();
+

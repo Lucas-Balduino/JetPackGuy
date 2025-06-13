@@ -1,60 +1,238 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <title>JetPack Joyride</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    /* Global reset */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Pixelify Sans', sans-serif;
-      background: url('MolduraPixelArt.png') no-repeat center center;
-      background-size: 700px;
-      height: 70vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+<meta charset="utf-8" />
+<title>JetPack Joyride</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Global reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Pixelify Sans', sans-serif;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Efeito de estrelas no fundo */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 160px 30px, #fff, transparent);
+    background-repeat: repeat;
+    background-size: 200px 100px;
+    z-index: -1;
+    opacity: 0.3;
+}
+
+.game-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.game-frame {
+    position: relative;
+    width: 600px;
+    height: 600px;
+    background: linear-gradient(45deg, #2a4a5a 0%, #1e3a4a 100%);
+    border: 8px solid #4a6a7a;
+    border-radius: 20px;
+    box-shadow: 
+        0 0 30px rgba(0,150,255,0.3),
+        inset 0 0 20px rgba(0,0,0,0.3),
+        0 10px 30px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.game-frame::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(255,255,255,0.1) 0%, 
+        transparent 25%, 
+        transparent 75%, 
+        rgba(0,0,0,0.1) 100%);
+    pointer-events: none;
+    z-index: 5;
+}
+
+#visor {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    height: 60px;
+    background: linear-gradient(135deg, #001100 0%, #003300 100%);
+    border: 3px solid #00ff00;
+    border-radius: 10px;
+    color: #00ff00;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 54px;
+    text-align: center;
+    z-index: 20;
+    text-shadow: 0 0 10px #00ff00;
+    box-shadow: 
+        0 0 20px rgba(0,255,0,0.5),
+        inset 0 0 10px rgba(0,255,0,0.1);
+}
+
+canvas {
+    display: block;
+    width: 540px;
+    height: 540px;
+    background: rgba(0,0,0,0.2);
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 5px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Game Over overlay */
+#gameOverText {
+    font-family: 'Pixelify Sans', sans-serif !important;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 30px;
+    border-radius: 15px;
+    border: 3px solid #ff0000;
+    text-shadow: 0 0 15px #ff0000;
+    box-shadow: 0 0 30px rgba(255,0,0,0.5);
+}
+
+.instructions {
+    margin-top: 22px;
+    color: #e0f7fa;
+    font-size: 16px;
+    text-align: center;
+    background: rgba(20,32,48,0.75);
+    border-radius: 8px;
+    padding: 8px 24px;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    z-index: 10;
+    display: inline-block;
+}
+.instructions b {
+    color: #00ffe7;
+    font-weight: 700;
+}
+
+/* Estilo do botão de pausa */
+#pauseBtn {
+    position: absolute;
+    top: 18px;
+    right: 32px;
+    z-index: 110;
+    font-size: 15px;
+    padding: 4px 14px 4px 10px;
+    border-radius: 7px;
+    border: 1.5px solid #1e3a4a;
+    background: #183040;
+    color: #e0f7fa;
+    font-family: 'Pixelify Sans', monospace;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: none;
+    cursor: pointer;
+    transition: 
+        background 0.2s, 
+        color 0.2s, 
+        border 0.2s, 
+        transform 0.1s;
+    outline: none;
+    text-shadow: none;
+}
+
+#pauseBtn:hover, #pauseBtn:focus {
+    background: #27475a;
+    color: #fff;
+    border-color: #27475a;
+    transform: scale(1.06);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
     .game-frame {
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      background: url('MolduraPixelArt.png') no-repeat center center;
-      background-size: contain;
-      padding: 50px;
-    }
-    #visor {
-      background: url('PixelArtVisor.png') no-repeat center center;
-      background-size: cover;
-      position: absolute;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 200px;
-      height: 50px;
-      color: #fff;
-      font-size: 24px;
-      line-height: 50px;
-      text-align: center;
-      border-radius: 8px;
-      z-index: 10;
+        width: 90vw;
+        height: 90vw;
+        max-width: 500px;
+        max-height: 500px;
     }
     canvas {
-      display: block;
-      width: 500px;
-      height: 500px;
-      background: #000;
+        width: calc(100% - 40px);
+        height: calc(100% - 100px);
     }
-  </style>
+    #visor {
+        width: 180px;
+        height: 50px;
+        font-size: 16px;
+        line-height: 44px;
+        top: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-frame {
+        width: 95vw;
+        height: 95vw;
+    }
+    #visor {
+        width: 150px;
+        height: 40px;
+        font-size: 14px;
+        line-height: 34px;
+        top: 10px;
+    }
+}
+</style>
 </head>
 <body>
-  <div class="game-frame">
+<div class="game-container">
+  
     <div id="visor">0000 m</div>
-    <canvas id="canvas" width="500" height="500"></canvas>
-  </div>
-  <script src="JetPackJogo.js"></script>
+    <button id="pauseBtn" title="Pausar">⏸️</button>
+
+    <div class="game-frame">
+        <canvas id="canvas" width="540" height="540"></canvas>
+    </div>
+
+    <div class="instructions">
+        <b>Espaço</b> ou <b>Clique</b> para voar &nbsp;|&nbsp; <b>P</b> para pausar
+    </div>
+</div>
+
+  <script src="SandboxJetPack.js"></script>
 </body>
 </html>
