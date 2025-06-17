@@ -102,7 +102,7 @@
             
             for (const p of pixels) {
                 let x, y;
-                if (url === 'BackgroundPixels.json') {
+                if (url === 'ImagesJson/BackgroundPixels.json') {
                     x = (p.x / w) * 2 - 1;
                     y = -((p.y / h) * 2 - 1);
                 } else {
@@ -188,49 +188,49 @@
     // Carrega JSONs
     const jsonData = {};
     
-    jsonData['JetPackGuyPixels.json'] = await getJsonData('JetPackGuyPixels.json', 100, 100);
-    jsonData['VerticalObstaclePixels.json'] = await getJsonData('VerticalObstaclePixels.json', 100, 100);
-    jsonData['HorizontalObstaclePixels.json'] = await getJsonData('HorizontalObstaclePixels.json', 100, 100);
-    jsonData['BackgroundPixels.json'] = await getJsonData('BackgroundPixels.json', 375, 375);
+    jsonData['ImagesJson/JetPackGuyPixels.json'] = await getJsonData('ImagesJson/JetPackGuyPixels.json', 100, 100);
+    jsonData['ImagesJson/VerticalObstaclePixels.json'] = await getJsonData('ImagesJson/VerticalObstaclePixels.json', 100, 100);
+    jsonData['ImagesJson/HorizontalObstaclePixels.json'] = await getJsonData('ImagesJson/HorizontalObstaclePixels.json', 100, 100);
+    jsonData['ImagesJson/BackgroundPixels.json'] = await getJsonData('ImagesJson/BackgroundPixels.json', 375, 375);
 
     // Usa sprites de fallback se necessário
-    if (jsonData['JetPackGuyPixels.json'].positionArray.length === 0) {
+    if (jsonData['ImagesJson/JetPackGuyPixels.json'].positionArray.length === 0) {
         console.log("Usando sprite de fallback para o jogador");
-        jsonData['JetPackGuyPixels.json'] = createFallbackSprite(20, 20, [0, 1, 0]);
+        jsonData['ImagesJson/JetPackGuyPixels.json'] = createFallbackSprite(20, 20, [0, 1, 0]);
     }
     
-    if (jsonData['VerticalObstaclePixels.json'].positionArray.length === 0) {
+    if (jsonData['ImagesJson/VerticalObstaclePixels.json'].positionArray.length === 0) {
         console.log("Usando sprite de fallback para obstáculo vertical");
-        jsonData['VerticalObstaclePixels.json'] = createFallbackSprite(10, 40, [1, 1, 0]);
+        jsonData['ImagesJson/VerticalObstaclePixels.json'] = createFallbackSprite(10, 40, [1, 1, 0]);
     }
     
-    if (jsonData['HorizontalObstaclePixels.json'].positionArray.length === 0) {
+    if (jsonData['ImagesJson/HorizontalObstaclePixels.json'].positionArray.length === 0) {
         console.log("Usando sprite de fallback para obstáculo horizontal");
-        jsonData['HorizontalObstaclePixels.json'] = createFallbackSprite(40, 10, [1, 1, 0]);
+        jsonData['ImagesJson/HorizontalObstaclePixels.json'] = createFallbackSprite(40, 10, [1, 1, 0]);
     }
 
     // Background que cobre toda a tela
-    if (jsonData['BackgroundPixels.json'].positionArray.length === 0) {
+    if (jsonData['ImagesJson/BackgroundPixels.json'].positionArray.length === 0) {
         console.log("Criando background completo");
-        jsonData['BackgroundPixels.json'] = createFullBackground();
+        jsonData['ImagesJson/BackgroundPixels.json'] = createFullBackground();
     }
 
     // Inicializa buffers
-    const posBuffer = initBuffer(jsonData['JetPackGuyPixels.json'].positionArray);
-    const colorBuffer = initBuffer(jsonData['JetPackGuyPixels.json'].colorArray);
-    const vertexCount = jsonData['JetPackGuyPixels.json'].positionArray.length / 2;
+    const posBuffer = initBuffer(jsonData['ImagesJson/JetPackGuyPixels.json'].positionArray);
+    const colorBuffer = initBuffer(jsonData['ImagesJson/JetPackGuyPixels.json'].colorArray);
+    const vertexCount = jsonData['ImagesJson/JetPackGuyPixels.json'].positionArray.length / 2;
 
-    const posVerticalBuffer = initBuffer(jsonData['VerticalObstaclePixels.json'].positionArray);
-    const colorVerticalBuffer = initBuffer(jsonData['VerticalObstaclePixels.json'].colorArray);
-    const vertexVerticalCount = jsonData['VerticalObstaclePixels.json'].positionArray.length / 2;
+    const posVerticalBuffer = initBuffer(jsonData['ImagesJson/VerticalObstaclePixels.json'].positionArray);
+    const colorVerticalBuffer = initBuffer(jsonData['ImagesJson/VerticalObstaclePixels.json'].colorArray);
+    const vertexVerticalCount = jsonData['ImagesJson/VerticalObstaclePixels.json'].positionArray.length / 2;
 
-    const posHorizontalBuffer = initBuffer(jsonData['HorizontalObstaclePixels.json'].positionArray);
-    const colorHorizontalBuffer = initBuffer(jsonData['HorizontalObstaclePixels.json'].colorArray);
-    const vertexHorizontalCount = jsonData['HorizontalObstaclePixels.json'].positionArray.length / 2;
+    const posHorizontalBuffer = initBuffer(jsonData['ImagesJson/HorizontalObstaclePixels.json'].positionArray);
+    const colorHorizontalBuffer = initBuffer(jsonData['ImagesJson/HorizontalObstaclePixels.json'].colorArray);
+    const vertexHorizontalCount = jsonData['ImagesJson/HorizontalObstaclePixels.json'].positionArray.length / 2;
 
-    const posBackgroundBuffer = initBuffer(jsonData['BackgroundPixels.json'].positionArray);
-    const colorBackgroundBuffer = initBuffer(jsonData['BackgroundPixels.json'].colorArray);
-    const vertexBackgroundCount = jsonData['BackgroundPixels.json'].positionArray.length / 2;
+    const posBackgroundBuffer = initBuffer(jsonData['ImagesJson/BackgroundPixels.json'].positionArray);
+    const colorBackgroundBuffer = initBuffer(jsonData['ImagesJson/BackgroundPixels.json'].colorArray);
+    const vertexBackgroundCount = jsonData['ImagesJson/BackgroundPixels.json'].positionArray.length / 2;
 
     // Estado do jogo
     let y = -0.5, velocity = 0, gravity = -0.0015;
