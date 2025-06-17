@@ -40,7 +40,7 @@ body::before {
     justify-content: center;
     padding: 20px;
 }
-
+/* 
 .game-frame {
     position: relative;
     width: 600px;
@@ -73,40 +73,68 @@ body::before {
         rgba(0,0,0,0.1) 100%);
     pointer-events: none;
     z-index: 5;
+} */
+
+#MolduraPixelArt{
+    position: absolute;
+    top: -10px;
+    width: 670px;
+    height: 785px;
+
 }
 
-#visor {
+/* #visor {
     position: absolute;
     top: -50px;
     left: 50%;
     transform: translateX(-50%);
     width: 220px;
     height: 60px;
-    background: linear-gradient(135deg, #001100 0%, #003300 100%);
-    border: 3px solid #00ff00;
+    background: linear-gradient(135deg, #110000 0%, #330000 100%);
+    border: 3px solid #ff0000;
     border-radius: 10px;
-    color: #00ff00;
+    color: #ff0000;
     font-size: 20px;
     font-weight: 700;
     line-height: 54px;
     text-align: center;
     z-index: 20;
-    text-shadow: 0 0 10px #00ff00;
+    text-shadow: 0 0 10px #ff0000;
     box-shadow: 
-        0 0 20px rgba(0,255,0,0.5),
-        inset 0 0 10px rgba(0,255,0,0.1);
+        0 0 20px #ff0000,
+        inset 0 0 10px rgba(255, 0, 0, 0.1);
+} */
+
+#visor {
+  background: url('Images/PixelArtVisor.png') no-repeat center center;
+  background-size: cover;
+  position: absolute;
+  top: -105px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 100px;
+  color: #fff;
+  font-size: 35px;
+  line-height: 95px;
+  text-align: center;
+  z-index: 10;
+  /* Melhoria de legibilidade */
+  text-shadow: 1px 1px 2px #000;
+  font-weight: bold;
 }
 
 canvas {
     display: block;
     width: 540px;
     height: 540px;
+    top: 80px;
     background: rgba(0,0,0,0.2);
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
     border: 2px solid rgba(255,255,255,0.1);
-    border-radius: 5px;
+    border-radius: 25px;
     position: relative;
     z-index: 1;
 }
@@ -125,33 +153,35 @@ canvas {
 .instructions {
     margin-top: 22px;
     color: #e0f7fa;
-    font-size: 16px;
+    font-size: 20px;
     text-align: center;
-    background: rgba(20,32,48,0.75);
+    /* background: rgba(20,32,48,0.75); */
     border-radius: 8px;
     padding: 8px 24px;
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18);
+    /* box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18); */
     font-weight: 600;
     letter-spacing: 0.5px;
     z-index: 10;
-    display: inline-block;
+    display: absolute;
 }
 .instructions b {
-    color: #00ffe7;
+    color: #ffd000;
     font-weight: 700;
 }
 
 /* Estilo do botão de pausa */
 #pauseBtn {
     position: absolute;
-    top: 18px;
-    right: 32px;
+    height: 100px;
+    width: 86px;
+    top: 25px;
+    right: -5px;
     z-index: 110;
     font-size: 15px;
-    padding: 4px 14px 4px 10px;
-    border-radius: 7px;
-    border: 1.5px solid #1e3a4a;
-    background: #183040;
+    padding: 4px 10px 4px 10px;
+    /* border-radius: 7px; */
+    border: 5px solid #000F30ff;
+    background: #183251ff;
     color: #e0f7fa;
     font-family: 'Pixelify Sans', monospace;
     font-weight: bold;
@@ -168,11 +198,12 @@ canvas {
 }
 
 #pauseBtn:hover, #pauseBtn:focus {
-    background: #27475a;
-    color: #fff;
-    border-color: #27475a;
-    transform: scale(1.06);
+    background: #235470;
+    /* color: #fff; */
+    border-color: #123e57;
+    /* transform: scale(1.06); */
 }
+
 
 /* Responsividade */
 @media (max-width: 768px) {

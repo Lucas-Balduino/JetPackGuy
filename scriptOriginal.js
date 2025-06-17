@@ -1,5 +1,5 @@
 (async function() {
-    const pontuation = document.getElementById("pontuation");
+    const pontuation = document.getElementById("visor");
     const canvas = document.getElementById("canvas");
     const gl = canvas.getContext("webgl");
   
@@ -86,22 +86,22 @@
     }
   
     // Inicializa buffers dos objetos
-    const JetPacKjsonData = await getJsonData('JetPackGuyPixels.json', canvas.width, canvas.height);
+    const JetPacKjsonData = await getJsonData('ImagesJson/JetPackGuyPixels.json', canvas.width, canvas.height);
     const posBuffer   = initBuffer(JetPacKjsonData.positionArray);
     const colorBuffer = initBuffer(JetPacKjsonData.colorArray);
     const vertexCount = JetPacKjsonData.positionArray.length / 2;
     
-    const VerticalObstaclejsonData = await getJsonData('VerticalObstaclePixels.json', canvas.width, canvas.height);
+    const VerticalObstaclejsonData = await getJsonData('ImagesJson/VerticalObstaclePixels.json', canvas.width, canvas.height);
     const posVerticalBuffer   = initBuffer(VerticalObstaclejsonData.positionArray);
     const colorVerticalBuffer = initBuffer(VerticalObstaclejsonData.colorArray);
     const vertexVerticalCount = VerticalObstaclejsonData.positionArray.length / 2;
     
-    const HorizontalObstaclejsonData = await getJsonData('HorizontalObstaclePixels.json', canvas.width, canvas.height);
+    const HorizontalObstaclejsonData = await getJsonData('ImagesJson/HorizontalObstaclePixels.json', canvas.width, canvas.height);
     const posHorizontalBuffer   = initBuffer(HorizontalObstaclejsonData.positionArray);
     const colorHorizontalBuffer = initBuffer(HorizontalObstaclejsonData.colorArray);
     const vertexHorizontalCount = HorizontalObstaclejsonData.positionArray.length / 2;
     
-    const BackgroundjsonData = await getJsonData('BackgroundPixels.json', canvas.width, canvas.height);
+    const BackgroundjsonData = await getJsonData('ImagesJson/BackgroundPixels.json', canvas.width, canvas.height);
     const posBackgroundBuffer   = initBuffer(BackgroundjsonData.positionArray);
     const colorBackgroundBuffer = initBuffer(BackgroundjsonData.colorArray);
     const vertexBackgroundCount = BackgroundjsonData.positionArray.length / 2;
@@ -129,13 +129,6 @@
     const horizontalObstacleBuffer = initBuffer(horizontalObstacleVerts);
     
     const obsCount = horizontalObstacleVerts.length / 2;
-
-    /* 
-    const playerVerts = new Float32Array([
-    -0.1
-
-    ])
-    */
   
     // Estado do jogo
     let y = -0.8, velocity = 0, gravity = -0.001;
@@ -292,9 +285,9 @@
       draw(posVerticalBuffer, colorVerticalBuffer,vertexVerticalCount,gl.POINTS,[(x2 + 1.3), (y3-0.8)]);
       draw(posBuffer,colorBuffer, vertexCount, gl.POINTS, [0, (y-0.91)]);
       // desenha obstáculos
-      drawSimple(horizontalObstacleBuffer, obsCount, gl.LINE_STRIP, [x1, y1]);
-      drawSimple(verticalObstacleBuffer, obsCount, gl.LINE_STRIP, [x2, y2]);
-      drawSimple(verticalObstacleBuffer, obsCount, gl.LINE_STRIP, [x2+0.5, y3]);
+      // drawSimple(horizontalObstacleBuffer, obsCount, gl.LINE_STRIP, [x1, y1]);
+      // drawSimple(verticalObstacleBuffer, obsCount, gl.LINE_STRIP, [x2, y2]);
+      // drawSimple(verticalObstacleBuffer, obsCount, gl.LINE_STRIP, [x2+0.5, y3]);
       //drawSimple(posBuffer, vertexCount, gl.LINE_STRIP, [0, (y-0.91)]);
       
       requestAnimationFrame(animate);

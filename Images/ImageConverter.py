@@ -3,7 +3,7 @@ import json
 import os
 
 # Caminho da sua imagem
-img_path = r"PixelArtBackground.png"
+img_path = r"Images/PixelArtJetPackGuy.png"
 img = Image.open(img_path).convert("RGBA")
 pixels = img.load()
 width, height = img.size
@@ -21,8 +21,8 @@ for y in range(height):
             })
 
 # Caminho da pasta Downloads do usuário atual
-downloads_folder = os.path.join(os.path.expanduser("~"), "Downloads")
-json_path = os.path.join(downloads_folder, "pixels.json")
+downloads_folder = os.path.join(os.path.expanduser("~"), "C:/Users/Lucas/Programas/JetPackGuy/ImagesJson")
+json_path = os.path.join(downloads_folder, "JetPackGuyPixels.json")
 
 # Salva o arquivo JSON
 with open(json_path, "w") as f:
