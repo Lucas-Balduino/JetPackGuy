@@ -420,8 +420,8 @@
     }
   }
 
-  document.addEventListener("keydown", (e) => {
-    if (e.code === "Space" || e.code === "ArrowUp") {
+  document.addEventListener("keydown" || "click", (e) => {
+    if (e.code === "Space" || e.code === "ArrowUp" || e.code === "Click") {
       e.preventDefault();
       if (gameOver) {
         resetGame();
@@ -437,15 +437,15 @@
     }
   });
 
-  // canvas.addEventListener('click', () => {
-  //     if (gameOver) {
-  //         resetGame();
-  //     } else {
-  //         startGame();
-  //         velocity = 0.028;
-  //         jumping = true;
-  //     }
-  // });
+  canvas.addEventListener('click', () => {
+      if (gameOver) {
+          resetGame();
+      } else {
+          startGame();
+          velocity = 0.028;
+          jumping = true;
+      }
+  });
 
   document.getElementById("pauseBtn").onclick = function () {
     if (!gameOver) setPaused(!paused);
