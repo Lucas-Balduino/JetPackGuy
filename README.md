@@ -1,7 +1,5 @@
 # JetPack Joyride WebGL
 
-![JetPack Joyride Banner](assets/banner.png)
-
 ## 🚀 Sobre o Projeto
 
 Uma recriação em pixel art do clássico *JetPack Joyride*, feita com **WebGL** puro. O jogo apresenta um cenário dinâmico, obstáculos que se movimentam e a pontuação em tempo real, tudo renderizado diretamente no canvas.
@@ -64,4 +62,4 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 
 ---
 
-> Feito com ❤️ por Seu Nome  |  [GitHub](https://github.com/seu-usuario)
+> Feito por Lucas Gonçalves Balduíno, Augusto Sodré Carneiro Lima, Luana Ferreira Veloso Lima |  [GitHub](https://github.com/Lucas-Balduino)
