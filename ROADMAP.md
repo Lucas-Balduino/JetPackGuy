@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 0 concluída (3/3)** · próxima tarefa: **1.2** — Unificar velocidade inicial dos obstáculos
+**Fase 0 concluída (3/3)** · próxima tarefa: **1.3** — Física com delta time
 
 ---
 
@@ -86,9 +86,9 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 - **Critérios de aceite:** Espaço e seta para cima continuam fazendo o personagem voar; clique no canvas continua funcionando; a string `"Click"` não aparece mais em `script.js`.
 - **Commit:** `fix: corrige listener de teclado com expressão inválida`
 
-### 1.2 — Unificar velocidade inicial dos obstáculos
+- ### 1.2 — Unificar velocidade inicial dos obstáculos
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** o jogo deve reiniciar exatamente como começou.
 - **Contexto:** a variável `obstacleVelocity` é inicializada com `0.015`, mas `resetGame()` a redefine para `0.01`. Partidas após a primeira começam mais lentas.
 - **Passos:**
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **4/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **5/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -513,10 +513,10 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 0.2 — Remover arquivos e código mortos
 - [x] 0.3 — Corrigir o README
 
-### Fase 1 — Correção de bugs (1/5)
+-### Fase 1 — Correção de bugs (2/5)
 
 - [x] 1.1 — Corrigir o listener de teclado inválido
-- [ ] 1.2 — Unificar velocidade inicial dos obstáculos
+- [x] 1.2 — Unificar velocidade inicial dos obstáculos
 - [ ] 1.3 — Física com delta time
 - [ ] 1.4 — Unificar a lógica de pontuação
 - [ ] 1.5 — Carregamento paralelo dos assets

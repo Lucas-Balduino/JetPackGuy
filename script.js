@@ -295,10 +295,11 @@
   let y = -0.8,
     velocity = 0,
     gravity = -0.001;
+  const INITIAL_OBSTACLE_VELOCITY = 0.015;
   let x1 = 1.2,
     x2 = 1.8,
     x3 = 2.4;
-  let obstacleVelocity = 0.015;
+  let obstacleVelocity = INITIAL_OBSTACLE_VELOCITY;
   let y1 = 0,
     y2 = 0,
     y3 = 0;
@@ -349,7 +350,7 @@
     x1 = 1.2;
     x2 = 1.8;
     x3 = 2.4;
-    obstacleVelocity = 0.01;
+    obstacleVelocity = INITIAL_OBSTACLE_VELOCITY;
     y1 = 0;
     y2 = 0;
     y3 = 0;
