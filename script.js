@@ -628,14 +628,6 @@
         [backgroundX + 2, 0],
         true
       );
-    //   draw(
-    //     posBackgroundBuffer,
-    //     colorBackgroundBuffer,
-    //     vertexBackgroundCount,
-    //     gl.POINTS,
-    //     [backgroundX + 4, 0],
-    //     true
-    //   );
     }
     draw(
       posHorizontalBuffer,
