@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 1 concluída (5/5)** · próxima tarefa: **2.1** — Migrar para ES Modules
+**Fase 1 concluída (5/5)** · próxima tarefa: **2.2** — Extrair configuração (config.js)
 
 ---
 
@@ -154,7 +154,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 2.1 — Migrar para ES Modules
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** habilitar `import`/`export` sem ainda dividir o código.
 - **Passos:**
   1. Criar a pasta `src/` e mover `script.js` para `src/main.js`.
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **8/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **9/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -521,9 +521,9 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 1.4 — Unificar a lógica de pontuação
 - [x] 1.5 — Carregamento paralelo dos assets
 
-### Fase 2 — Arquitetura em módulos (0/7)
+### Fase 2 — Arquitetura em módulos (1/7)
 
-- [ ] 2.1 — Migrar para ES Modules
+- [x] 2.1 — Migrar para ES Modules
 - [ ] 2.2 — Extrair configuração (config.js)
 - [ ] 2.3 — Extrair o renderer WebGL (renderer.js)
 - [ ] 2.4 — Extrair o carregador de assets (assets.js)
