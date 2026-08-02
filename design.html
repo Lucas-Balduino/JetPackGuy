@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Design System — JetPack Guy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/styles/tokens.css" />
+  <link rel="stylesheet" href="src/styles/components.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-family-pixel);
+      background: linear-gradient(135deg, var(--color-bg-deep) 0%, var(--color-bg-mid) 50%, var(--color-bg-light) 100%);
+      color: var(--color-text);
+      min-height: 100vh;
+      padding: var(--space-6) var(--space-5);
+      line-height: 1.5;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: var(--space-7);
+    }
+
+    header h1 {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-accent);
+      margin-bottom: var(--space-2);
+    }
+
+    header p {
+      font-size: var(--font-size-md);
+      opacity: 0.9;
+    }
+
+    header a {
+      color: var(--color-accent);
+    }
+
+    section {
+      margin-bottom: var(--space-7);
+    }
+
+    section h2 {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--space-4);
+      padding-bottom: var(--space-2);
+      border-bottom: 2px solid var(--color-border);
+    }
+
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: var(--space-4);
+    }
+
+    .swatch {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .swatch-chip {
+      width: 100%;
+      aspect-ratio: 1;
+      border: var(--border-pixel);
+      border-radius: var(--radius-sm);
+    }
+
+    .swatch-name {
+      font-size: var(--font-size-sm);
+      word-break: break-all;
+    }
+
+    .swatch-value {
+      font-size: var(--font-size-sm);
+      opacity: 0.75;
+    }
+
+    .type-row {
+      margin-bottom: var(--space-4);
+    }
+
+    .type-label {
+      font-size: var(--font-size-sm);
+      opacity: 0.7;
+      margin-bottom: var(--space-1);
+    }
+
+    .space-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+    }
+
+    .space-label {
+      width: 100px;
+      font-size: var(--font-size-sm);
+      flex-shrink: 0;
+    }
+
+    .space-bar {
+      height: var(--space-4);
+      background: var(--color-accent);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .space-value {
+      font-size: var(--font-size-sm);
+      opacity: 0.7;
+    }
+
+    .component-block {
+      margin-bottom: var(--space-5);
+    }
+
+    .component-block h3 {
+      font-size: var(--font-size-md);
+      margin-bottom: var(--space-3);
+    }
+
+    .component-demo {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-3);
+      padding: var(--space-5);
+      background: var(--color-bg-deep);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      min-height: 80px;
+      position: relative;
+    }
+
+    .component-demo--tall {
+      min-height: 160px;
+    }
+
+    code {
+      display: block;
+      background: var(--color-bg-deep);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: var(--space-3) var(--space-4);
+      font-family: monospace;
+      font-size: var(--font-size-sm);
+      white-space: pre-wrap;
+      overflow-x: auto;
+      color: var(--color-accent);
+    }
+
+    .hint {
+      font-size: var(--font-size-sm);
+      opacity: 0.7;
+      margin-top: var(--space-2);
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Design System — JetPack Guy</h1>
+      <p>Tokens e componentes do jogo. <a href="index.html">← Voltar ao jogo</a></p>
+    </header>
+
+    <section id="cores">
+      <h2>Cores</h2>
+      <div class="swatch-grid" id="colorSwatches"></div>
+    </section>
+
+    <section id="tipografia">
+      <h2>Tipografia</h2>
+      <div class="type-row">
+        <div class="type-label">--font-size-sm (14px)</div>
+        <p style="font-size: var(--font-size-sm); font-weight: var(--font-weight-regular);">
+          O jetpack dispara e o chão some sob os pés.
+        </p>
+      </div>
+      <div class="type-row">
+        <div class="type-label">--font-size-md (20px)</div>
+        <p style="font-size: var(--font-size-md); font-weight: var(--font-weight-regular);">
+          O jetpack dispara e o chão some sob os pés.
+        </p>
+      </div>
+      <div class="type-row">
+        <div class="type-label">--font-size-lg (28px)</div>
+        <p style="font-size: var(--font-size-lg); font-weight: var(--font-weight-bold);">
+          O jetpack dispara e o chão some sob os pés.
+        </p>
+      </div>
+      <div class="type-row">
+        <div class="type-label">--font-size-xl (35px)</div>
+        <p style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold);">
+          O jetpack dispara e o chão some sob os pés.
+        </p>
+      </div>
+    </section>
+
+    <section id="espacamento">
+      <h2>Espaçamento</h2>
+      <div id="spacingBars"></div>
+    </section>
+
+    <section id="componentes">
+      <h2>Componentes</h2>
+
+      <div class="component-block">
+        <h3>.btn-pixel</h3>
+        <div class="component-demo">
+          <button type="button" class="btn-pixel">Normal</button>
+          <button type="button" class="btn-pixel" id="btnHoverDemo">Hover</button>
+          <button type="button" class="btn-pixel" id="btnFocusDemo">Focus</button>
+        </div>
+        <p class="hint">Passe o mouse em Hover · use Tab para Focus (outline accent)</p>
+        <code>&lt;button type="button" class="btn-pixel"&gt;Jogar&lt;/button&gt;</code>
+      </div>
+
+      <div class="component-block">
+        <h3>.panel-pixel</h3>
+        <div class="component-demo component-demo--tall">
+          <div class="panel-pixel panel-pixel--danger" style="position: relative;">
+            GAME OVER
+          </div>
+          <div class="panel-pixel panel-pixel--neutral" style="position: relative;">
+            PAUSADO
+          </div>
+        </div>
+        <code>&lt;div class="panel-pixel panel-pixel--danger"&gt;GAME OVER&lt;/div&gt;</code>
+      </div>
+
+      <div class="component-block">
+        <h3>.hud-text</h3>
+        <div class="component-demo">
+          <span class="hud-text">0042 m</span>
+        </div>
+        <code>&lt;span class="hud-text"&gt;0042 m&lt;/span&gt;</code>
+      </div>
+
+      <div class="component-block">
+        <h3>.overlay-center</h3>
+        <div class="component-demo component-demo--tall">
+          <div class="overlay-center panel-pixel panel-pixel--neutral">
+            Overlay centrado
+          </div>
+        </div>
+        <code>&lt;div class="overlay-center panel-pixel"&gt;...&lt;/div&gt;</code>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const rootStyles = getComputedStyle(document.documentElement);
+
+    const colorTokens = [
+      '--color-bg-deep',
+      '--color-bg-mid',
+      '--color-bg-light',
+      '--color-surface',
+      '--color-border',
+      '--color-text',
+      '--color-accent',
+      '--color-danger',
+      '--color-white',
+    ];
+
+    const colorGrid = document.getElementById('colorSwatches');
+    colorTokens.forEach((token) => {
+      const value = rootStyles.getPropertyValue(token).trim();
+      const item = document.createElement('div');
+      item.className = 'swatch';
+      item.innerHTML =
+        '<div class="swatch-chip" style="background:' + value + '"></div>' +
+        '<div class="swatch-name">' + token + '</div>' +
+        '<div class="swatch-value">' + value + '</div>';
+      colorGrid.appendChild(item);
+    });
+
+    const spaceTokens = [
+      '--space-1',
+      '--space-2',
+      '--space-3',
+      '--space-4',
+      '--space-5',
+      '--space-6',
+      '--space-7',
+      '--space-8',
+    ];
+
+    const spacingBars = document.getElementById('spacingBars');
+    spaceTokens.forEach((token) => {
+      const value = rootStyles.getPropertyValue(token).trim();
+      const row = document.createElement('div');
+      row.className = 'space-row';
+      row.innerHTML =
+        '<span class="space-label">' + token + '</span>' +
+        '<span class="space-bar" style="width:' + value + '"></span>' +
+        '<span class="space-value">' + value + '</span>';
+      spacingBars.appendChild(row);
+    });
+
+    document.getElementById('btnHoverDemo').addEventListener('mouseenter', function () {
+      this.style.filter = 'brightness(1.08)';
+    });
+    document.getElementById('btnHoverDemo').addEventListener('mouseleave', function () {
+      this.style.filter = '';
+    });
+  </script>
+</body>
+</html>

@@ -9,7 +9,10 @@ Recriação em pixel art do *Jetpack Joyride* com **WebGL puro**, sem biblioteca
 | Caminho | O que é |
 |---|---|
 | `index.html` | Estrutura da página: canvas, visor de pontuação, botão de pausa, moldura |
-| `style.css` | Todo o CSS — layout, moldura, HUD, overlays, media queries |
+| `style.css` | Layout, moldura, HUD, overlays e media queries (usa tokens) |
+| `src/styles/tokens.css` | Design tokens (cores, tipografia, espaçamento, z-index) |
+| `src/styles/components.css` | Componentes reutilizáveis (`.btn-pixel`, `.panel-pixel`, etc.) |
+| `design.html` | Styleguide navegável do design system |
 | `src/main.js` | Ponto de entrada: liga renderer, assets, entidades, estado, input e loop |
 | `src/config.js` | Constantes de tuning (`CONFIG` congelado) |
 | `src/renderer.js` | Pipeline WebGL: shaders, buffers, `drawSprite` |

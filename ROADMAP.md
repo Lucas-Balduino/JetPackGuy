@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 4 em andamento (3/4)** · próxima tarefa: **4.4** — Página de documentação do design system
+**Fase 5 em andamento (0/6)** · próxima tarefa: **5.1** — Overlays declarativos
 
 ---
 
@@ -298,7 +298,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ---
 
-## Fase 4 — Design System
+## Fase 4 — Design System ✅
 
 > **O que você aprende:** um design system é a diferença entre "estilizar telas" e "projetar um sistema". Você define **tokens** (decisões de design nomeadas: cores, tipografia, espaçamento), constrói **componentes** a partir deles e **documenta** tudo. Depois disso, criar qualquer tela nova é montar Lego.
 
@@ -343,7 +343,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 4.4 — Página de documentação do design system
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** o artefato de portfólio — um styleguide navegável.
 - **Passos:**
   1. Criar `design.html` na raiz: uma página estática que importa `tokens.css` e `components.css` e exibe:
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **21/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **22/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -537,12 +537,12 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 3.2 — Substituir o JSON de background de 11 MB
 - [x] 3.3 — Tela de loading
 
-### Fase 4 — Design system (3/4)
+### Fase 4 — Design system ✅ (4/4)
 
- - [x] 4.1 — Tokens de design (CSS custom properties)
- - [x] 4.2 — Aplicar tokens ao CSS existente
- - [x] 4.3 — Componentes base
- - [ ] 4.4 — Página de documentação do design system
+- [x] 4.1 — Tokens de design (CSS custom properties)
+- [x] 4.2 — Aplicar tokens ao CSS existente
+- [x] 4.3 — Componentes base
+- [x] 4.4 — Página de documentação do design system
 
 ### Fase 5 — UX e fluxo de telas (0/6)
 
