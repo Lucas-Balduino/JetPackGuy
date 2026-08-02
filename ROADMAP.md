@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 6 concluída ✅ (4/4)** · próxima tarefa: **7.1** — Deploy no GitHub Pages
+**Fase 7 em andamento (1/3)** · próxima tarefa: **7.2** — Favicon e meta tags Open Graph
 
 ---
 
@@ -482,7 +482,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 7.1 — Deploy no GitHub Pages
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Passos:** criar `.github/workflows/deploy.yml` com o workflow oficial de deploy estático do GitHub Pages (actions/upload-pages-artifact + actions/deploy-pages, branch main, publicando a raiz do repositório). Habilitar Pages nas configurações do repositório (Settings → Pages → GitHub Actions).
 - **Critérios de aceite:** o jogo abre na URL `https://<usuario>.github.io/<repo>/` com todos os assets carregando (caminhos relativos — conferir que nenhum caminho começa com `/`).
 - **Commit:** `chore: deploy automático no GitHub Pages`
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **31/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **32/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -560,8 +560,8 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 6.3 — Sons e botão de mudo
 - [x] 6.4 — Animação do contador de metros
 
-### Fase 7 — Vitrine de portfólio (0/3)
+### Fase 7 — Vitrine de portfólio (1/3)
 
-- [ ] 7.1 — Deploy no GitHub Pages
+- [x] 7.1 — Deploy no GitHub Pages
 - [ ] 7.2 — Favicon e meta tags Open Graph
 - [ ] 7.3 — README de portfólio
