@@ -1,4 +1,4 @@
-# JetPack Joyride WebGL
+# JetPack Guy WebGL
 
 ## 🚀 Sobre o Projeto
 
@@ -11,7 +11,7 @@ Uma recriação em pixel art do clássico *JetPack Joyride*, feita com **WebGL**
 * **Obstáculos dinâmicos**: obstáculos horizontais e verticais aparecem em posições randômicas a cada ciclo.
 * **Sistema de pontuação**: contador em metros que aumenta a cada 0.1s e acelera a dificuldade.
 * **Animações fluidas**: loop de renderização a 60fps usando `requestAnimationFrame`.
-* **Modo responsivo**: funciona em desktop e dispositivos móveis.
+<!-- Responsividade será adicionada na Fase 5 do roadmap -->
 
 ## 🛠️ Tecnologias
 
@@ -23,14 +23,15 @@ Uma recriação em pixel art do clássico *JetPack Joyride*, feita com **WebGL**
 ## 📂 Estrutura do Projeto
 
 ```
-├── index.html          # template principal e frame do jogo
-├── style.css           # estilo do layout e moldura
-├── script.js           # lógica do WebGL, animações e controle de jogo
-├── assets/             # imagens e JSONs de pixel art
-│   ├── JetPackGuy.png
-│   ├── Background.json
-│   └── ...
-└── README.md           # este arquivo
+├── index.html
+├── style.css
+├── script.js
+├── Images/              # imagens (PNG) usadas pelo jogo
+├── ImagesJson/          # JSONs com pixels dos sprites
+├── Info/                # anotações e dimensões (histórico)
+├── AGENTS.md            # contexto para agentes
+├── ROADMAP.md           # plano de evolução e tarefas
+└── README.md
 ```
 
 ## 📥 Como Executar
@@ -38,7 +39,7 @@ Uma recriação em pixel art do clássico *JetPack Joyride*, feita com **WebGL**
 1. **Clone** o repositório:
 
    ```bash
-   git clone https://github.com/seu-usuario/jetpack-joyride-webgl.git
+   git clone https://github.com/Lucas-Balduino/JetPackGuy.git
    ```
 2. Abra um **servidor local** (recomendado para evitar bloqueios de `fetch`):
 
