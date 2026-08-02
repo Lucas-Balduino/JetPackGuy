@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 4 em andamento (0/4)** · próxima tarefa: **4.1** — Tokens de design (CSS custom properties)
+**Fase 4 em andamento (1/4)** · próxima tarefa: **4.2** — Aplicar tokens ao CSS existente
 
 ---
 
@@ -302,9 +302,9 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 > **O que você aprende:** um design system é a diferença entre "estilizar telas" e "projetar um sistema". Você define **tokens** (decisões de design nomeadas: cores, tipografia, espaçamento), constrói **componentes** a partir deles e **documenta** tudo. Depois disso, criar qualquer tela nova é montar Lego.
 
-### 4.1 — Tokens de design (CSS custom properties)
+-### 4.1 — Tokens de design (CSS custom properties)
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** fundar o design system.
 - **Passos:**
   1. Criar `src/styles/tokens.css` com um bloco `:root` definindo, com comentários explicando cada grupo:
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **18/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **19/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
