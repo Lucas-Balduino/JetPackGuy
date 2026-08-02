@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 7 em andamento (1/3)** · próxima tarefa: **7.2** — Favicon e meta tags Open Graph
+**Fase 7 em andamento (2/3)** · próxima tarefa: **7.3** — README de portfólio
 
 ---
 
@@ -489,7 +489,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 7.2 — Favicon e meta tags Open Graph
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Passos:** criar um favicon a partir do sprite do personagem (`Images/PixelArtJetPackGuy.png` redimensionado para 32×32 → `favicon.png`); adicionar ao `<head>`: `<link rel="icon">`, `<meta name="description">`, e as tags OG (`og:title`, `og:description`, `og:image` com um screenshot 1200×630 do jogo salvo em `Images/og-cover.png`, `og:url`) + `twitter:card summary_large_image`.
 - **Critérios de aceite:** favicon aparece na aba; validar o link em https://www.opengraph.xyz/ mostra card com imagem.
 - **Commit:** `feat: favicon e meta tags para compartilhamento`
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **32/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **33/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -560,8 +560,8 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 6.3 — Sons e botão de mudo
 - [x] 6.4 — Animação do contador de metros
 
-### Fase 7 — Vitrine de portfólio (1/3)
+### Fase 7 — Vitrine de portfólio (2/3)
 
 - [x] 7.1 — Deploy no GitHub Pages
-- [ ] 7.2 — Favicon e meta tags Open Graph
+- [x] 7.2 — Favicon e meta tags Open Graph
 - [ ] 7.3 — README de portfólio
