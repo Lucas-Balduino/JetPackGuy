@@ -51,7 +51,7 @@ export function createJetpackParticles(renderer) {
       particle.age += dt;
       particle.x += particle.vx * dt * 60;
       particle.y += particle.vy * dt * 60;
-      particle.vy -= 0.00055 * dt * 60;
+      particle.vy += 0.00055 * dt * 60;
       particle.vx *= 0.995;
 
       if (particle.age >= particle.maxAge) {
@@ -76,7 +76,8 @@ export function createJetpackParticles(renderer) {
       const alpha = lifeRatio * (0.7 + particle.lifeSeed * 0.3);
 
       positions[i * 2] = particle.x;
-      positions[i * 2 + 1] = particle.y;
+      // Shader inverte Y (como sprites); negar aqui alinha coordenadas de mundo ao clip space
+      positions[i * 2 + 1] = -particle.y;
       colors[i * 4] = red;
       colors[i * 4 + 1] = clamp(green, 0, 1);
       colors[i * 4 + 2] = clamp(blue, 0, 1);
