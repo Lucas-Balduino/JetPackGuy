@@ -144,6 +144,27 @@ canvas {
     font-weight: var(--font-weight-bold);
 }
 
+.site-footer {
+    margin-top: var(--space-4);
+    text-align: center;
+}
+
+.site-footer__link {
+    font-family: var(--font-family-pixel);
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    opacity: 0.55;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+}
+
+.site-footer__link:hover,
+.site-footer__link:focus-visible {
+    opacity: 0.9;
+    color: var(--color-accent);
+    outline: none;
+}
+
 /* Botão de pausa — sprite isolado da moldura */
 #pauseBtn {
     position: absolute;
