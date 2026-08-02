@@ -22,10 +22,10 @@ export function createStateMachine() {
     return () => listeners.delete(fn);
   }
 
-  function notify() {
+  function notify(prev) {
     for (const fn of listeners) {
       try {
-        fn(current);
+        fn(prev, current);
       } catch (e) {
         console.error('listener error', e);
       }
@@ -43,8 +43,9 @@ export function createStateMachine() {
     if (current === to) return;
     const allowed = valid[current] || [];
     if (allowed.includes(to)) {
+      const prev = current;
       current = to;
-      notify();
+      notify(prev);
     } else {
       console.warn(`Transição inválida: ${current} -> ${to}`);
     }
@@ -53,8 +54,9 @@ export function createStateMachine() {
   // força o estado (útil para reset)
   function force(state) {
     if (current !== state) {
+      const prev = current;
       current = state;
-      notify();
+      notify(prev);
     }
   }
 
