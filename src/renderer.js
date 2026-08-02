@@ -8,10 +8,10 @@ export function createRenderer(canvas) {
 
   const vsSource = `
         attribute vec2 coordinates;
-        attribute vec3 aColor;
+        attribute vec4 aColor;
         uniform vec2 translation;
         uniform float isBackground;
-        varying vec3 vColor;
+        varying vec4 vColor;
         void main(void) {
             vec2 pos = coordinates;
             if (isBackground < 0.5) {
@@ -25,9 +25,9 @@ export function createRenderer(canvas) {
 
   const fsSource = `
         precision mediump float;
-        varying vec3 vColor;
+        varying vec4 vColor;
         void main(void) {
-            gl_FragColor = vec4(vColor, 1.0);
+            gl_FragColor = vColor;
         }
     `;
 
@@ -59,6 +59,8 @@ export function createRenderer(canvas) {
     throw new Error('Program link failed');
   }
   gl.useProgram(program);
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
   const coordLoc = gl.getAttribLocation(program, 'coordinates');
   const colorLoc = gl.getAttribLocation(program, 'aColor');
@@ -75,7 +77,8 @@ export function createRenderer(canvas) {
     gl.bufferData(gl.ARRAY_BUFFER, colorArray, gl.STATIC_DRAW);
 
     const count = positionArray.length / 2;
-    return { posBuffer: posBuf, colorBuffer: colorBuf, count };
+    const colorComponents = colorArray.length === count * 4 ? 4 : 3;
+    return { posBuffer: posBuf, colorBuffer: colorBuf, count, colorComponents };
   }
 
   function clear() {
@@ -94,7 +97,7 @@ export function createRenderer(canvas) {
     gl.enableVertexAttribArray(coordLoc);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buffers.colorBuffer);
-    gl.vertexAttribPointer(colorLoc, 3, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(colorLoc, buffers.colorComponents || 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(colorLoc);
 
     gl.uniform2fv(transLoc, translation);
@@ -102,10 +105,39 @@ export function createRenderer(canvas) {
     gl.drawArrays(gl.POINTS, 0, buffers.count);
   }
 
+  function drawPoints(positionArray, colorArray) {
+    const count = positionArray.length / 2;
+    if (count === 0) return;
+
+    const posBuf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+    gl.bufferData(gl.ARRAY_BUFFER, positionArray, gl.STATIC_DRAW);
+
+    const colorBuf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuf);
+    gl.bufferData(gl.ARRAY_BUFFER, colorArray, gl.STATIC_DRAW);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+    gl.vertexAttribPointer(coordLoc, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(coordLoc);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuf);
+    gl.vertexAttribPointer(colorLoc, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(colorLoc);
+
+    gl.uniform2fv(transLoc, [0, 0]);
+    gl.uniform1f(isBackgroundLoc, 0.0);
+    gl.drawArrays(gl.POINTS, 0, count);
+
+    gl.deleteBuffer(posBuf);
+    gl.deleteBuffer(colorBuf);
+  }
+
   return Object.freeze({
     createSpriteBuffers,
     clear,
     drawSprite,
+    drawPoints,
     setViewport,
   });
 }

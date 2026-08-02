@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 5 completa (6/6)** · próxima tarefa: **6.1** — Partículas do jetpack
+**Fase 6 em andamento (1/4)** · próxima tarefa: **6.2** — Screen shake na morte
 
 ---
 
@@ -448,7 +448,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 6.1 — Partículas do jetpack
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Passos:** em um novo `src/particles.js`, gerar pontos (reutilizando o renderer e `gl.POINTS`, coerente com a técnica do projeto) que nascem sob o player enquanto `velocity > 0`, com cor amarelo→vermelho, vida curta (~0.4s), queda e fade (descartar partículas mortas). Máximo de ~100 partículas simultâneas.
 - **Critérios de aceite:** segurar Espaço mostra rastro de fogo; soltar interrompe; FPS estável.
 - **Commit:** `feat(feel): partículas de propulsão do jetpack`
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **28/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **29/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -553,9 +553,9 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 5.5 — Responsividade real e controle por toque
 - [x] 5.6 — Acessibilidade
 
-### Fase 6 — Game feel (0/4)
+### Fase 6 — Game feel (1/4)
 
-- [ ] 6.1 — Partículas do jetpack
+- [x] 6.1 — Partículas do jetpack
 - [ ] 6.2 — Screen shake na morte
 - [ ] 6.3 — Sons e botão de mudo
 - [ ] 6.4 — Animação do contador de metros

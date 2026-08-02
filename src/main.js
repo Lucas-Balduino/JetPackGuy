@@ -5,6 +5,7 @@ import { createPlayer, createObstacles, checkCollision, getRect } from './entiti
 import { States, createStateMachine } from './state.js';
 import { setupInput } from './input.js';
 import { getHighScore, saveHighScore } from './storage.js';
+import { createJetpackParticles } from './particles.js';
 
 const pontuation = document.getElementById("visor");
 const canvas = document.getElementById("canvas");
@@ -52,6 +53,7 @@ const playerEntity = createPlayer(CONFIG);
 const obstaclesEntity = createObstacles(CONFIG);
 let points = 0;
 const state = createStateMachine();
+const jetpackParticles = createJetpackParticles(renderer);
 let backgroundX = 0;
 let scoreTimer = 0;
 let lastTime = null;
@@ -101,6 +103,7 @@ function startGame() {
 function resetGameState() {
   playerEntity.reset();
   obstaclesEntity.reset();
+  jetpackParticles.reset();
   obstacleVelocity = INITIAL_OBSTACLE_VELOCITY;
   points = 0;
   scoreTimer = 0;
@@ -178,6 +181,7 @@ function animate(now) {
   if (state.is(States.PLAYING)) {
     playerEntity.applyPhysics(dt);
     obstaclesEntity.advanceAll(obstacleVelocity, dt);
+    jetpackParticles.update(dt, playerEntity.state, true);
 
     scoreTimer += dt;
     while (scoreTimer >= CONFIG.score.intervalSeconds) {
@@ -200,6 +204,7 @@ function animate(now) {
     renderer.drawSprite(verticalBuffers, positions[1]);
     renderer.drawSprite(verticalBuffers, positions[2]);
   }
+  jetpackParticles.draw();
   const player = playerEntity.state;
   renderer.drawSprite(playerBuffers, [player.x, player.y]);
 
