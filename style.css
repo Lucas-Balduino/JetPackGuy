@@ -117,17 +117,6 @@ canvas {
     z-index: var(--z-game);
 }
 
-/* Game Over overlay */
-#gameOverText {
-    font-family: var(--font-family-pixel) !important;
-    background: var(--overlay-bg);
-    padding: 30px;
-    border-radius: var(--radius-md);
-    border: 3px solid var(--color-danger);
-    text-shadow: var(--glow-danger);
-    box-shadow: var(--glow-danger-weak);
-}
-
 .instructions {
     margin-top: 22px;
     color: var(--color-text);

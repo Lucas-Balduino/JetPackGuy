@@ -8,6 +8,8 @@ import { setupInput } from './input.js';
 const pontuation = document.getElementById("visor");
 const canvas = document.getElementById("canvas");
 const loadingOverlay = document.getElementById("loadingOverlay");
+const gameOverOverlay = document.getElementById("gameOverOverlay");
+const pauseOverlay = document.getElementById("pauseOverlay");
 const renderer = createRenderer(canvas);
 
 const { player: playerData, vertical: verticalData, horizontal: horizontalData, background: backgroundData } = await loadAllSprites();
@@ -48,18 +50,8 @@ let lastTime = null;
 let firstFrameDrawn = false;
 
 state.onChange((_from, to) => {
-  if (to === States.PAUSED) {
-    showPauseOverlay();
-  } else {
-    hidePauseOverlay();
-  }
-
-  if (to === States.GAME_OVER) {
-    drawGameOverText();
-  } else {
-    const go = document.getElementById("gameOverText");
-    if (go) go.remove();
-  }
+  pauseOverlay.classList.toggle("hidden", to !== States.PAUSED);
+  gameOverOverlay.classList.toggle("hidden", to !== States.GAME_OVER);
 });
 
 function applyJump(e) {
@@ -123,56 +115,6 @@ setupInput({
 });
 
 document.getElementById("pauseBtn").onclick = togglePause;
-
-function drawGameOverText() {
-  const gameOverDiv = document.createElement("div");
-  gameOverDiv.style.position = "absolute";
-  gameOverDiv.style.top = "50%";
-  gameOverDiv.style.left = "50%";
-  gameOverDiv.style.transform = "translate(-50%, -50%)";
-  gameOverDiv.style.color = "#ff4444";
-  gameOverDiv.style.fontSize = "28px";
-  gameOverDiv.style.fontWeight = "bold";
-  gameOverDiv.style.textAlign = "center";
-  gameOverDiv.style.pointerEvents = "none";
-  gameOverDiv.style.zIndex = "100";
-  gameOverDiv.innerHTML =
-    'GAME OVER<br><span style="font-size: 18px;">Pressione ESPAÇO ou clique para reiniciar</span>';
-  gameOverDiv.id = "gameOverText";
-
-  const existingText = document.getElementById("gameOverText");
-  if (existingText) {
-    existingText.remove();
-  }
-
-  document.body.appendChild(gameOverDiv);
-}
-
-function showPauseOverlay() {
-  let pauseDiv = document.getElementById("pauseOverlay");
-  if (!pauseDiv) {
-    pauseDiv = document.createElement("div");
-    pauseDiv.id = "pauseOverlay";
-    pauseDiv.style.position = "absolute";
-    pauseDiv.style.top = "50%";
-    pauseDiv.style.left = "50%";
-    pauseDiv.style.transform = "translate(-50%, -50%)";
-    pauseDiv.style.color = "#fff";
-    pauseDiv.style.fontSize = "32px";
-    pauseDiv.style.fontWeight = "bold";
-    pauseDiv.style.textAlign = "center";
-    pauseDiv.style.pointerEvents = "none";
-    pauseDiv.style.zIndex = "101";
-    pauseDiv.style.textShadow = "0 0 10px #000";
-    pauseDiv.innerHTML = "PAUSADO";
-    document.body.appendChild(pauseDiv);
-  }
-}
-
-function hidePauseOverlay() {
-  const pauseDiv = document.getElementById("pauseOverlay");
-  if (pauseDiv) pauseDiv.remove();
-}
 
 function animate(now) {
   if (lastTime === null) lastTime = now;
