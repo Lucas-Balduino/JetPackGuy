@@ -2,6 +2,7 @@ import { CONFIG } from './config.js';
 import { createRenderer } from './renderer.js';
 import { loadAllSprites } from './assets.js';
 import { createPlayer, createObstacles, checkCollision, getRect } from './entities.js';
+import { States, createStateMachine } from './state.js';
 
 const pontuation = document.getElementById("visor");
 const canvas = document.getElementById("canvas");
@@ -47,10 +48,8 @@ const playerEntity = createPlayer(CONFIG);
 const obstaclesEntity = createObstacles(CONFIG);
 let jumping = false;
 let points = 0;
-let gameOver = false;
-let gameStarted = false;
+const state = createStateMachine();
 let backgroundX = 0;
-let paused = false;
 let scoreTimer = 0;
 let lastTime = null;
 
@@ -67,14 +66,13 @@ let lastTime = null;
   };
 
 function startGame() {
-  if (!gameStarted) {
-    gameStarted = true;
-  }
+  // Transition to PLAYING (valid from READY or PAUSED)
+  state.transition(States.PLAYING);
 }
 
 function resetGame() {
-  gameOver = false;
-  gameStarted = false;
+  // Reset to READY
+  state.force(States.READY);
   playerEntity.reset();
   obstaclesEntity.reset();
   obstacleVelocity = INITIAL_OBSTACLE_VELOCITY;
@@ -95,7 +93,7 @@ function checkAllCollisions() {
 
   // Colisão com bordas da tela
   if (p.y <= CONFIG.bounds.deathFloor || p.y >= CONFIG.bounds.deathCeiling) {
-    gameOver = true;
+    state.transition(States.GAME_OVER);
     return;
   }
 
@@ -103,7 +101,7 @@ function checkAllCollisions() {
   const rects = obstaclesEntity.getRects();
   for (const r of rects) {
     if (checkCollision(playerRect, r)) {
-      gameOver = true;
+      state.transition(States.GAME_OVER);
       return;
     }
   }
@@ -112,7 +110,7 @@ function checkAllCollisions() {
 document.addEventListener("keydown", (e) => {
   if (e.code === "Space" || e.code === "ArrowUp") {
     e.preventDefault();
-    if (gameOver) {
+    if (state.is(States.GAME_OVER)) {
       resetGame();
     } else {
       startGame();
@@ -127,7 +125,7 @@ document.addEventListener("keydown", (e) => {
 });
 
   canvas.addEventListener('click', () => {
-    if (gameOver) {
+    if (state.is(States.GAME_OVER)) {
         resetGame();
     } else {
         startGame();
@@ -137,12 +135,18 @@ document.addEventListener("keydown", (e) => {
 });
 
 document.getElementById("pauseBtn").onclick = function () {
-  if (!gameOver) setPaused(!paused);
+  if (!state.is(States.GAME_OVER)) {
+    if (state.is(States.PLAYING)) state.transition(States.PAUSED);
+    else if (state.is(States.PAUSED)) state.transition(States.PLAYING);
+  }
 };
 
 document.addEventListener("keydown", (e) => {
-  if (e.code === "KeyP" && !gameOver) {
-    setPaused(!paused);
+  if (e.code === "KeyP") {
+    if (!state.is(States.GAME_OVER)) {
+      if (state.is(States.PLAYING)) state.transition(States.PAUSED);
+      else if (state.is(States.PAUSED)) state.transition(States.PLAYING);
+    }
   }
 });
 
@@ -173,12 +177,10 @@ function drawGameOverText() {
 }
 
 function setPaused(value) {
-  paused = value;
-  if (paused) {
-    showPauseOverlay();
-  } else {
-    hidePauseOverlay();
-  }
+  if (value) state.transition(States.PAUSED);
+  else state.transition(States.PLAYING);
+  if (state.is(States.PAUSED)) showPauseOverlay();
+  else hidePauseOverlay();
 }
 
 function showPauseOverlay() {
@@ -214,43 +216,35 @@ function animate(now) {
 
   renderer.clear();
 
-  // Só atualiza movimento se não estiver pausado e não estiver em game over
-  if (!gameOver && !paused) {
+  // Atualiza somente quando estiver jogando
+  if (state.is(States.PLAYING)) {
     backgroundX -= obstacleVelocity * dt * 60;
     if (backgroundX <= -2) {
       backgroundX = 0;
     }
 
-    if (!gameOver) {
-      const gameOverText = document.getElementById("gameOverText");
-      if (gameOverText) {
-        gameOverText.remove();
-      }
-
-      if (gameStarted) {
-        playerEntity.applyPhysics(dt);
-      }
-
-      // Limites e física do jogador são tratadas pelo playerEntity
-
-      if (gameStarted) {
-          obstaclesEntity.advanceAll(obstacleVelocity, dt);
-
-        scoreTimer += dt;
-        while (scoreTimer >= CONFIG.score.intervalSeconds) {
-          scoreTimer -= CONFIG.score.intervalSeconds;
-          points += 1;
-          obstacleVelocity += CONFIG.obstacles.acceleration;
-          pontuation.textContent = points.toString().padStart(4, "0") + " m";
-        }
-
-        checkAllCollisions();
-      }
-    } else {
-      drawGameOverText();
+    const gameOverText = document.getElementById("gameOverText");
+    if (gameOverText) {
+      gameOverText.remove();
     }
-  } else if (gameOver) {
+
+    // Física do jogador e obstáculos
+    playerEntity.applyPhysics(dt);
+    obstaclesEntity.advanceAll(obstacleVelocity, dt);
+
+    scoreTimer += dt;
+    while (scoreTimer >= CONFIG.score.intervalSeconds) {
+      scoreTimer -= CONFIG.score.intervalSeconds;
+      points += 1;
+      obstacleVelocity += CONFIG.obstacles.acceleration;
+      pontuation.textContent = points.toString().padStart(4, "0") + " m";
+    }
+
+    checkAllCollisions();
+  } else if (state.is(States.GAME_OVER)) {
     drawGameOverText();
+  } else if (state.is(States.PAUSED)) {
+    showPauseOverlay();
   }
 
   // Sempre desenha a cena (para mostrar overlay de pausa/game over)
