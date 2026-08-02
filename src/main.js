@@ -6,6 +6,7 @@ import { States, createStateMachine } from './state.js';
 import { setupInput } from './input.js';
 import { getHighScore, saveHighScore } from './storage.js';
 import { createJetpackParticles } from './particles.js';
+import { createAudio } from './audio.js';
 
 const pontuation = document.getElementById("visor");
 const canvas = document.getElementById("canvas");
@@ -14,6 +15,8 @@ const startOverlay = document.getElementById("startOverlay");
 const gameOverOverlay = document.getElementById("gameOverOverlay");
 const pauseOverlay = document.getElementById("pauseOverlay");
 const pauseBtn = document.getElementById("pauseBtn");
+const muteBtn = document.getElementById("muteBtn");
+const audio = createAudio();
 const instructionsEl = document.querySelector(".instructions");
 const renderer = createRenderer(canvas);
 
@@ -63,6 +66,13 @@ function formatScore(value) {
   return value.toString().padStart(4, "0") + " m";
 }
 
+function updateMuteButton() {
+  muteBtn.textContent = audio.isMuted() ? "🔇" : "🔊";
+  const label = audio.isMuted() ? "Ativar sons" : "Silenciar sons";
+  muteBtn.setAttribute("aria-label", label);
+  muteBtn.title = label;
+}
+
 function updateGameOverOverlay() {
   const distanceEl = document.getElementById("gameOverDistance");
   const recordEl = document.getElementById("gameOverRecord");
@@ -71,10 +81,16 @@ function updateGameOverOverlay() {
   const isNewRecord = points > previousHigh;
 
   distanceEl.textContent = formatScore(points);
-  if (isNewRecord) saveHighScore(points);
+  if (isNewRecord) {
+    saveHighScore(points);
+    audio.playRecordBlip();
+  }
   recordEl.textContent = "RECORDE: " + formatScore(isNewRecord ? points : previousHigh);
   newRecordEl.classList.toggle("hidden", !isNewRecord);
 }
+
+updateMuteButton();
+audio.initOnFirstGesture();
 
 state.onChange((_from, to) => {
   startOverlay.classList.toggle("hidden", to !== States.READY);
@@ -83,12 +99,16 @@ state.onChange((_from, to) => {
   const pauseLabel = to === States.PAUSED ? "Continuar jogo" : "Pausar jogo";
   pauseBtn.setAttribute("aria-label", pauseLabel);
   pauseBtn.title = to === States.PAUSED ? "Continuar" : "Pausar";
+  if (to !== States.PLAYING) {
+    audio.stopJetpack();
+  }
   if (to === States.GAME_OVER) {
+    audio.playDeath();
     canvas.classList.remove("canvas-shake");
     void canvas.offsetWidth;
     canvas.classList.add("canvas-shake");
+    updateGameOverOverlay();
   }
-  if (to === States.GAME_OVER) updateGameOverOverlay();
 });
 
 canvas.addEventListener("animationend", (event) => {
@@ -168,6 +188,10 @@ setupInput({
 });
 
 document.getElementById("pauseBtn").onclick = togglePause;
+muteBtn.onclick = () => {
+  audio.toggleMute();
+  updateMuteButton();
+};
 document.getElementById("startBtn").onclick = () => {
   if (state.is(States.READY)) startGame();
 };
@@ -203,6 +227,13 @@ function animate(now) {
     }
 
     checkAllCollisions();
+
+    const thrusting = playerEntity.state.velocity > 0;
+    if (thrusting && !audio.isMuted()) {
+      audio.startJetpack();
+    } else {
+      audio.stopJetpack();
+    }
   }
 
   if (vertexBackgroundCount > 0) {

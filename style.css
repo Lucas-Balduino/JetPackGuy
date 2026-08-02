@@ -195,6 +195,18 @@ canvas {
     outline: none;
 }
 
+#muteBtn {
+    position: absolute;
+    top: calc(var(--pause-btn-top) + 28px);
+    right: calc(var(--pause-btn-right) + 98px);
+    z-index: var(--z-controls);
+    min-width: 44px;
+    min-height: 44px;
+    padding: var(--space-2);
+    font-size: var(--font-size-md);
+    line-height: 1;
+}
+
 /* Botão de pausa — sprite isolado da moldura */
 #pauseBtn {
     position: absolute;

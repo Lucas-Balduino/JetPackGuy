@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 6 em andamento (2/4)** · próxima tarefa: **6.3** — Sons e botão de mudo
+**Fase 6 em andamento (3/4)** · próxima tarefa: **6.4** — Animação do contador de metros
 
 ---
 
@@ -462,7 +462,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 6.3 — Sons e botão de mudo
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Passos:** criar `src/audio.js` usando **Web Audio API com sons sintetizados** (osciladores: ruído curto para o jato, tom descendente para morte, blip para recorde) — sem arquivos de áudio, o que evita problemas de licença. Botão de mudo (`.btn-pixel`, ícone 🔊/🔇 em texto) ao lado do pause; preferência salva em `localStorage`. O `AudioContext` só pode iniciar após o primeiro gesto do usuário — criar no primeiro input.
 - **Critérios de aceite:** sons tocam nos eventos; mudo silencia e persiste após reload; nenhum erro de autoplay no console.
 - **Commit:** `feat(feel): efeitos sonoros sintetizados com toggle de mudo`
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **29/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **30/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -553,11 +553,11 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 5.5 — Responsividade real e controle por toque
 - [x] 5.6 — Acessibilidade
 
-### Fase 6 — Game feel (2/4)
+### Fase 6 — Game feel (3/4)
 
 - [x] 6.1 — Partículas do jetpack
 - [x] 6.2 — Screen shake na morte
-- [ ] 6.3 — Sons e botão de mudo
+- [x] 6.3 — Sons e botão de mudo
 - [ ] 6.4 — Animação do contador de metros
 
 ### Fase 7 — Vitrine de portfólio (0/3)

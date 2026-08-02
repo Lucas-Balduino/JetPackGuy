@@ -20,6 +20,7 @@ Recriação em pixel art do *Jetpack Joyride* com **WebGL puro**, sem biblioteca
 | `src/entities.js` | Player, obstáculos, hitboxes e colisão AABB |
 | `src/state.js` | Máquina de estados (`READY`, `PLAYING`, `PAUSED`, `GAME_OVER`) |
 | `src/input.js` | Teclado e clique no canvas (callbacks) |
+| `src/audio.js` | Efeitos sonoros sintetizados (Web Audio API) e preferência de mudo |
 | `ImagesJson/*.json` | Sprites como listas de pixels `{ x, y, color }` |
 | `ImagesJson/BackgroundPixels.compact.json` | Fundo em formato compacto `{ width, height, data: [r,g,b,...] }` |
 | `tools/convert_to_compact.py` | Converte PNG opaco em JSON compacto (roda fora do jogo) |
