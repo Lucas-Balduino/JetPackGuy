@@ -53,6 +53,24 @@ let backgroundX = 0;
 let scoreTimer = 0;
 let lastTime = null;
 
+// Reaja a mudanças de estado para controlar overlays de forma centralizada
+state.onChange((from, to) => {
+  // Pausa: mostrar/ocultar overlay
+  if (to === States.PAUSED) {
+    showPauseOverlay();
+  } else {
+    hidePauseOverlay();
+  }
+
+  // Game over: criar overlay apenas ao entrar; remover ao sair
+  if (to === States.GAME_OVER) {
+    drawGameOverText();
+  } else {
+    const go = document.getElementById("gameOverText");
+    if (go) go.remove();
+  }
+});
+
   const player = playerEntity.state;
 
   const horizontalObstacle = {
@@ -216,18 +234,15 @@ function animate(now) {
 
   renderer.clear();
 
-  // Atualiza somente quando estiver jogando
-  if (state.is(States.PLAYING)) {
+  // Background deve se mover em READY e PLAYING; física e obstáculos só em PLAYING
+  if (state.is(States.PLAYING) || state.is(States.READY)) {
     backgroundX -= obstacleVelocity * dt * 60;
     if (backgroundX <= -2) {
       backgroundX = 0;
     }
+  }
 
-    const gameOverText = document.getElementById("gameOverText");
-    if (gameOverText) {
-      gameOverText.remove();
-    }
-
+  if (state.is(States.PLAYING)) {
     // Física do jogador e obstáculos
     playerEntity.applyPhysics(dt);
     obstaclesEntity.advanceAll(obstacleVelocity, dt);
@@ -241,10 +256,6 @@ function animate(now) {
     }
 
     checkAllCollisions();
-  } else if (state.is(States.GAME_OVER)) {
-    drawGameOverText();
-  } else if (state.is(States.PAUSED)) {
-    showPauseOverlay();
   }
 
   // Sempre desenha a cena (para mostrar overlay de pausa/game over)
