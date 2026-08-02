@@ -41,12 +41,14 @@ body::before {
     padding: 20px;
 }
 
-#MolduraPixelArt{
+#MolduraPixelArt {
     position: absolute;
     top: -10px;
     width: 670px;
     height: 785px;
-
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
 }
 
 
@@ -111,36 +113,36 @@ canvas {
     font-weight: 700;
 }
 
-/* Estilo do botão de pausa */
+/* Botão de pausa — sprite isolado da moldura */
 #pauseBtn {
     position: absolute;
-    height: 100px;
-    width: 86px;
     top: 25px;
     right: -5px;
     z-index: 110;
-    font-size: 15px;
-    padding: 4px 10px 4px 10px;
-    border: 5px solid #000F30ff;
-    background: #183251ff;
-    color: #e0f7fa;
-    font-family: 'Pixelify Sans', monospace;
-    font-weight: bold;
-    letter-spacing: 1px;
-    box-shadow: none;
+    padding: 0;
+    border: none;
+    background: transparent;
     cursor: pointer;
-    transition: 
-        background 0.2s, 
-        color 0.2s, 
-        border 0.2s, 
-        transform 0.1s;
     outline: none;
-    text-shadow: none;
 }
 
-#pauseBtn:hover, #pauseBtn:focus {
-    background: #235470;
-    border-color: #123e57;
+#pauseBtnIcon {
+    display: block;
+    width: 86px;
+    height: 100px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+#pauseBtn:hover #pauseBtnIcon,
+#pauseBtn:focus-visible #pauseBtnIcon {
+    filter: brightness(1.12);
+}
+
+#pauseBtn:focus-visible {
+    outline: 2px solid #ffd000;
+    outline-offset: 2px;
 }
 
 

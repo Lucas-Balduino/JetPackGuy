@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 2 concluída (7/7)** · próxima tarefa: **3.1** — Otimizar as imagens PNG
+**Fase 3 em andamento (1/3)** · próxima tarefa: **3.2** — Substituir o JSON de background de 11 MB
 
 ---
 
@@ -262,7 +262,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 3.1 — Otimizar as imagens PNG
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** reduzir os PNGs gigantes.
 - **Contexto:** `Images/PixelArtVisor.png` tem 2,2 MB e `Images/MolduraPixelArt.png` tem 1,25 MB — para imagens decorativas isso é ~50x maior que o necessário.
 - **Passos:**
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **15/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **16/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -531,9 +531,9 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 2.6 — Máquina de estados (state.js)
 - [x] 2.7 — Módulo de input (input.js)
 
-### Fase 3 — Assets e performance (0/3)
+### Fase 3 — Assets e performance (1/3)
 
-- [ ] 3.1 — Otimizar as imagens PNG
+- [x] 3.1 — Otimizar as imagens PNG
 - [ ] 3.2 — Substituir o JSON de background de 11 MB
 - [ ] 3.3 — Tela de loading
 
