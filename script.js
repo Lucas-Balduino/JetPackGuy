@@ -309,6 +309,7 @@
   let gameStarted = false;
   let backgroundX = 0;
   let paused = false;
+  let scoreTimer = 0;
   let lastTime = null;
 
   const player = {
@@ -328,18 +329,11 @@
     height: 0.25,
   };
 
-  let pointsInterval;
+  
 
   function startGame() {
     if (!gameStarted) {
       gameStarted = true;
-      pointsInterval = setInterval(() => {
-        if (!gameOver) {
-          points += 1;
-          obstacleVelocity += 0.00003;
-          pontuation.textContent = points.toString().padStart(4, "0") + " m";
-        }
-      }, 100);
     }
   }
 
@@ -356,8 +350,8 @@
     y2 = 0;
     y3 = 0;
     points = 0;
+    scoreTimer = 0;
     jumping = false;
-    clearInterval(pointsInterval);
     pontuation.textContent = "0000 m";
   }
 
@@ -380,7 +374,6 @@
     // Colisão com bordas da tela
     if (y <= -0.85 || y >= 1) {
       gameOver = true;
-      clearInterval(pointsInterval);
       return;
     }
 
@@ -418,7 +411,6 @@
       checkCollision(playerRect, verticalObst2Rect)
     ) {
       gameOver = true;
-      clearInterval(pointsInterval);
     }
   }
 
@@ -509,18 +501,9 @@
   function setPaused(value) {
     paused = value;
     if (paused) {
-      clearInterval(pointsInterval);
       showPauseOverlay();
     } else {
-      if (gameStarted && !gameOver) {
-        pointsInterval = setInterval(() => {
-          if (!gameOver && !paused) {
-            points += 1;
-            obstacleVelocity += 0.00003;
-            pontuation.textContent = points.toString().padStart(4, "0") + " m";
-          }
-        }, 100);
-      }
+      // Resuming simply hides the overlay; scoring continues in the game loop
       hidePauseOverlay();
     }
   }
@@ -606,6 +589,15 @@
           if (x3 <= -1.5) {
             x3 = 2.1;
             y3 = getRandomFloat(-0.8, 0.8);
+          }
+
+          // Pontuação e aumento de velocidade integrados ao game loop
+          scoreTimer += dt;
+          while (scoreTimer >= 0.1) {
+            scoreTimer -= 0.1;
+            points += 1;
+            obstacleVelocity += 0.00003;
+            pontuation.textContent = points.toString().padStart(4, "0") + " m";
           }
 
           checkAllCollisions();

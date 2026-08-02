@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 0 concluída (3/3)** · próxima tarefa: **1.4** — Unificar a lógica de pontuação
+**Fase 0 concluída (3/3)** · próxima tarefa: **1.5** — Carregamento paralelo dos assets
 
 ---
 
@@ -110,9 +110,9 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 - **Critérios de aceite:** em um monitor de 60 Hz o jogo se comporta como antes; limitando o refresh (ou usando o throttling de FPS do DevTools → Performance), a velocidade percebida do jogo não muda; a variável `dt` é usada em todos os incrementos de posição/velocidade.
 - **Commit:** `fix: física independente de frame rate com delta time`
 
-### 1.4 — Unificar a lógica de pontuação
+- ### 1.4 — Unificar a lógica de pontuação
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** remover duplicação e acoplar a pontuação ao loop do jogo.
 - **Contexto:** o `setInterval` que incrementa pontos está duplicado em `startGame()` e `setPaused()`. Além disso, um timer separado do loop pode dessincronizar.
 - **Passos:**
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **6/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **7/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -513,12 +513,12 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 0.2 — Remover arquivos e código mortos
 - [x] 0.3 — Corrigir o README
 
--### Fase 1 — Correção de bugs (3/5)
+-### Fase 1 — Correção de bugs (4/5)
 
 - [x] 1.1 — Corrigir o listener de teclado inválido
 - [x] 1.2 — Unificar velocidade inicial dos obstáculos
 - [x] 1.3 — Física com delta time
-- [ ] 1.4 — Unificar a lógica de pontuação
+- [x] 1.4 — Unificar a lógica de pontuação
 - [ ] 1.5 — Carregamento paralelo dos assets
 
 ### Fase 2 — Arquitetura em módulos (0/7)
