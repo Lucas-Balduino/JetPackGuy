@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 0 concluída (3/3)** · próxima tarefa: **1.1** — Corrigir o listener de teclado inválido
+**Fase 0 concluída (3/3)** · próxima tarefa: **1.2** — Unificar velocidade inicial dos obstáculos
 
 ---
 
@@ -76,7 +76,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 1.1 — Corrigir o listener de teclado inválido
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** remover um bug clássico de JS.
 - **Contexto:** em `script.js` (~linha 423) existe `document.addEventListener("keydown" || "click", ...)`. A expressão `"keydown" || "click"` avalia apenas para `"keydown"`; o `"click"` é código morto. Dentro do handler, `e.code === "Click"` nunca é verdadeiro. O clique só funciona por causa de outro listener no canvas.
 - **Passos:**
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **3/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **4/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -513,9 +513,9 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 0.2 — Remover arquivos e código mortos
 - [x] 0.3 — Corrigir o README
 
-### Fase 1 — Correção de bugs (0/5)
+### Fase 1 — Correção de bugs (1/5)
 
-- [ ] 1.1 — Corrigir o listener de teclado inválido
+- [x] 1.1 — Corrigir o listener de teclado inválido
 - [ ] 1.2 — Unificar velocidade inicial dos obstáculos
 - [ ] 1.3 — Física com delta time
 - [ ] 1.4 — Unificar a lógica de pontuação

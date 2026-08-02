@@ -420,20 +420,21 @@
     }
   }
 
-  document.addEventListener("keydown" || "click", (e) => {
-    if (e.code === "Space" || e.code === "ArrowUp" || e.code === "Click") {
+  // Only listen for keyboard events here; canvas click is handled separately
+  document.addEventListener("keydown", (e) => {
+    if (e.code === "Space" || e.code === "ArrowUp") {
       e.preventDefault();
       if (gameOver) {
         resetGame();
       } else {
         startGame();
-            if (y > -0.7) {
-              velocity = 0.023;
-            } else {
-              velocity = 0.03;
-            }
-            jumping = true;
-          }
+        if (y > -0.7) {
+          velocity = 0.023;
+        } else {
+          velocity = 0.03;
+        }
+        jumping = true;
+      }
     }
   });
 
