@@ -9,14 +9,8 @@ const pontuation = document.getElementById("visor");
 const canvas = document.getElementById("canvas");
 const renderer = createRenderer(canvas);
 
-// Definir dimensões dos sprites
-const spriteWidth = 100;
-const spriteHeight = 100;
-
-// Carrega sprites via módulo de assets (inclui fallbacks)
 const { player: playerData, vertical: verticalData, horizontal: horizontalData, background: backgroundData } = await loadAllSprites();
 
-// Inicializa buffers via renderer
 const playerBuffers = renderer.createSpriteBuffers(
   playerData.positionArray,
   playerData.colorArray
@@ -41,29 +35,23 @@ const backgroundBuffers = renderer.createSpriteBuffers(
 );
 const vertexBackgroundCount = backgroundBuffers.count;
 
-// Estado do jogo
 const INITIAL_OBSTACLE_VELOCITY = CONFIG.obstacles.initialVelocity;
 let obstacleVelocity = INITIAL_OBSTACLE_VELOCITY;
-// Entities
 const playerEntity = createPlayer(CONFIG);
 const obstaclesEntity = createObstacles(CONFIG);
-let jumping = false;
 let points = 0;
 const state = createStateMachine();
 let backgroundX = 0;
 let scoreTimer = 0;
 let lastTime = null;
 
-// Reaja a mudanças de estado para controlar overlays de forma centralizada
-state.onChange((from, to) => {
-  // Pausa: mostrar/ocultar overlay
+state.onChange((_from, to) => {
   if (to === States.PAUSED) {
     showPauseOverlay();
   } else {
     hidePauseOverlay();
   }
 
-  // Game over: criar overlay apenas ao entrar; remover ao sair
   if (to === States.GAME_OVER) {
     drawGameOverText();
   } else {
@@ -72,53 +60,40 @@ state.onChange((from, to) => {
   }
 });
 
-  const player = playerEntity.state;
-
-  const horizontalObstacle = {
-    width: CONFIG.obstacles.horizontal.width,
-    height: CONFIG.obstacles.horizontal.height,
-  };
-
-  const verticalObstacle = {
-    width: CONFIG.obstacles.vertical.width,
-    height: CONFIG.obstacles.vertical.height,
-  };
+function applyJump(e) {
+  if (e && e.type === 'click') {
+    playerEntity.jump(CONFIG.physics.canvasClickJumpVelocity);
+  } else if (playerEntity.state.y > CONFIG.player.jumpThresholdY) {
+    playerEntity.jump(CONFIG.physics.jumpVelocity);
+  } else {
+    playerEntity.jump(CONFIG.physics.jumpVelocityFromGround);
+  }
+}
 
 function startGame() {
-  // Transition to PLAYING (valid from READY or PAUSED)
   state.transition(States.PLAYING);
 }
 
 function resetGame() {
-  // Reset to READY
   state.force(States.READY);
   playerEntity.reset();
   obstaclesEntity.reset();
   obstacleVelocity = INITIAL_OBSTACLE_VELOCITY;
   points = 0;
   scoreTimer = 0;
-  jumping = false;
   pontuation.textContent = "0000 m";
 }
-
-function getRandomFloat(min, max) {
-  return Math.random() * (max - min) + min;
-}
-
-// `checkCollision` imported from `src/entities.js`
 
 function checkAllCollisions() {
   const p = playerEntity.state;
 
-  // Colisão com bordas da tela
   if (p.y <= CONFIG.bounds.deathFloor || p.y >= CONFIG.bounds.deathCeiling) {
     state.transition(States.GAME_OVER);
     return;
   }
 
   const playerRect = getRect(p);
-  const rects = obstaclesEntity.getRects();
-  for (const r of rects) {
+  for (const r of obstaclesEntity.getRects()) {
     if (checkCollision(playerRect, r)) {
       state.transition(States.GAME_OVER);
       return;
@@ -126,41 +101,26 @@ function checkAllCollisions() {
   }
 }
 
-// Centralize input handling in src/input.js
+function togglePause() {
+  if (state.is(States.GAME_OVER)) return;
+  if (state.is(States.PLAYING)) state.transition(States.PAUSED);
+  else if (state.is(States.PAUSED)) state.transition(States.PLAYING);
+}
+
 setupInput({
   onJump: (e) => {
     if (state.is(States.GAME_OVER)) {
       resetGame();
-    } else {
-      startGame();
-      if (e && e.type === 'click') {
-        playerEntity.jump(CONFIG.physics.canvasClickJumpVelocity);
-      } else {
-        if (playerEntity.state.y > CONFIG.player.jumpThresholdY) {
-          playerEntity.jump(CONFIG.physics.jumpVelocity);
-        } else {
-          playerEntity.jump(CONFIG.physics.jumpVelocityFromGround);
-        }
-      }
-      jumping = true;
+      return;
     }
+    if (state.is(States.READY)) startGame();
+    if (!state.is(States.PLAYING) && !state.is(States.PAUSED)) return;
+    applyJump(e);
   },
-  onTogglePause: () => {
-    if (!state.is(States.GAME_OVER)) {
-      if (state.is(States.PLAYING)) state.transition(States.PAUSED);
-      else if (state.is(States.PAUSED)) state.transition(States.PLAYING);
-    }
-  }
+  onTogglePause: togglePause,
 });
 
-document.getElementById("pauseBtn").onclick = function () {
-  if (!state.is(States.GAME_OVER)) {
-    if (state.is(States.PLAYING)) state.transition(States.PAUSED);
-    else if (state.is(States.PAUSED)) state.transition(States.PLAYING);
-  }
-};
-
-// Rendering is delegated to src/renderer.js
+document.getElementById("pauseBtn").onclick = togglePause;
 
 function drawGameOverText() {
   const gameOverDiv = document.createElement("div");
@@ -184,13 +144,6 @@ function drawGameOverText() {
   }
 
   document.body.appendChild(gameOverDiv);
-}
-
-function setPaused(value) {
-  if (value) state.transition(States.PAUSED);
-  else state.transition(States.PLAYING);
-  if (state.is(States.PAUSED)) showPauseOverlay();
-  else hidePauseOverlay();
 }
 
 function showPauseOverlay() {
@@ -226,7 +179,6 @@ function animate(now) {
 
   renderer.clear();
 
-  // Background deve se mover em READY e PLAYING; física e obstáculos só em PLAYING
   if (state.is(States.PLAYING) || state.is(States.READY)) {
     backgroundX -= obstacleVelocity * dt * 60;
     if (backgroundX <= -2) {
@@ -235,7 +187,6 @@ function animate(now) {
   }
 
   if (state.is(States.PLAYING)) {
-    // Física do jogador e obstáculos
     playerEntity.applyPhysics(dt);
     obstaclesEntity.advanceAll(obstacleVelocity, dt);
 
@@ -250,7 +201,6 @@ function animate(now) {
     checkAllCollisions();
   }
 
-  // Sempre desenha a cena (para mostrar overlay de pausa/game over)
   if (vertexBackgroundCount > 0) {
     renderer.drawSprite(backgroundBuffers, [backgroundX, 0], true);
     renderer.drawSprite(backgroundBuffers, [backgroundX + 2, 0], true);
@@ -261,12 +211,12 @@ function animate(now) {
     renderer.drawSprite(verticalBuffers, positions[1]);
     renderer.drawSprite(verticalBuffers, positions[2]);
   }
+  const player = playerEntity.state;
   renderer.drawSprite(playerBuffers, [player.x, player.y]);
 
   requestAnimationFrame(animate);
 }
 
-// Log de debug
 console.log("Inicializando jogo...");
 console.log("Vértices do jogador:", vertexCount);
 console.log("Vértices obstáculo vertical:", vertexVerticalCount);

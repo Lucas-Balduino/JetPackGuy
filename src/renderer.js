@@ -107,6 +107,5 @@ export function createRenderer(canvas) {
     clear,
     drawSprite,
     setViewport,
-    gl, // expose gl only if needed elsewhere (but prefer not to use directly)
   });
 }

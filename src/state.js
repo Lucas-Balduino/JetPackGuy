@@ -27,7 +27,7 @@ export function createStateMachine() {
       try {
         fn(prev, current);
       } catch (e) {
-        console.error('listener error', e);
+        console.error('erro no listener de estado', e);
       }
     }
   }

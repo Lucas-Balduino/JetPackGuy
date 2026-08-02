@@ -1,5 +1,3 @@
-import { CONFIG } from './config.js';
-
 function getRandomFloat(min, max) {
   return Math.random() * (max - min) + min;
 }
@@ -54,14 +52,13 @@ export function createPlayer(cfg) {
 
 export function createObstacles(cfg) {
   const obs = [];
-  // First obstacle is horizontal, next two vertical (keeps same layout)
   for (let i = 0; i < 3; i++) {
     const isHorizontal = i === 0;
     const width = isHorizontal ? cfg.obstacles.horizontal.width : cfg.obstacles.vertical.width;
     const height = isHorizontal ? cfg.obstacles.horizontal.height : cfg.obstacles.vertical.height;
     obs.push({
       x: cfg.obstacles.startX[i],
-      y: getRandomFloat(cfg.obstacles.spawnYRange[0], cfg.obstacles.spawnYRange[1]),
+      y: 0,
       width,
       height,
       respawnX: cfg.obstacles.respawnX[i],
