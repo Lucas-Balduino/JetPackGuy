@@ -12,7 +12,12 @@ const loadingOverlay = document.getElementById("loadingOverlay");
 const startOverlay = document.getElementById("startOverlay");
 const gameOverOverlay = document.getElementById("gameOverOverlay");
 const pauseOverlay = document.getElementById("pauseOverlay");
+const instructionsEl = document.querySelector(".instructions");
 const renderer = createRenderer(canvas);
+
+if (instructionsEl && 'ontouchstart' in window) {
+  instructionsEl.innerHTML = '<b>Toque</b> para voar &nbsp;|&nbsp; <b>P</b> para pausar';
+}
 
 const { player: playerData, vertical: verticalData, horizontal: horizontalData, background: backgroundData } = await loadAllSprites();
 

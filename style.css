@@ -39,6 +39,22 @@ body::before {
     align-items: center;
     justify-content: center;
     padding: var(--space-game-container);
+    --game-width: 670px;
+    --game-height: 850px;
+    --game-scale: min(
+        1,
+        calc(min(90vw, var(--game-width)) / var(--game-width)),
+        calc((100dvh - 2 * var(--space-game-container)) / var(--game-height))
+    );
+    padding-top: calc(var(--space-game-container) + 105px * max(0, 1 - var(--game-scale)));
+}
+
+.game-stage {
+    position: relative;
+    width: var(--game-width);
+    height: var(--game-height);
+    transform: scale(var(--game-scale));
+    transform-origin: top center;
 }
 
 #MolduraPixelArt {
@@ -192,40 +208,4 @@ canvas {
 #pauseBtn:focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
-}
-
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .game-frame {
-        width: 90vw;
-        height: 90vw;
-        max-width: 500px;
-        max-height: 500px;
-    }
-    canvas {
-        width: calc(100% - 40px);
-        height: calc(100% - 100px);
-    }
-    #visor {
-        width: 180px;
-        height: 50px;
-        font-size: 16px;
-        line-height: 44px;
-        top: 15px;
-    }
-}
-
-@media (max-width: 480px) {
-    .game-frame {
-        width: 95vw;
-        height: 95vw;
-    }
-    #visor {
-        width: 150px;
-        height: 40px;
-        font-size: 14px;
-        line-height: 34px;
-        top: 10px;
-    }
 }
