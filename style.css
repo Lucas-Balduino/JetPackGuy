@@ -226,3 +226,21 @@ canvas {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
 }
+
+@media (prefers-reduced-motion: no-preference) {
+    #canvas.canvas-shake {
+        animation: canvas-shake 300ms ease-out;
+    }
+
+    @keyframes canvas-shake {
+        0% { transform: translate(0, 0); }
+        12% { transform: translate(-4px, 3px); }
+        24% { transform: translate(4px, -3px); }
+        36% { transform: translate(-3px, -2px); }
+        48% { transform: translate(3px, 2px); }
+        60% { transform: translate(-2px, 1px); }
+        72% { transform: translate(2px, -1px); }
+        84% { transform: translate(-1px, 0); }
+        100% { transform: translate(0, 0); }
+    }
+}

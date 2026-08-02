@@ -83,7 +83,18 @@ state.onChange((_from, to) => {
   const pauseLabel = to === States.PAUSED ? "Continuar jogo" : "Pausar jogo";
   pauseBtn.setAttribute("aria-label", pauseLabel);
   pauseBtn.title = to === States.PAUSED ? "Continuar" : "Pausar";
+  if (to === States.GAME_OVER) {
+    canvas.classList.remove("canvas-shake");
+    void canvas.offsetWidth;
+    canvas.classList.add("canvas-shake");
+  }
   if (to === States.GAME_OVER) updateGameOverOverlay();
+});
+
+canvas.addEventListener("animationend", (event) => {
+  if (event.animationName === "canvas-shake") {
+    canvas.classList.remove("canvas-shake");
+  }
 });
 
 function applyJump(e) {

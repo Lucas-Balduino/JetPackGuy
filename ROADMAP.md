@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 6 em andamento (1/4)** · próxima tarefa: **6.2** — Screen shake na morte
+**Fase 6 em andamento (2/4)** · próxima tarefa: **6.3** — Sons e botão de mudo
 
 ---
 
@@ -455,7 +455,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 6.2 — Screen shake na morte
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Passos:** na transição para `GAME_OVER`, aplicar por ~300ms um deslocamento aleatório decrescente ao uniform `translation` de tudo que é desenhado (ou uma classe CSS com `@keyframes` de shake no canvas — mais simples). Respeitar `prefers-reduced-motion`.
 - **Critérios de aceite:** morte gera tremida curta; com reduced motion, nada treme.
 - **Commit:** `feat(feel): screen shake ao morrer`
@@ -553,10 +553,10 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 5.5 — Responsividade real e controle por toque
 - [x] 5.6 — Acessibilidade
 
-### Fase 6 — Game feel (1/4)
+### Fase 6 — Game feel (2/4)
 
 - [x] 6.1 — Partículas do jetpack
-- [ ] 6.2 — Screen shake na morte
+- [x] 6.2 — Screen shake na morte
 - [ ] 6.3 — Sons e botão de mudo
 - [ ] 6.4 — Animação do contador de metros
 
