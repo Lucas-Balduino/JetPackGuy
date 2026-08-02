@@ -42,7 +42,7 @@ Depois de **qualquer** mudança, jogue uma partida completa antes de commitar: v
 - **Sprites são pontos, não texturas.** Cada pixel do JSON vira um vértice desenhado com `gl.POINTS`. Essa é a proposta pedagógica do projeto — não converter para textura nem para quads.
 - **Coordenadas em clip space** (−1 a +1). Os sprites têm o Y invertido no vertex shader; o fundo não — é o que o uniform `isBackground` controla.
 - **Escala:** 1.5 unidades de clip space = 375 px (teto ao chão); 0.4 = 100 px (obstáculo). Canvas é 540×540.
-- **A física está em unidades por frame**, calibrada para 60 fps — em monitores de 144 Hz o jogo roda mais rápido. A tarefa 1.3 corrige isso com delta time.
+- **Física com delta time:** movimento e pontuação usam `dt` (segundos desde o último frame, com clamp de 0,05 s) multiplicado por 60 para preservar o tuning calibrado em 60 fps. `lastTime` é atualizado em todo frame, inclusive pausado — evita salto ao retomar.
 - **Os overlays de pausa e game over** são criados por JS com estilos inline e anexados ao `body`, fora do container do jogo. A tarefa 5.1 os move para o HTML.
 
 ## Convenções

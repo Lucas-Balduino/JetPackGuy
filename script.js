@@ -321,8 +321,6 @@
     height: 0.25,
   };
 
-  
-
   function startGame() {
     if (!gameStarted) {
       gameStarted = true;
@@ -406,7 +404,6 @@
     }
   }
 
-  // Only listen for keyboard events here; canvas click is handled separately
   document.addEventListener("keydown", (e) => {
     if (e.code === "Space" || e.code === "ArrowUp") {
       e.preventDefault();
@@ -495,7 +492,6 @@
     if (paused) {
       showPauseOverlay();
     } else {
-      // Resuming simply hides the overlay; scoring continues in the game loop
       hidePauseOverlay();
     }
   }
@@ -536,8 +532,7 @@
 
     // Só atualiza movimento se não estiver pausado e não estiver em game over
     if (!gameOver && !paused) {
-      // Atualize o deslocamento do fundo (ajustado por delta time)
-      backgroundX -= obstacleVelocity * dt * 60; // ajuste a velocidade do fundo aqui
+      backgroundX -= obstacleVelocity * dt * 60;
       if (backgroundX <= -2) {
         backgroundX = 0;
       }
@@ -564,7 +559,7 @@
           velocity = Math.min(velocity, 0);
         }
 
-          if (gameStarted) {
+        if (gameStarted) {
           x1 -= obstacleVelocity * dt * 60;
           if (x1 <= -1.5) {
             x1 = 1.5;
@@ -583,7 +578,6 @@
             y3 = getRandomFloat(-0.8, 0.8);
           }
 
-          // Pontuação e aumento de velocidade integrados ao game loop
           scoreTimer += dt;
           while (scoreTimer >= 0.1) {
             scoreTimer -= 0.1;
