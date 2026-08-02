@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 1 concluída (5/5)** · próxima tarefa: **2.4** — Extrair o carregador de assets (assets.js)
+**Fase 1 concluída (5/5)** · próxima tarefa: **2.5** — Extrair entidades e colisão (entities.js)
 
 ---
 
@@ -205,7 +205,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 2.4 — Extrair o carregador de assets (assets.js)
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** isolar fetch/parse dos sprites.
 - **Passos:**
   1. Criar `src/assets.js` e mover para lá: `getJsonData`, `createFallbackSprite`, `createFullBackground` e o parse de cores.
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **11/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **12/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -521,12 +521,13 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 1.4 — Unificar a lógica de pontuação
 - [x] 1.5 — Carregamento paralelo dos assets
 
-### Fase 2 — Arquitetura em módulos (3/7)
+### Fase 2 — Arquitetura em módulos (4/7)
 
 - [x] 2.1 — Migrar para ES Modules
 - [x] 2.2 — Extrair configuração (config.js)
 - [x] 2.3 — Extrair o renderer WebGL (renderer.js)
-- [ ] 2.4 — Extrair o carregador de assets (assets.js)
+- [x] 2.4 — Extrair o carregador de assets (assets.js)
+- [ ] 2.5 — Extrair entidades e colisão (entities.js)
 - [ ] 2.3 — Extrair o renderer WebGL (renderer.js)
 - [ ] 2.4 — Extrair o carregador de assets (assets.js)
 - [ ] 2.5 — Extrair entidades e colisão (entities.js)

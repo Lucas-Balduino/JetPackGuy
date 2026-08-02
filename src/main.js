@@ -1,5 +1,6 @@
 import { CONFIG } from './config.js';
 import { createRenderer } from './renderer.js';
+import { loadAllSprites } from './assets.js';
 
 const pontuation = document.getElementById("visor");
 const canvas = document.getElementById("canvas");
@@ -9,188 +10,31 @@ const renderer = createRenderer(canvas);
 const spriteWidth = 100;
 const spriteHeight = 100;
 
-async function getJsonData(url, w, h) {
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Erro ao carregar ${url}: ${res.status}`);
-    const pixels = await res.json();
-
-    if (!pixels || pixels.length === 0) {
-      console.warn(`Arquivo ${url} está vazio ou não contém pixels válidos`);
-      return {
-        positionArray: new Float32Array([]),
-        colorArray: new Float32Array([]),
-      };
-    }
-
-    const positions = [];
-    const colors = [];
-
-    for (const p of pixels) {
-      let x, y;
-      if (url === "ImagesJson/BackgroundPixels.json") {
-        x = (p.x / w) * 2 - 1;
-        y = -((p.y / h) * 2 - 1);
-      } else {
-        const scale = 0.3;
-        x = (p.x / w) * scale - scale / 2;
-        y = (p.y / h) * scale - scale / 2;
-      }
-      positions.push(x, y);
-
-      // Parse da cor
-      const match = /rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/.exec(p.color);
-      let r = 0,
-        g = 0,
-        b = 0;
-      if (match) {
-        r = Number(match[1]);
-        g = Number(match[2]);
-        b = Number(match[3]);
-      } else if (p.color.startsWith("#")) {
-        const hex = p.color.slice(1);
-        r = parseInt(hex.substr(0, 2), 16);
-        g = parseInt(hex.substr(2, 2), 16);
-        b = parseInt(hex.substr(4, 2), 16);
-      }
-      colors.push(r / 255, g / 255, b / 255);
-    }
-
-    console.log(`Carregado ${url}: ${pixels.length} pixels`);
-    return {
-      positionArray: new Float32Array(positions),
-      colorArray: new Float32Array(colors),
-    };
-  } catch (error) {
-    console.error("Erro ao carregar JSON:", error);
-    return {
-      positionArray: new Float32Array([]),
-      colorArray: new Float32Array([]),
-    };
-  }
-}
-
-// Função para criar sprites de fallback
-function createFallbackSprite(width, height, color) {
-  const positions = [];
-  const colors = [];
-  const scale = 0.1;
-
-  for (let x = 0; x < width; x += 2) {
-    for (let y = 0; y < height; y += 2) {
-      const normX = (x / width) * scale - scale / 2;
-      const normY = (y / height) * scale - scale / 2;
-      positions.push(normX, normY);
-      colors.push(color[0], color[1], color[2]);
-    }
-  }
-
-  return {
-    positionArray: new Float32Array(positions),
-    colorArray: new Float32Array(colors),
-  };
-}
-
-// Cria background que cobre toda a tela
-function createFullBackground() {
-  const positions = [];
-  const colors = [];
-  // Gera pontos de -1 a 1 cobrindo toda a tela
-  for (let x = 0; x <= 550; x += 6) {
-    for (let y = 0; y <= 540; y += 6) {
-      // Normaliza para -1 a 1
-      const nx = (x / 540) * 2 - 1;
-      const ny = -((y / 540) * 2 - 1); // Inverte Y para ficar igual ao JetPackJogo.js
-      positions.push(nx, ny);
-      // Gradiente azul escuro
-      const intensity = 0.1 + Math.random() * 0.1;
-      colors.push(0, intensity, intensity * 2);
-    }
-  }
-  return {
-    positionArray: new Float32Array(positions),
-    colorArray: new Float32Array(colors),
-  };
-}
-
-// Carrega JSONs
-const jsonData = {};
-
-// Carrega os 4 JSONs de sprites em paralelo
-const [playerData, verticalData, horizontalData, backgroundData] = await Promise.all([
-  getJsonData("ImagesJson/JetPackGuyPixels.json", 100, 100),
-  getJsonData("ImagesJson/VerticalObstaclePixels.json", 100, 100),
-  getJsonData("ImagesJson/HorizontalObstaclePixels.json", 100, 100),
-  getJsonData("ImagesJson/BackgroundPixels.json", 375, 375),
-]);
-
-jsonData["ImagesJson/JetPackGuyPixels.json"] = playerData;
-jsonData["ImagesJson/VerticalObstaclePixels.json"] = verticalData;
-jsonData["ImagesJson/HorizontalObstaclePixels.json"] = horizontalData;
-jsonData["ImagesJson/BackgroundPixels.json"] = backgroundData;
-
-// Usa sprites de fallback se necessário
-if (jsonData["ImagesJson/JetPackGuyPixels.json"].positionArray.length === 0) {
-  console.log("Usando sprite de fallback para o jogador");
-  jsonData["ImagesJson/JetPackGuyPixels.json"] = createFallbackSprite(
-    20,
-    20,
-    [0, 1, 0]
-  );
-}
-
-if (
-  jsonData["ImagesJson/VerticalObstaclePixels.json"].positionArray.length ===
-  0
-) {
-  console.log("Usando sprite de fallback para obstáculo vertical");
-  jsonData["ImagesJson/VerticalObstaclePixels.json"] = createFallbackSprite(
-    10,
-    40,
-    [1, 1, 0]
-  );
-}
-
-if (
-  jsonData["ImagesJson/HorizontalObstaclePixels.json"].positionArray
-    .length === 0
-) {
-  console.log("Usando sprite de fallback para obstáculo horizontal");
-  jsonData["ImagesJson/HorizontalObstaclePixels.json"] = createFallbackSprite(
-    40,
-    10,
-    [1, 1, 0]
-  );
-}
-
-// Background que cobre toda a tela
-if (jsonData["ImagesJson/BackgroundPixels.json"].positionArray.length === 0) {
-  console.log("Criando background completo");
-  jsonData["ImagesJson/BackgroundPixels.json"] = createFullBackground();
-}
+// Carrega sprites via módulo de assets (inclui fallbacks)
+const { player: playerData, vertical: verticalData, horizontal: horizontalData, background: backgroundData } = await loadAllSprites();
 
 // Inicializa buffers via renderer
 const playerBuffers = renderer.createSpriteBuffers(
-  jsonData["ImagesJson/JetPackGuyPixels.json"].positionArray,
-  jsonData["ImagesJson/JetPackGuyPixels.json"].colorArray
+  playerData.positionArray,
+  playerData.colorArray
 );
 const vertexCount = playerBuffers.count;
 
 const verticalBuffers = renderer.createSpriteBuffers(
-  jsonData["ImagesJson/VerticalObstaclePixels.json"].positionArray,
-  jsonData["ImagesJson/VerticalObstaclePixels.json"].colorArray
+  verticalData.positionArray,
+  verticalData.colorArray
 );
 const vertexVerticalCount = verticalBuffers.count;
 
 const horizontalBuffers = renderer.createSpriteBuffers(
-  jsonData["ImagesJson/HorizontalObstaclePixels.json"].positionArray,
-  jsonData["ImagesJson/HorizontalObstaclePixels.json"].colorArray
+  horizontalData.positionArray,
+  horizontalData.colorArray
 );
 const vertexHorizontalCount = horizontalBuffers.count;
 
 const backgroundBuffers = renderer.createSpriteBuffers(
-  jsonData["ImagesJson/BackgroundPixels.json"].positionArray,
-  jsonData["ImagesJson/BackgroundPixels.json"].colorArray
+  backgroundData.positionArray,
+  backgroundData.colorArray
 );
 const vertexBackgroundCount = backgroundBuffers.count;
 
