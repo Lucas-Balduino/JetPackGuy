@@ -8,6 +8,7 @@ import { setupInput } from './input.js';
 const pontuation = document.getElementById("visor");
 const canvas = document.getElementById("canvas");
 const loadingOverlay = document.getElementById("loadingOverlay");
+const startOverlay = document.getElementById("startOverlay");
 const gameOverOverlay = document.getElementById("gameOverOverlay");
 const pauseOverlay = document.getElementById("pauseOverlay");
 const renderer = createRenderer(canvas);
@@ -50,6 +51,7 @@ let lastTime = null;
 let firstFrameDrawn = false;
 
 state.onChange((_from, to) => {
+  startOverlay.classList.toggle("hidden", to !== States.READY);
   pauseOverlay.classList.toggle("hidden", to !== States.PAUSED);
   gameOverOverlay.classList.toggle("hidden", to !== States.GAME_OVER);
 });
@@ -115,6 +117,9 @@ setupInput({
 });
 
 document.getElementById("pauseBtn").onclick = togglePause;
+document.getElementById("startBtn").onclick = () => {
+  if (state.is(States.READY)) startGame();
+};
 
 function animate(now) {
   if (lastTime === null) lastTime = now;

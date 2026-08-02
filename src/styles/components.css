@@ -68,6 +68,26 @@
   text-shadow: var(--shadow-text);
 }
 
+#startOverlay {
+  text-align: center;
+}
+
+#startOverlay h2 {
+  margin: 0 0 var(--space-3) 0;
+  font-family: var(--font-family-pixel);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
+  text-shadow: var(--shadow-text);
+}
+
+#startOverlay p {
+  margin: 0 0 var(--space-4) 0;
+  font-family: var(--font-family-pixel);
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+}
+
 #gameOverOverlay {
   text-align: center;
   pointer-events: none;
