@@ -14,7 +14,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 **Regras para o executor (modelo ou humano):**
 
-0. Ler o [`AGENTS.md`](AGENTS.md) antes de começar: ele tem o mapa do projeto, os conceitos de WebGL que o código não explicita, as convenções e a lista de arquivos que **não** devem ser lidos por inteiro (o JSON do fundo tem 11 MB).
+0. Ler o [`AGENTS.md`](AGENTS.md) antes de começar: ele tem o mapa do projeto, os conceitos de WebGL que o código não explicita, as convenções e a lista de arquivos que **não** devem ser lidos por inteiro (o JSON compacto do fundo tem ~1,3 MB).
 1. Executar **apenas uma tarefa por vez**. Nunca adiantar tarefas futuras, mesmo que pareça fácil.
 2. Não refatorar, renomear ou "melhorar" nada fora do escopo da tarefa.
 3. Antes do commit, conferir **todos** os critérios de aceite.
@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 3 em andamento (1/3)** · próxima tarefa: **3.2** — Substituir o JSON de background de 11 MB
+**Fase 3 em andamento (2/3)** · próxima tarefa: **3.3** — Tela de loading
 
 ---
 
@@ -273,7 +273,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 3.2 — Substituir o JSON de background de 11 MB
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** eliminar o maior gargalo de carregamento.
 - **Contexto:** `ImagesJson/BackgroundPixels.json` tem **11 MB** para descrever uma imagem de 375×375. O formato JSON (`{"x":..,"y":..,"color":"rgba(...)"}` por pixel) é extremamente verboso.
 - **Passos:**
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **16/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **17/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -534,7 +534,7 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 ### Fase 3 — Assets e performance (1/3)
 
 - [x] 3.1 — Otimizar as imagens PNG
-- [ ] 3.2 — Substituir o JSON de background de 11 MB
+- [x] 3.2 — Substituir o JSON de background de 11 MB
 - [ ] 3.3 — Tela de loading
 
 ### Fase 4 — Design system (0/4)

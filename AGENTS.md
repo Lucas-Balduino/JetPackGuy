@@ -18,6 +18,8 @@ Recriação em pixel art do *Jetpack Joyride* com **WebGL puro**, sem biblioteca
 | `src/state.js` | Máquina de estados (`READY`, `PLAYING`, `PAUSED`, `GAME_OVER`) |
 | `src/input.js` | Teclado e clique no canvas (callbacks) |
 | `ImagesJson/*.json` | Sprites como listas de pixels `{ x, y, color }` |
+| `ImagesJson/BackgroundPixels.compact.json` | Fundo em formato compacto `{ width, height, data: [r,g,b,...] }` |
+| `tools/convert_to_compact.py` | Converte PNG opaco em JSON compacto (roda fora do jogo) |
 | `Images/*.png` | Arte-fonte: moldura, visor, ícone de pausa e os sprites originais |
 | `Images/ImageConverter.py` | Converte PNG → JSON de pixels (roda fora do jogo, manualmente) |
 | `Info/*.txt` | Anotações da disciplina — **histórico, não especificação** |
@@ -26,10 +28,10 @@ Recriação em pixel art do *Jetpack Joyride* com **WebGL puro**, sem biblioteca
 
 ## Não leia estes arquivos por inteiro
 
-- `ImagesJson/BackgroundPixels.json` — **11 MB**. Ler estoura o contexto sem entregar informação útil.
+- `ImagesJson/BackgroundPixels.compact.json` — **~1,3 MB**. Ler estoura o contexto sem entregar informação útil.
 - Os demais JSONs de `ImagesJson/` (84–128 KB) — se precisar conferir o formato, leia só as primeiras linhas.
 
-O formato é sempre o mesmo: array de `{ "x": int, "y": int, "color": "rgba(r, g, b, a)" }`, um item por pixel visível.
+Sprites usam array de `{ "x": int, "y": int, "color": "rgba(r, g, b, a)" }`, um item por pixel visível. O background usa formato compacto: `{ "width": W, "height": H, "data": [r, g, b, ...] }` em ordem row-major (coordenadas derivadas do índice).
 
 ## Como rodar e verificar
 

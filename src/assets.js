@@ -1,5 +1,43 @@
 // Carregamento de sprites e fallbacks
 export async function loadAllSprites() {
+  async function getCompactBackgroundData(url) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Erro ao carregar ${url}: ${res.status}`);
+      const { width, height, data } = await res.json();
+
+      if (!data || data.length === 0) {
+        console.warn(`Arquivo ${url} está vazio ou não contém pixels válidos`);
+        return {
+          positionArray: new Float32Array([]),
+          colorArray: new Float32Array([]),
+        };
+      }
+
+      const positions = [];
+      const colors = [];
+
+      for (let i = 0; i < data.length; i += 3) {
+        const idx = i / 3;
+        const px = idx % width;
+        const py = Math.floor(idx / width);
+        positions.push((px / width) * 2 - 1, -((py / height) * 2 - 1));
+        colors.push(data[i] / 255, data[i + 1] / 255, data[i + 2] / 255);
+      }
+
+      return {
+        positionArray: new Float32Array(positions),
+        colorArray: new Float32Array(colors),
+      };
+    } catch (error) {
+      console.error('Erro ao carregar JSON compacto:', error);
+      return {
+        positionArray: new Float32Array([]),
+        colorArray: new Float32Array([]),
+      };
+    }
+  }
+
   async function getJsonData(url, w, h, isBackground = false) {
     try {
       const res = await fetch(url);
@@ -102,7 +140,7 @@ export async function loadAllSprites() {
     getJsonData('ImagesJson/JetPackGuyPixels.json', 100, 100, false),
     getJsonData('ImagesJson/VerticalObstaclePixels.json', 100, 100, false),
     getJsonData('ImagesJson/HorizontalObstaclePixels.json', 100, 100, false),
-    getJsonData('ImagesJson/BackgroundPixels.json', 375, 375, true),
+    getCompactBackgroundData('ImagesJson/BackgroundPixels.compact.json'),
   ]);
 
   const player = playerData.positionArray.length === 0 ? createFallbackSprite(20, 20, [0, 1, 0]) : playerData;
