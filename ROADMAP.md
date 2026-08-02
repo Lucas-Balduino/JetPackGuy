@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 0 concluída (3/3)** · próxima tarefa: **1.6** — Extrair assets e performance
+**Fase 0 concluída (3/3)** · próxima tarefa: **2.1** — Extrair assets e performance
 
 ---
 
