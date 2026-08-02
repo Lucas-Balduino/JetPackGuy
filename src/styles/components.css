@@ -90,7 +90,6 @@
 
 #gameOverOverlay {
   text-align: center;
-  pointer-events: none;
 }
 
 #gameOverOverlay h2 {
@@ -102,11 +101,22 @@
   text-shadow: var(--glow-danger);
 }
 
-#gameOverOverlay p {
-  margin: 0;
+#gameOverDistance,
+#gameOverRecord,
+#gameOverNewRecord {
+  margin: 0 0 var(--space-2) 0;
   font-family: var(--font-family-pixel);
   font-size: var(--font-size-md);
   color: var(--color-text);
+}
+
+#gameOverRecord {
+  margin-bottom: var(--space-4);
+}
+
+#gameOverNewRecord {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
 }
 
 #pauseOverlay {

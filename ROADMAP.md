@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 5 em andamento (2/6)** · próxima tarefa: **5.3** — Tela de morte com pontuação e recorde
+**Fase 5 em andamento (3/6)** · próxima tarefa: **5.4** — Transições e micro-animações de UI
 
 ---
 
@@ -394,7 +394,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 5.3 — Tela de morte com pontuação e recorde
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** fechar o loop de retenção (o item "Tela de Morte" do TODO original).
 - **Passos:**
   1. Expandir `#gameOverOverlay` com: distância da partida ("0342 m"), recorde ("RECORDE: 0518 m") e um `.btn-pixel` "JOGAR DE NOVO".
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **24/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **25/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -544,11 +544,11 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 4.3 — Componentes base
 - [x] 4.4 — Página de documentação do design system
 
-### Fase 5 — UX e fluxo de telas (2/6)
+### Fase 5 — UX e fluxo de telas (3/6)
 
 - [x] 5.1 — Overlays declarativos
 - [x] 5.2 — Tela inicial (estado READY)
-- [ ] 5.3 — Tela de morte com pontuação e recorde
+- [x] 5.3 — Tela de morte com pontuação e recorde
 - [ ] 5.4 — Transições e micro-animações de UI
 - [ ] 5.5 — Responsividade real e controle por toque
 - [ ] 5.6 — Acessibilidade

@@ -4,6 +4,7 @@ import { loadAllSprites } from './assets.js';
 import { createPlayer, createObstacles, checkCollision, getRect } from './entities.js';
 import { States, createStateMachine } from './state.js';
 import { setupInput } from './input.js';
+import { getHighScore, saveHighScore } from './storage.js';
 
 const pontuation = document.getElementById("visor");
 const canvas = document.getElementById("canvas");
@@ -50,10 +51,28 @@ let scoreTimer = 0;
 let lastTime = null;
 let firstFrameDrawn = false;
 
+function formatScore(value) {
+  return value.toString().padStart(4, "0") + " m";
+}
+
+function updateGameOverOverlay() {
+  const distanceEl = document.getElementById("gameOverDistance");
+  const recordEl = document.getElementById("gameOverRecord");
+  const newRecordEl = document.getElementById("gameOverNewRecord");
+  const previousHigh = getHighScore();
+  const isNewRecord = points > previousHigh;
+
+  distanceEl.textContent = formatScore(points);
+  if (isNewRecord) saveHighScore(points);
+  recordEl.textContent = "RECORDE: " + formatScore(isNewRecord ? points : previousHigh);
+  newRecordEl.classList.toggle("hidden", !isNewRecord);
+}
+
 state.onChange((_from, to) => {
   startOverlay.classList.toggle("hidden", to !== States.READY);
   pauseOverlay.classList.toggle("hidden", to !== States.PAUSED);
   gameOverOverlay.classList.toggle("hidden", to !== States.GAME_OVER);
+  if (to === States.GAME_OVER) updateGameOverOverlay();
 });
 
 function applyJump(e) {
@@ -70,14 +89,23 @@ function startGame() {
   state.transition(States.PLAYING);
 }
 
-function resetGame() {
-  state.force(States.READY);
+function resetGameState() {
   playerEntity.reset();
   obstaclesEntity.reset();
   obstacleVelocity = INITIAL_OBSTACLE_VELOCITY;
   points = 0;
   scoreTimer = 0;
   pontuation.textContent = "0000 m";
+}
+
+function resetGame() {
+  resetGameState();
+  state.force(States.READY);
+}
+
+function restartGame() {
+  resetGameState();
+  state.force(States.PLAYING);
 }
 
 function checkAllCollisions() {
@@ -106,7 +134,7 @@ function togglePause() {
 setupInput({
   onJump: (e) => {
     if (state.is(States.GAME_OVER)) {
-      resetGame();
+      restartGame();
       return;
     }
     if (state.is(States.READY)) startGame();
@@ -119,6 +147,9 @@ setupInput({
 document.getElementById("pauseBtn").onclick = togglePause;
 document.getElementById("startBtn").onclick = () => {
   if (state.is(States.READY)) startGame();
+};
+document.getElementById("restartBtn").onclick = () => {
+  if (state.is(States.GAME_OVER)) restartGame();
 };
 
 function animate(now) {
