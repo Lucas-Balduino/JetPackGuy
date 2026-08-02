@@ -7,6 +7,7 @@ import { setupInput } from './input.js';
 
 const pontuation = document.getElementById("visor");
 const canvas = document.getElementById("canvas");
+const loadingOverlay = document.getElementById("loadingOverlay");
 const renderer = createRenderer(canvas);
 
 const { player: playerData, vertical: verticalData, horizontal: horizontalData, background: backgroundData } = await loadAllSprites();
@@ -44,6 +45,7 @@ const state = createStateMachine();
 let backgroundX = 0;
 let scoreTimer = 0;
 let lastTime = null;
+let firstFrameDrawn = false;
 
 state.onChange((_from, to) => {
   if (to === States.PAUSED) {
@@ -213,6 +215,11 @@ function animate(now) {
   }
   const player = playerEntity.state;
   renderer.drawSprite(playerBuffers, [player.x, player.y]);
+
+  if (!firstFrameDrawn) {
+    firstFrameDrawn = true;
+    loadingOverlay.classList.add("hidden");
+  }
 
   requestAnimationFrame(animate);
 }

@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 3 em andamento (2/3)** · próxima tarefa: **3.3** — Tela de loading
+**Fase 4 em andamento (0/4)** · próxima tarefa: **4.1** — Tokens de design (CSS custom properties)
 
 ---
 
@@ -256,7 +256,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ---
 
-## Fase 3 — Assets e performance
+## Fase 3 — Assets e performance ✅
 
 > **O que você aprende:** performance percebida é UX. Um jogo que demora 10 segundos para abrir perde o jogador antes do primeiro pulo. Aqui você mede, otimiza e comunica o carregamento.
 
@@ -287,7 +287,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 3.3 — Tela de loading
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** nunca mostrar canvas vazio ao usuário.
 - **Passos:**
   1. Em `index.html`, adicionar dentro de `.game-container` um `<div id="loadingOverlay">Carregando...</div>` sobre o canvas (posição absoluta, fundo escuro, fonte Pixelify Sans, centralizado).
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **17/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **18/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -531,11 +531,11 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 2.6 — Máquina de estados (state.js)
 - [x] 2.7 — Módulo de input (input.js)
 
-### Fase 3 — Assets e performance (1/3)
+### Fase 3 — Assets e performance (3/3)
 
 - [x] 3.1 — Otimizar as imagens PNG
 - [x] 3.2 — Substituir o JSON de background de 11 MB
-- [ ] 3.3 — Tela de loading
+- [x] 3.3 — Tela de loading
 
 ### Fase 4 — Design system (0/4)
 
