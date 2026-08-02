@@ -2,8 +2,8 @@
 /* Global reset */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-    font-family: 'Pixelify Sans', sans-serif;
-    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    font-family: var(--font-family-pixel);
+    background: linear-gradient(135deg, var(--color-bg-deep) 0%, var(--color-bg-mid) 50%, var(--color-bg-light) 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -21,11 +21,11 @@ body::before {
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(2px 2px at 20px 30px, #eee, transparent),
-        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
-        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-        radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
-        radial-gradient(2px 2px at 160px 30px, #fff, transparent);
+        radial-gradient(2px 2px at 20px 30px, var(--star-1), transparent),
+        radial-gradient(2px 2px at 40px 70px, var(--star-2), transparent),
+        radial-gradient(1px 1px at 90px 40px, var(--star-1), transparent),
+        radial-gradient(1px 1px at 130px 80px, var(--star-3), transparent),
+        radial-gradient(2px 2px at 160px 30px, var(--star-1), transparent);
     background-repeat: repeat;
     background-size: 200px 100px;
     z-index: -1;
@@ -38,7 +38,7 @@ body::before {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: var(--space-game-container);
 }
 
 #MolduraPixelArt {
@@ -53,22 +53,22 @@ body::before {
 
 
 #visor {
-  background: url('Images/PixelArtVisor.png') no-repeat center center;
-  background-size: cover;
-  position: absolute;
-  top: -105px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 400px;
-  height: 100px;
-  color: #fff;
-  font-size: 35px;
-  line-height: 95px;
-  text-align: center;
-  z-index: 10;
-  /* Melhoria de legibilidade */
-  text-shadow: 1px 1px 2px #000;
-  font-weight: bold;
+    background: url('Images/PixelArtVisor.png') no-repeat center center;
+    background-size: cover;
+    position: absolute;
+    top: -105px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 100px;
+    color: var(--color-white);
+    font-size: var(--font-size-xl);
+    line-height: 95px;
+    text-align: center;
+    z-index: var(--z-hud);
+    /* Melhoria de legibilidade */
+    text-shadow: var(--shadow-text);
+    font-weight: var(--font-weight-bold);
 }
 
 .hidden {
@@ -92,13 +92,13 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.85);
-    font-family: 'Pixelify Sans', sans-serif;
-    color: #e0f7fa;
-    font-size: 28px;
-    font-weight: 700;
-    z-index: 20;
-    border-radius: 25px;
+    background: var(--overlay-bg);
+    font-family: var(--font-family-pixel);
+    color: var(--color-text);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    z-index: var(--z-overlay);
+    border-radius: var(--radius-lg);
     pointer-events: none;
 }
 
@@ -107,41 +107,41 @@ canvas {
     width: 540px;
     height: 540px;
     top: 80px;
-    background: rgba(0,0,0,0.2);
+    background: var(--canvas-bg);
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
-    border: 2px solid rgba(255,255,255,0.1);
-    border-radius: 25px;
+    border: var(--border-faint);
+    border-radius: var(--radius-lg);
     position: relative;
-    z-index: 1;
+    z-index: var(--z-game);
 }
 
 /* Game Over overlay */
 #gameOverText {
-    font-family: 'Pixelify Sans', sans-serif !important;
-    background: rgba(0, 0, 0, 0.9);
+    font-family: var(--font-family-pixel) !important;
+    background: var(--overlay-bg);
     padding: 30px;
-    border-radius: 15px;
-    border: 3px solid #ff0000;
-    text-shadow: 0 0 15px #ff0000;
-    box-shadow: 0 0 30px rgba(255,0,0,0.5);
+    border-radius: var(--radius-md);
+    border: 3px solid var(--color-danger);
+    text-shadow: var(--glow-danger);
+    box-shadow: var(--glow-danger-weak);
 }
 
 .instructions {
     margin-top: 22px;
-    color: #e0f7fa;
-    font-size: 20px;
+    color: var(--color-text);
+    font-size: var(--font-size-md);
     text-align: center;
-    border-radius: 8px;
-    padding: 8px 24px;
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-5);
     font-weight: 600;
     letter-spacing: 0.5px;
-    z-index: 10;
+    z-index: var(--z-hud);
 }
 .instructions b {
-    color: #ffd000;
-    font-weight: 700;
+    color: var(--color-accent);
+    font-weight: var(--font-weight-bold);
 }
 
 /* Botão de pausa — sprite isolado da moldura */
@@ -149,7 +149,7 @@ canvas {
     position: absolute;
     top: 25px;
     right: -5px;
-    z-index: 110;
+    z-index: var(--z-controls);
     padding: 0;
     border: none;
     background: transparent;
@@ -172,7 +172,7 @@ canvas {
 }
 
 #pauseBtn:focus-visible {
-    outline: 2px solid #ffd000;
+    outline: 2px solid var(--color-accent);
     outline-offset: 2px;
 }
 

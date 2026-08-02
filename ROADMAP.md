@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 4 em andamento (1/4)** · próxima tarefa: **4.2** — Aplicar tokens ao CSS existente
+**Fase 4 em andamento (2/4)** · próxima tarefa: **4.3** — Componentes base
 
 ---
 
@@ -319,7 +319,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 4.2 — Aplicar tokens ao CSS existente
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** todo valor de design vem de token.
 - **Passos:**
   1. Reescrever `style.css` substituindo cada cor, fonte, espaçamento, raio e z-index hardcoded pelo token correspondente de `tokens.css`.
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **19/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **20/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -537,12 +537,12 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 3.2 — Substituir o JSON de background de 11 MB
 - [x] 3.3 — Tela de loading
 
-### Fase 4 — Design system (0/4)
+### Fase 4 — Design system (2/4)
 
-- [ ] 4.1 — Tokens de design (CSS custom properties)
-- [ ] 4.2 — Aplicar tokens ao CSS existente
-- [ ] 4.3 — Componentes base
-- [ ] 4.4 — Página de documentação do design system
+ - [x] 4.1 — Tokens de design (CSS custom properties)
+ - [x] 4.2 — Aplicar tokens ao CSS existente
+ - [ ] 4.3 — Componentes base
+ - [ ] 4.4 — Página de documentação do design system
 
 ### Fase 5 — UX e fluxo de telas (0/6)
 

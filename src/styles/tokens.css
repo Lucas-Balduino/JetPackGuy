@@ -42,4 +42,17 @@
   --z-hud: 10;
   --z-controls: 110;
   --z-overlay: 100;
+  --z-background: -1;
+
+  /* Utility colors with alpha or component-specific tokens (created for style compatibility) */
+  --overlay-bg: rgba(0, 0, 0, 0.85);
+  --canvas-bg: rgba(0, 0, 0, 0.2);
+  --border-faint: 2px solid rgba(224, 247, 250, 0.1);
+  --star-1: rgba(255,255,255,0.95);
+  --star-2: rgba(255,255,255,0.8);
+  --star-3: rgba(255,255,255,0.6);
+  --glow-danger-weak: 0 0 30px rgba(255,0,0,0.5);
+
+  /* Fine-grained spacing tokens used in the current stylesheet */
+  --space-game-container: 20px;
 }
