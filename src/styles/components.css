@@ -76,6 +76,24 @@
   .overlay-center:not(.hidden) {
     animation: overlay-in 200ms ease-out;
   }
+
+  @keyframes score-pulse {
+    0% {
+      transform: translateX(-50%) scale(1);
+    }
+
+    50% {
+      transform: translateX(-50%) scale(1.08);
+    }
+
+    100% {
+      transform: translateX(-50%) scale(1);
+    }
+  }
+
+  #visor.score-pulse {
+    animation: score-pulse 120ms ease-out;
+  }
 }
 
 /* HUD text */

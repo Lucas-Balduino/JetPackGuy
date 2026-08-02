@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 6 em andamento (3/4)** · próxima tarefa: **6.4** — Animação do contador de metros
+**Fase 6 concluída ✅ (4/4)** · próxima tarefa: **7.1** — Deploy no GitHub Pages
 
 ---
 
@@ -469,7 +469,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 6.4 — Animação do contador de metros
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Passos:** ao atualizar o visor, aplicar um "pulse" sutil (scale 1.0→1.08→1.0, ~120ms) a cada 100m cheios; na tela de morte, animar a contagem da distância de 0 até o valor final em ~0.8s (`requestAnimationFrame`).
 - **Critérios de aceite:** pulse a cada 100m; contagem animada na tela de morte; reduced motion desativa ambos.
 - **Commit:** `feat(feel): animações do contador de pontuação`
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **30/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **31/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -553,12 +553,12 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 5.5 — Responsividade real e controle por toque
 - [x] 5.6 — Acessibilidade
 
-### Fase 6 — Game feel (3/4)
+### Fase 6 — Game feel ✅ (4/4)
 
 - [x] 6.1 — Partículas do jetpack
 - [x] 6.2 — Screen shake na morte
 - [x] 6.3 — Sons e botão de mudo
-- [ ] 6.4 — Animação do contador de metros
+- [x] 6.4 — Animação do contador de metros
 
 ### Fase 7 — Vitrine de portfólio (0/3)
 

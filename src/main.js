@@ -61,6 +61,61 @@ let backgroundX = 0;
 let scoreTimer = 0;
 let lastTime = null;
 let firstFrameDrawn = false;
+let deathDistanceAnimationFrame = null;
+
+const reducedMotionQuery = typeof window.matchMedia === "function"
+  ? window.matchMedia("(prefers-reduced-motion: reduce)")
+  : null;
+
+function prefersReducedMotion() {
+  return Boolean(reducedMotionQuery && reducedMotionQuery.matches);
+}
+
+function stopDeathDistanceAnimation() {
+  if (deathDistanceAnimationFrame !== null) {
+    cancelAnimationFrame(deathDistanceAnimationFrame);
+    deathDistanceAnimationFrame = null;
+  }
+}
+
+function pulseScoreCounter() {
+  if (prefersReducedMotion()) return;
+  pontuation.classList.remove("score-pulse");
+  void pontuation.offsetWidth;
+  pontuation.classList.add("score-pulse");
+}
+
+function animateDeathDistance(finalPoints) {
+  const distanceEl = document.getElementById("gameOverDistance");
+
+  stopDeathDistanceAnimation();
+  if (prefersReducedMotion()) {
+    distanceEl.textContent = formatScore(finalPoints);
+    return;
+  }
+
+  const duration = 800;
+  const startTime = performance.now();
+  distanceEl.textContent = formatScore(0);
+
+  const tick = (now) => {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const currentPoints = Math.round(finalPoints * eased);
+    distanceEl.textContent = formatScore(currentPoints);
+
+    if (progress < 1) {
+      deathDistanceAnimationFrame = requestAnimationFrame(tick);
+      return;
+    }
+
+    deathDistanceAnimationFrame = null;
+    distanceEl.textContent = formatScore(finalPoints);
+  };
+
+  deathDistanceAnimationFrame = requestAnimationFrame(tick);
+}
 
 function formatScore(value) {
   return value.toString().padStart(4, "0") + " m";
@@ -74,19 +129,18 @@ function updateMuteButton() {
 }
 
 function updateGameOverOverlay() {
-  const distanceEl = document.getElementById("gameOverDistance");
   const recordEl = document.getElementById("gameOverRecord");
   const newRecordEl = document.getElementById("gameOverNewRecord");
   const previousHigh = getHighScore();
   const isNewRecord = points > previousHigh;
 
-  distanceEl.textContent = formatScore(points);
   if (isNewRecord) {
     saveHighScore(points);
     audio.playRecordBlip();
   }
   recordEl.textContent = "RECORDE: " + formatScore(isNewRecord ? points : previousHigh);
   newRecordEl.classList.toggle("hidden", !isNewRecord);
+  animateDeathDistance(points);
 }
 
 updateMuteButton();
@@ -132,6 +186,7 @@ function startGame() {
 }
 
 function resetGameState() {
+  stopDeathDistanceAnimation();
   playerEntity.reset();
   obstaclesEntity.reset();
   jetpackParticles.reset();
@@ -224,6 +279,9 @@ function animate(now) {
       points += 1;
       obstacleVelocity += CONFIG.obstacles.acceleration;
       pontuation.textContent = points.toString().padStart(4, "0") + " m";
+      if (points % 100 === 0) {
+        pulseScoreCounter();
+      }
     }
 
     checkAllCollisions();
