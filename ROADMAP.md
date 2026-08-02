@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 0 concluída (3/3)** · próxima tarefa: **1.3** — Física com delta time
+**Fase 0 concluída (3/3)** · próxima tarefa: **1.4** — Unificar a lógica de pontuação
 
 ---
 
@@ -99,7 +99,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 1.3 — Física com delta time
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** o jogo deve rodar na mesma velocidade em monitores de 60 Hz, 120 Hz e 144 Hz.
 - **Contexto:** hoje a física soma valores fixos por frame (`y += velocity`, `x1 -= obstacleVelocity`), então quanto maior o refresh rate, mais rápido o jogo.
 - **Passos:**
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **5/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **6/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -513,11 +513,11 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 0.2 — Remover arquivos e código mortos
 - [x] 0.3 — Corrigir o README
 
--### Fase 1 — Correção de bugs (2/5)
+-### Fase 1 — Correção de bugs (3/5)
 
 - [x] 1.1 — Corrigir o listener de teclado inválido
 - [x] 1.2 — Unificar velocidade inicial dos obstáculos
-- [ ] 1.3 — Física com delta time
+- [x] 1.3 — Física com delta time
 - [ ] 1.4 — Unificar a lógica de pontuação
 - [ ] 1.5 — Carregamento paralelo dos assets
 

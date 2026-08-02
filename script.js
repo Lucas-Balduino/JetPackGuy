@@ -309,6 +309,7 @@
   let gameStarted = false;
   let backgroundX = 0;
   let paused = false;
+  let lastTime = null;
 
   const player = {
     width: 0.08,
@@ -550,14 +551,18 @@
     if (pauseDiv) pauseDiv.remove();
   }
 
-  function animate() {
+  function animate(now) {
+    if (lastTime === null) lastTime = now;
+    const dt = Math.min((now - lastTime) / 1000, 0.05);
+    lastTime = now;
+
     gl.clearColor(0.02, 0.05, 0.15, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Só atualiza movimento se não estiver pausado e não estiver em game over
     if (!gameOver && !paused) {
-      // Atualize o deslocamento do fundo
-      backgroundX -= obstacleVelocity * 1; // ajuste a velocidade do fundo aqui
+      // Atualize o deslocamento do fundo (ajustado por delta time)
+      backgroundX -= obstacleVelocity * dt * 60; // ajuste a velocidade do fundo aqui
       if (backgroundX <= -2) {
         backgroundX = 0;
       }
@@ -569,8 +574,8 @@
         }
 
         if (gameStarted) {
-          y += velocity;
-          velocity += gravity;
+          y += velocity * dt * 60;
+          velocity += gravity * dt * 60;
         }
 
         // Limites da tela
@@ -584,20 +589,20 @@
           velocity = Math.min(velocity, 0);
         }
 
-        if (gameStarted) {
-          x1 -= obstacleVelocity;
+          if (gameStarted) {
+          x1 -= obstacleVelocity * dt * 60;
           if (x1 <= -1.5) {
             x1 = 1.5;
             y1 = getRandomFloat(-0.8, 0.8);
           }
 
-          x2 -= obstacleVelocity;
+          x2 -= obstacleVelocity * dt * 60;
           if (x2 <= -1.5) {
             x2 = 1.8;
             y2 = getRandomFloat(-0.8, 0.8);
           }
 
-          x3 -= obstacleVelocity;
+          x3 -= obstacleVelocity * dt * 60;
           if (x3 <= -1.5) {
             x3 = 2.1;
             y3 = getRandomFloat(-0.8, 0.8);
@@ -665,5 +670,5 @@
   console.log("Vértices background:", vertexBackgroundCount);
 
   gl.viewport(0, 0, canvas.width, canvas.height);
-  animate();
+  requestAnimationFrame(animate);
 })();
