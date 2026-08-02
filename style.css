@@ -105,7 +105,6 @@ canvas {
     font-weight: 600;
     letter-spacing: 0.5px;
     z-index: 10;
-    /* display property removed (was invalid) */
 }
 .instructions b {
     color: #ffd000;

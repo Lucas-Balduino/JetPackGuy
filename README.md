@@ -11,7 +11,6 @@ Uma recriação em pixel art do clássico *JetPack Joyride*, feita com **WebGL**
 * **Obstáculos dinâmicos**: obstáculos horizontais e verticais aparecem em posições randômicas a cada ciclo.
 * **Sistema de pontuação**: contador em metros que aumenta a cada 0.1s e acelera a dificuldade.
 * **Animações fluidas**: loop de renderização a 60fps usando `requestAnimationFrame`.
-<!-- Responsividade será adicionada na Fase 5 do roadmap -->
 
 ## 🛠️ Tecnologias
 
@@ -44,7 +43,7 @@ Uma recriação em pixel art do clássico *JetPack Joyride*, feita com **WebGL**
 2. Abra um **servidor local** (recomendado para evitar bloqueios de `fetch`):
 
    ```bash
-   cd jetpack-joyride-webgl
+   cd JetPackGuy
    npx serve .
    ```
 3. Acesse `http://localhost:5000` no navegador.

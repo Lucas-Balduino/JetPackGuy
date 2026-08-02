@@ -15,7 +15,7 @@ Recriação em pixel art do *Jetpack Joyride* com **WebGL puro**, sem biblioteca
 | `Images/*.png` | Arte-fonte: moldura, visor, ícone de pausa e os sprites originais |
 | `Images/ImageConverter.py` | Converte PNG → JSON de pixels (roda fora do jogo, manualmente) |
 | `Info/*.txt` | Anotações da disciplina — **histórico, não especificação** |
-| `TelaMorte.html` | Arquivo morto: referencia scripts que não existem. Removido na tarefa 0.2 |
+| `TelaMorte.html` | Removido na tarefa 0.2 |
 | `ROADMAP.md` | Plano de evolução em 8 fases; fonte das tarefas |
 
 Hoje o jogo inteiro vive em `script.js`. A Fase 2 do roadmap o divide em `src/` (`main.js`, `config.js`, `renderer.js`, `assets.js`, `entities.js`, `input.js`, `state.js`) — quando isso acontecer, atualize a tabela acima.

@@ -21,17 +21,23 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 4. O jogo deve continuar funcionando após todo commit: abrir com um servidor local (`npx serve .` ou `python -m http.server`) e jogar uma partida completa (voar, morrer, reiniciar, pausar).
 5. Mensagens de commit seguem [Conventional Commits](https://www.conventionalcommits.org/pt-br/): `fix:`, `feat:`, `refactor:`, `chore:`, `docs:`, `perf:`.
 6. Se uma tarefa depender de outra não concluída, parar e avisar em vez de improvisar.
+7. Ao concluir: marcar o checkbox da tarefa (`[ ]` → `[x]`) no corpo dela **e** no [Resumo do progresso](#resumo-do-progresso), e atualizar a linha **Progresso atual**. Fazer isso no mesmo commit da tarefa.
 
 **Ordem:** as fases devem ser feitas em sequência (0 → 7). Dentro de cada fase, as tarefas também são sequenciais, salvo indicação contrária.
 
+### Progresso atual
+
+**Fase 0 concluída (3/3)** · próxima tarefa: **1.1** — Corrigir o listener de teclado inválido
+
 ---
 
-## Fase 0 — Higiene do repositório
+## Fase 0 — Higiene do repositório ✅
 
 > **O que você aprende:** todo projeto profissional começa com um repositório limpo — sem arquivos mortos, com documentação que corresponde à realidade e metadados básicos (licença, gitignore). É a primeira coisa que um recrutador vê.
 
 ### 0.1 — Adicionar .gitignore e LICENSE
 
+- **Status:** [x] concluído
 - **Objetivo:** metadados básicos de repositório.
 - **Passos:**
   1. Criar `.gitignore` na raiz com: `node_modules/`, `.DS_Store`, `Thumbs.db`, `*.log`.
@@ -41,6 +47,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 0.2 — Remover arquivos e código mortos
 
+- **Status:** [x] concluído
 - **Objetivo:** eliminar tudo que não é usado.
 - **Passos:**
   1. Excluir `TelaMorte.html` (referencia `JetPackJogo.js` e `SandboxJetPack.js`, que não existem).
@@ -52,6 +59,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 0.3 — Corrigir o README
 
+- **Status:** [x] concluído
 - **Objetivo:** documentação que reflete o projeto real.
 - **Passos:**
   1. Na seção "Estrutura do Projeto", substituir a árvore fictícia (`assets/`) pela estrutura real: `index.html`, `style.css`, `script.js`, `Images/`, `ImagesJson/`, `Info/`, `AGENTS.md`, `ROADMAP.md`.
@@ -68,6 +76,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 1.1 — Corrigir o listener de teclado inválido
 
+- **Status:** [ ] pendente
 - **Objetivo:** remover um bug clássico de JS.
 - **Contexto:** em `script.js` (~linha 423) existe `document.addEventListener("keydown" || "click", ...)`. A expressão `"keydown" || "click"` avalia apenas para `"keydown"`; o `"click"` é código morto. Dentro do handler, `e.code === "Click"` nunca é verdadeiro. O clique só funciona por causa de outro listener no canvas.
 - **Passos:**
@@ -79,6 +88,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 1.2 — Unificar velocidade inicial dos obstáculos
 
+- **Status:** [ ] pendente
 - **Objetivo:** o jogo deve reiniciar exatamente como começou.
 - **Contexto:** a variável `obstacleVelocity` é inicializada com `0.015`, mas `resetGame()` a redefine para `0.01`. Partidas após a primeira começam mais lentas.
 - **Passos:**
@@ -89,6 +99,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 1.3 — Física com delta time
 
+- **Status:** [ ] pendente
 - **Objetivo:** o jogo deve rodar na mesma velocidade em monitores de 60 Hz, 120 Hz e 144 Hz.
 - **Contexto:** hoje a física soma valores fixos por frame (`y += velocity`, `x1 -= obstacleVelocity`), então quanto maior o refresh rate, mais rápido o jogo.
 - **Passos:**
@@ -101,6 +112,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 1.4 — Unificar a lógica de pontuação
 
+- **Status:** [ ] pendente
 - **Objetivo:** remover duplicação e acoplar a pontuação ao loop do jogo.
 - **Contexto:** o `setInterval` que incrementa pontos está duplicado em `startGame()` e `setPaused()`. Além disso, um timer separado do loop pode dessincronizar.
 - **Passos:**
@@ -113,6 +125,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 1.5 — Carregamento paralelo dos assets
 
+- **Status:** [ ] pendente
 - **Objetivo:** reduzir o tempo até o jogo ficar pronto.
 - **Contexto:** os 4 JSONs são carregados com `await` em sequência; podem ser carregados em paralelo.
 - **Passos:**
@@ -141,6 +154,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 2.1 — Migrar para ES Modules
 
+- **Status:** [ ] pendente
 - **Objetivo:** habilitar `import`/`export` sem ainda dividir o código.
 - **Passos:**
   1. Criar a pasta `src/` e mover `script.js` para `src/main.js`.
@@ -151,6 +165,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 2.2 — Extrair configuração (config.js)
 
+- **Status:** [ ] pendente
 - **Objetivo:** eliminar números mágicos.
 - **Passos:**
   1. Criar `src/config.js` exportando um objeto congelado:
@@ -176,6 +191,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 2.3 — Extrair o renderer WebGL (renderer.js)
 
+- **Status:** [ ] pendente
 - **Objetivo:** isolar todo o código de WebGL.
 - **Passos:**
   1. Criar `src/renderer.js` exportando uma função `createRenderer(canvas)` que: obtém o contexto, compila os shaders (mover `vsSource`, `fsSource`, `createShader` e a criação do program para cá), guarda as locations e retorna um objeto com os métodos:
@@ -189,6 +205,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 2.4 — Extrair o carregador de assets (assets.js)
 
+- **Status:** [ ] pendente
 - **Objetivo:** isolar fetch/parse dos sprites.
 - **Passos:**
   1. Criar `src/assets.js` e mover para lá: `getJsonData`, `createFallbackSprite`, `createFullBackground` e o parse de cores.
@@ -199,6 +216,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 2.5 — Extrair entidades e colisão (entities.js)
 
+- **Status:** [ ] pendente
 - **Objetivo:** agrupar estado e regras de player/obstáculos.
 - **Passos:**
   1. Criar `src/entities.js` exportando:
@@ -211,6 +229,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 2.6 — Máquina de estados (state.js)
 
+- **Status:** [ ] pendente
 - **Objetivo:** substituir os booleanos `gameStarted`/`gameOver`/`paused` por um estado explícito.
 - **Contexto:** três booleanos permitem 8 combinações, das quais várias não fazem sentido (ex.: `gameOver && paused`). Uma máquina de estados torna os fluxos explícitos e prepara o menu da Fase 5.
 - **Passos:**
@@ -227,6 +246,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 2.7 — Módulo de input (input.js)
 
+- **Status:** [ ] pendente
 - **Objetivo:** centralizar teclado e mouse.
 - **Passos:**
   1. Criar `src/input.js` exportando `setupInput({ onJump, onTogglePause })` que registra os listeners de `keydown` (Espaço, seta para cima, P) e `click` no canvas, chamando os callbacks.
@@ -242,6 +262,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 3.1 — Otimizar as imagens PNG
 
+- **Status:** [ ] pendente
 - **Objetivo:** reduzir os PNGs gigantes.
 - **Contexto:** `Images/PixelArtVisor.png` tem 2,2 MB e `Images/MolduraPixelArt.png` tem 1,25 MB — para imagens decorativas isso é ~50x maior que o necessário.
 - **Passos:**
@@ -252,6 +273,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 3.2 — Substituir o JSON de background de 11 MB
 
+- **Status:** [ ] pendente
 - **Objetivo:** eliminar o maior gargalo de carregamento.
 - **Contexto:** `ImagesJson/BackgroundPixels.json` tem **11 MB** para descrever uma imagem de 375×375. O formato JSON (`{"x":..,"y":..,"color":"rgba(...)"}` por pixel) é extremamente verboso.
 - **Passos:**
@@ -265,6 +287,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 3.3 — Tela de loading
 
+- **Status:** [ ] pendente
 - **Objetivo:** nunca mostrar canvas vazio ao usuário.
 - **Passos:**
   1. Em `index.html`, adicionar dentro de `.game-container` um `<div id="loadingOverlay">Carregando...</div>` sobre o canvas (posição absoluta, fundo escuro, fonte Pixelify Sans, centralizado).
@@ -281,6 +304,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 4.1 — Tokens de design (CSS custom properties)
 
+- **Status:** [ ] pendente
 - **Objetivo:** fundar o design system.
 - **Passos:**
   1. Criar `src/styles/tokens.css` com um bloco `:root` definindo, com comentários explicando cada grupo:
@@ -295,6 +319,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 4.2 — Aplicar tokens ao CSS existente
 
+- **Status:** [ ] pendente
 - **Objetivo:** todo valor de design vem de token.
 - **Passos:**
   1. Reescrever `style.css` substituindo cada cor, fonte, espaçamento, raio e z-index hardcoded pelo token correspondente de `tokens.css`.
@@ -304,6 +329,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 4.3 — Componentes base
 
+- **Status:** [ ] pendente
 - **Objetivo:** criar as classes de componente reutilizáveis do sistema.
 - **Passos:**
   1. Criar `src/styles/components.css` (importar no `index.html` após `tokens.css`) com:
@@ -317,6 +343,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 4.4 — Página de documentação do design system
 
+- **Status:** [ ] pendente
 - **Objetivo:** o artefato de portfólio — um styleguide navegável.
 - **Passos:**
   1. Criar `design.html` na raiz: uma página estática que importa `tokens.css` e `components.css` e exibe:
@@ -336,6 +363,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 5.1 — Overlays declarativos (remover DOM criado por JS)
 
+- **Status:** [ ] pendente
 - **Objetivo:** toda a UI existe no HTML; o JS apenas mostra/esconde.
 - **Contexto:** `drawGameOverText()` e `showPauseOverlay()` criam divs com dezenas de estilos inline e as anexam ao `document.body` (fora do container do jogo).
 - **Passos:**
@@ -355,6 +383,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 5.2 — Tela inicial (estado READY)
 
+- **Status:** [ ] pendente
 - **Objetivo:** onboarding em vez de canvas parado.
 - **Passos:**
   1. Adicionar em `index.html` um overlay `#startOverlay` (classes `overlay-center panel-pixel--neutral`) com: título "JETPACK GUY", subtítulo "Espaço, ↑ ou clique para voar", e um `.btn-pixel` "JOGAR".
@@ -365,6 +394,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 5.3 — Tela de morte com pontuação e recorde
 
+- **Status:** [ ] pendente
 - **Objetivo:** fechar o loop de retenção (o item "Tela de Morte" do TODO original).
 - **Passos:**
   1. Expandir `#gameOverOverlay` com: distância da partida ("0342 m"), recorde ("RECORDE: 0518 m") e um `.btn-pixel` "JOGAR DE NOVO".
@@ -376,6 +406,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 5.4 — Transições e micro-animações de UI
 
+- **Status:** [ ] pendente
 - **Objetivo:** suavidade nas trocas de tela.
 - **Passos:**
   1. Em `components.css`, criar animações CSS: `.overlay-center` entra com fade + scale (ex.: `@keyframes overlay-in { from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); } }`, 200ms ease-out). Ajustar: o utilitário já centraliza com transform, então a animação deve preservar o translate.
@@ -386,6 +417,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 5.5 — Responsividade real e controle por toque
 
+- **Status:** [ ] pendente
 - **Objetivo:** jogável em celular.
 - **Passos:**
   1. Adicionar `<meta name="viewport" content="width=device-width, initial-scale=1">` ao `index.html` (e ao `design.html`).
@@ -397,6 +429,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 5.6 — Acessibilidade
 
+- **Status:** [ ] pendente
 - **Objetivo:** o básico de a11y bem feito.
 - **Passos:**
   1. `alt` descritivo em todas as `<img>` (`#MolduraPixelArt`: `alt=""` + `aria-hidden="true"` por ser decorativa; ícone de pausa: `alt="Pausar"` ou usar `aria-label` no botão).
@@ -415,24 +448,28 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 6.1 — Partículas do jetpack
 
+- **Status:** [ ] pendente
 - **Passos:** em um novo `src/particles.js`, gerar pontos (reutilizando o renderer e `gl.POINTS`, coerente com a técnica do projeto) que nascem sob o player enquanto `velocity > 0`, com cor amarelo→vermelho, vida curta (~0.4s), queda e fade (descartar partículas mortas). Máximo de ~100 partículas simultâneas.
 - **Critérios de aceite:** segurar Espaço mostra rastro de fogo; soltar interrompe; FPS estável.
 - **Commit:** `feat(feel): partículas de propulsão do jetpack`
 
 ### 6.2 — Screen shake na morte
 
+- **Status:** [ ] pendente
 - **Passos:** na transição para `GAME_OVER`, aplicar por ~300ms um deslocamento aleatório decrescente ao uniform `translation` de tudo que é desenhado (ou uma classe CSS com `@keyframes` de shake no canvas — mais simples). Respeitar `prefers-reduced-motion`.
 - **Critérios de aceite:** morte gera tremida curta; com reduced motion, nada treme.
 - **Commit:** `feat(feel): screen shake ao morrer`
 
 ### 6.3 — Sons e botão de mudo
 
+- **Status:** [ ] pendente
 - **Passos:** criar `src/audio.js` usando **Web Audio API com sons sintetizados** (osciladores: ruído curto para o jato, tom descendente para morte, blip para recorde) — sem arquivos de áudio, o que evita problemas de licença. Botão de mudo (`.btn-pixel`, ícone 🔊/🔇 em texto) ao lado do pause; preferência salva em `localStorage`. O `AudioContext` só pode iniciar após o primeiro gesto do usuário — criar no primeiro input.
 - **Critérios de aceite:** sons tocam nos eventos; mudo silencia e persiste após reload; nenhum erro de autoplay no console.
 - **Commit:** `feat(feel): efeitos sonoros sintetizados com toggle de mudo`
 
 ### 6.4 — Animação do contador de metros
 
+- **Status:** [ ] pendente
 - **Passos:** ao atualizar o visor, aplicar um "pulse" sutil (scale 1.0→1.08→1.0, ~120ms) a cada 100m cheios; na tela de morte, animar a contagem da distância de 0 até o valor final em ~0.8s (`requestAnimationFrame`).
 - **Critérios de aceite:** pulse a cada 100m; contagem animada na tela de morte; reduced motion desativa ambos.
 - **Commit:** `feat(feel): animações do contador de pontuação`
@@ -445,18 +482,21 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 7.1 — Deploy no GitHub Pages
 
+- **Status:** [ ] pendente
 - **Passos:** criar `.github/workflows/deploy.yml` com o workflow oficial de deploy estático do GitHub Pages (actions/upload-pages-artifact + actions/deploy-pages, branch main, publicando a raiz do repositório). Habilitar Pages nas configurações do repositório (Settings → Pages → GitHub Actions).
 - **Critérios de aceite:** o jogo abre na URL `https://<usuario>.github.io/<repo>/` com todos os assets carregando (caminhos relativos — conferir que nenhum caminho começa com `/`).
 - **Commit:** `chore: deploy automático no GitHub Pages`
 
 ### 7.2 — Favicon e meta tags Open Graph
 
+- **Status:** [ ] pendente
 - **Passos:** criar um favicon a partir do sprite do personagem (`Images/PixelArtJetPackGuy.png` redimensionado para 32×32 → `favicon.png`); adicionar ao `<head>`: `<link rel="icon">`, `<meta name="description">`, e as tags OG (`og:title`, `og:description`, `og:image` com um screenshot 1200×630 do jogo salvo em `Images/og-cover.png`, `og:url`) + `twitter:card summary_large_image`.
 - **Critérios de aceite:** favicon aparece na aba; validar o link em https://www.opengraph.xyz/ mostra card com imagem.
 - **Commit:** `feat: favicon e meta tags para compartilhamento`
 
 ### 7.3 — README de portfólio
 
+- **Status:** [ ] pendente
 - **Passos:** reescrever o README com: badge/link "▶ Jogar agora" para o GitHub Pages; GIF de gameplay (gravar com ScreenToGif/Kap, salvar em `Images/gameplay.gif`, máx. 5 MB); seção **"Como funciona a renderização"** explicando a técnica de pixels→pontos WebGL (com trecho do shader); seção **"Design System"** com link para `design.html` publicado; seção **"Arquitetura"** com a árvore de `src/` e uma frase sobre cada módulo; roadmap de próximos passos.
 - **Critérios de aceite:** README renderiza no GitHub com GIF funcionando; todos os links (jogo, design system) funcionam.
 - **Commit:** `docs: README de portfólio com demo, arquitetura e design system`
@@ -465,13 +505,63 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Marque conforme concluir:
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **3/35**.
 
-- [ ] **Fase 0** — Higiene do repositório (0.1, 0.2, 0.3)
-- [ ] **Fase 1** — Correção de bugs (1.1, 1.2, 1.3, 1.4, 1.5)
-- [ ] **Fase 2** — Arquitetura em módulos (2.1 … 2.7)
-- [ ] **Fase 3** — Assets e performance (3.1, 3.2, 3.3)
-- [ ] **Fase 4** — Design system (4.1, 4.2, 4.3, 4.4)
-- [ ] **Fase 5** — UX e fluxo de telas (5.1 … 5.6)
-- [ ] **Fase 6** — Game feel (6.1, 6.2, 6.3, 6.4)
-- [ ] **Fase 7** — Vitrine de portfólio (7.1, 7.2, 7.3)
+### Fase 0 — Higiene do repositório ✅ (3/3)
+
+- [x] 0.1 — Adicionar .gitignore e LICENSE
+- [x] 0.2 — Remover arquivos e código mortos
+- [x] 0.3 — Corrigir o README
+
+### Fase 1 — Correção de bugs (0/5)
+
+- [ ] 1.1 — Corrigir o listener de teclado inválido
+- [ ] 1.2 — Unificar velocidade inicial dos obstáculos
+- [ ] 1.3 — Física com delta time
+- [ ] 1.4 — Unificar a lógica de pontuação
+- [ ] 1.5 — Carregamento paralelo dos assets
+
+### Fase 2 — Arquitetura em módulos (0/7)
+
+- [ ] 2.1 — Migrar para ES Modules
+- [ ] 2.2 — Extrair configuração (config.js)
+- [ ] 2.3 — Extrair o renderer WebGL (renderer.js)
+- [ ] 2.4 — Extrair o carregador de assets (assets.js)
+- [ ] 2.5 — Extrair entidades e colisão (entities.js)
+- [ ] 2.6 — Máquina de estados (state.js)
+- [ ] 2.7 — Módulo de input (input.js)
+
+### Fase 3 — Assets e performance (0/3)
+
+- [ ] 3.1 — Otimizar as imagens PNG
+- [ ] 3.2 — Substituir o JSON de background de 11 MB
+- [ ] 3.3 — Tela de loading
+
+### Fase 4 — Design system (0/4)
+
+- [ ] 4.1 — Tokens de design (CSS custom properties)
+- [ ] 4.2 — Aplicar tokens ao CSS existente
+- [ ] 4.3 — Componentes base
+- [ ] 4.4 — Página de documentação do design system
+
+### Fase 5 — UX e fluxo de telas (0/6)
+
+- [ ] 5.1 — Overlays declarativos
+- [ ] 5.2 — Tela inicial (estado READY)
+- [ ] 5.3 — Tela de morte com pontuação e recorde
+- [ ] 5.4 — Transições e micro-animações de UI
+- [ ] 5.5 — Responsividade real e controle por toque
+- [ ] 5.6 — Acessibilidade
+
+### Fase 6 — Game feel (0/4)
+
+- [ ] 6.1 — Partículas do jetpack
+- [ ] 6.2 — Screen shake na morte
+- [ ] 6.3 — Sons e botão de mudo
+- [ ] 6.4 — Animação do contador de metros
+
+### Fase 7 — Vitrine de portfólio (0/3)
+
+- [ ] 7.1 — Deploy no GitHub Pages
+- [ ] 7.2 — Favicon e meta tags Open Graph
+- [ ] 7.3 — README de portfólio
