@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 4 em andamento (2/4)** · próxima tarefa: **4.3** — Componentes base
+**Fase 4 em andamento (3/4)** · próxima tarefa: **4.4** — Página de documentação do design system
 
 ---
 
@@ -329,7 +329,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 4.3 — Componentes base
 
-- **Status:** [ ] pendente
+ - **Status:** [x] concluído
 - **Objetivo:** criar as classes de componente reutilizáveis do sistema.
 - **Passos:**
   1. Criar `src/styles/components.css` (importar no `index.html` após `tokens.css`) com:
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **20/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **21/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -537,11 +537,11 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 3.2 — Substituir o JSON de background de 11 MB
 - [x] 3.3 — Tela de loading
 
-### Fase 4 — Design system (2/4)
+### Fase 4 — Design system (3/4)
 
  - [x] 4.1 — Tokens de design (CSS custom properties)
  - [x] 4.2 — Aplicar tokens ao CSS existente
- - [ ] 4.3 — Componentes base
+ - [x] 4.3 — Componentes base
  - [ ] 4.4 — Página de documentação do design system
 
 ### Fase 5 — UX e fluxo de telas (0/6)
