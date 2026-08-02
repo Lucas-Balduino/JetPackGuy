@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 0 concluída (3/3)** · próxima tarefa: **1.5** — Carregamento paralelo dos assets
+**Fase 0 concluída (3/3)** · próxima tarefa: **1.6** — Extrair assets e performance
 
 ---
 
@@ -123,9 +123,9 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 - **Critérios de aceite:** `setInterval`/`clearInterval` não aparecem mais em `script.js`; a pontuação sobe ~10 pontos por segundo; pausar congela a pontuação; reiniciar zera o visor.
 - **Commit:** `refactor: pontuação integrada ao game loop sem setInterval`
 
-### 1.5 — Carregamento paralelo dos assets
+- ### 1.5 — Carregamento paralelo dos assets
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** reduzir o tempo até o jogo ficar pronto.
 - **Contexto:** os 4 JSONs são carregados com `await` em sequência; podem ser carregados em paralelo.
 - **Passos:**
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **7/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **8/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -513,13 +513,13 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 0.2 — Remover arquivos e código mortos
 - [x] 0.3 — Corrigir o README
 
--### Fase 1 — Correção de bugs (4/5)
+-### Fase 1 — Correção de bugs (5/5)
 
 - [x] 1.1 — Corrigir o listener de teclado inválido
 - [x] 1.2 — Unificar velocidade inicial dos obstáculos
 - [x] 1.3 — Física com delta time
 - [x] 1.4 — Unificar a lógica de pontuação
-- [ ] 1.5 — Carregamento paralelo dos assets
+- [x] 1.5 — Carregamento paralelo dos assets
 
 ### Fase 2 — Arquitetura em módulos (0/7)
 

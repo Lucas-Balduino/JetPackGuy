@@ -192,26 +192,18 @@
   // Carrega JSONs
   const jsonData = {};
 
-  jsonData["ImagesJson/JetPackGuyPixels.json"] = await getJsonData(
-    "ImagesJson/JetPackGuyPixels.json",
-    100,
-    100
-  );
-  jsonData["ImagesJson/VerticalObstaclePixels.json"] = await getJsonData(
-    "ImagesJson/VerticalObstaclePixels.json",
-    100,
-    100
-  );
-  jsonData["ImagesJson/HorizontalObstaclePixels.json"] = await getJsonData(
-    "ImagesJson/HorizontalObstaclePixels.json",
-    100,
-    100
-  );
-  jsonData["ImagesJson/BackgroundPixels.json"] = await getJsonData(
-    "ImagesJson/BackgroundPixels.json",
-    375,
-    375
-  );
+  // Carrega os 4 JSONs de sprites em paralelo
+  const [playerData, verticalData, horizontalData, backgroundData] = await Promise.all([
+    getJsonData("ImagesJson/JetPackGuyPixels.json", 100, 100),
+    getJsonData("ImagesJson/VerticalObstaclePixels.json", 100, 100),
+    getJsonData("ImagesJson/HorizontalObstaclePixels.json", 100, 100),
+    getJsonData("ImagesJson/BackgroundPixels.json", 375, 375),
+  ]);
+
+  jsonData["ImagesJson/JetPackGuyPixels.json"] = playerData;
+  jsonData["ImagesJson/VerticalObstaclePixels.json"] = verticalData;
+  jsonData["ImagesJson/HorizontalObstaclePixels.json"] = horizontalData;
+  jsonData["ImagesJson/BackgroundPixels.json"] = backgroundData;
 
   // Usa sprites de fallback se necessário
   if (jsonData["ImagesJson/JetPackGuyPixels.json"].positionArray.length === 0) {
