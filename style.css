@@ -58,8 +58,18 @@ body::before {
     align-items: center;
     transform: scale(var(--game-scale));
     transform-origin: top left;
-    /* Ajuste fino vertical do canvas na moldura: aumente para descer, diminua para subir */
+
+    /*
+     * Alinhamento visual na moldura — ajuste fino aqui se a arte mudar.
+     * --game-frame-offset-y: desloca o bloco do canvas (aumente = desce).
+     * --canvas-offset-y: desloca o canvas dentro do bloco (aumente = desce).
+     * --pause-btn-top / --pause-btn-right: posição do botão de pausa na moldura.
+     */
     --game-frame-offset-y: 10px;
+    --canvas-offset-y: 90px;
+    --canvas-height: 540px;
+    --pause-btn-top: 25px;
+    --pause-btn-right: 40px;
 }
 
 #MolduraPixelArt {
@@ -100,9 +110,6 @@ body::before {
 .game-frame {
     position: relative;
     margin-top: var(--game-frame-offset-y);
-    /* Ajuste fino vertical do canvas na moldura: aumente para descer, diminua para subir */
-    --canvas-offset-y: 90px;
-    --canvas-height: 540px;
 }
 
 #loadingOverlay.hidden {
@@ -191,8 +198,8 @@ canvas {
 /* Botão de pausa — sprite isolado da moldura */
 #pauseBtn {
     position: absolute;
-    top: 25px;
-    right: 40px;
+    top: var(--pause-btn-top);
+    right: var(--pause-btn-right);
     z-index: var(--z-controls);
     padding: 0;
     border: none;

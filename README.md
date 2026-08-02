@@ -7,7 +7,9 @@ Uma recriação em pixel art do clássico *JetPack Joyride*, feita com **WebGL**
 ### 🎮 Funcionalidades
 
 * **Renderização por pontos**: cada sprite é carregado de um JSON de pixels, garantindo fidelidade ao pixel art original.
-* **Controles intuitivos**: `Espaço`, `Clique` ou seta para cima para voar; `P` ou botão de pausa para pausar.
+* **Fluxo de telas**: tela inicial, pausa, game over com recorde persistente e reinício rápido.
+* **Controles intuitivos**: `Espaço`, `Clique`, seta para cima ou toque para voar; `P` ou botão de pausa para pausar.
+* **Modo responsivo**: layout escala em desktop e dispositivos móveis; jogável por toque no canvas.
 * **Obstáculos dinâmicos**: obstáculos horizontais e verticais aparecem em posições randômicas a cada ciclo.
 * **Sistema de pontuação**: contador em metros que aumenta a cada 0.1s e acelera a dificuldade.
 * **Animações fluidas**: loop de renderização a 60fps usando `requestAnimationFrame`.
@@ -50,11 +52,11 @@ Uma recriação em pixel art do clássico *JetPack Joyride*, feita com **WebGL**
 
 ## 🎮 Controles
 
-| Ação      | Tecla/Botão          |
-| --------- | -------------------- |
-| Voar      | `Espaço` / `Clique`  |
-| Pausar    | `P` / botão de pausa |
-| Reiniciar | `Espaço` / `Clique`  |
+| Ação      | Tecla/Botão                    |
+| --------- | ------------------------------ |
+| Voar      | `Espaço` / `Clique` / Toque    |
+| Pausar    | `P` / botão de pausa           |
+| Reiniciar | `Espaço` / `Clique` / botão    |
 
 ## 📝 Licença
 

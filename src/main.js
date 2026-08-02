@@ -78,7 +78,9 @@ state.onChange((_from, to) => {
   startOverlay.classList.toggle("hidden", to !== States.READY);
   pauseOverlay.classList.toggle("hidden", to !== States.PAUSED);
   gameOverOverlay.classList.toggle("hidden", to !== States.GAME_OVER);
-  pauseBtn.setAttribute("aria-label", to === States.PAUSED ? "Continuar jogo" : "Pausar jogo");
+  const pauseLabel = to === States.PAUSED ? "Continuar jogo" : "Pausar jogo";
+  pauseBtn.setAttribute("aria-label", pauseLabel);
+  pauseBtn.title = to === States.PAUSED ? "Continuar" : "Pausar";
   if (to === States.GAME_OVER) updateGameOverOverlay();
 });
 
