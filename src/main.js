@@ -1,6 +1,7 @@
 import { CONFIG } from './config.js';
 import { createRenderer } from './renderer.js';
 import { loadAllSprites } from './assets.js';
+import { createPlayer, createObstacles, checkCollision, getRect } from './entities.js';
 
 const pontuation = document.getElementById("visor");
 const canvas = document.getElementById("canvas");
@@ -39,17 +40,11 @@ const backgroundBuffers = renderer.createSpriteBuffers(
 const vertexBackgroundCount = backgroundBuffers.count;
 
 // Estado do jogo
-let y = CONFIG.player.startY,
-  velocity = 0,
-  gravity = CONFIG.physics.gravity;
 const INITIAL_OBSTACLE_VELOCITY = CONFIG.obstacles.initialVelocity;
-let x1 = CONFIG.obstacles.startX[0],
-  x2 = CONFIG.obstacles.startX[1],
-  x3 = CONFIG.obstacles.startX[2];
 let obstacleVelocity = INITIAL_OBSTACLE_VELOCITY;
-let y1 = 0,
-  y2 = 0,
-  y3 = 0;
+// Entities
+const playerEntity = createPlayer(CONFIG);
+const obstaclesEntity = createObstacles(CONFIG);
 let jumping = false;
 let points = 0;
 let gameOver = false;
@@ -59,12 +54,7 @@ let paused = false;
 let scoreTimer = 0;
 let lastTime = null;
 
-  const player = {
-    width: CONFIG.player.width,
-    height: CONFIG.player.height,
-    x: CONFIG.player.x,
-    y: y,
-  };
+  const player = playerEntity.state;
 
   const horizontalObstacle = {
     width: CONFIG.obstacles.horizontal.width,
@@ -85,15 +75,9 @@ function startGame() {
 function resetGame() {
   gameOver = false;
   gameStarted = false;
-  y = -0.8;
-  velocity = 0;
-  x1 = 1.2;
-  x2 = 1.8;
-  x3 = 2.4;
+  playerEntity.reset();
+  obstaclesEntity.reset();
   obstacleVelocity = INITIAL_OBSTACLE_VELOCITY;
-  y1 = 0;
-  y2 = 0;
-  y3 = 0;
   points = 0;
   scoreTimer = 0;
   jumping = false;
@@ -114,48 +98,21 @@ function checkCollision(rect1, rect2) {
 }
 
 function checkAllCollisions() {
-  player.y = y;
+  const p = playerEntity.state;
 
   // Colisão com bordas da tela
-    if (y <= CONFIG.bounds.deathFloor || y >= CONFIG.bounds.deathCeiling) {
+  if (p.y <= CONFIG.bounds.deathFloor || p.y >= CONFIG.bounds.deathCeiling) {
     gameOver = true;
     return;
   }
 
-  const horizontalObstRect = {
-    x: x1 - horizontalObstacle.width / 2,
-    y: y1 - horizontalObstacle.height / 2,
-    width: horizontalObstacle.width,
-    height: horizontalObstacle.height,
-  };
-
-  const verticalObst1Rect = {
-    x: x2 - verticalObstacle.width / 2,
-    y: y2 - verticalObstacle.height / 2,
-    width: verticalObstacle.width,
-    height: verticalObstacle.height,
-  };
-
-  const verticalObst2Rect = {
-    x: x3 - verticalObstacle.width / 2,
-    y: y3 - verticalObstacle.height / 2,
-    width: verticalObstacle.width,
-    height: verticalObstacle.height,
-  };
-
-  const playerRect = {
-    x: player.x - player.width / 2,
-    y: player.y - player.height / 2,
-    width: player.width,
-    height: player.height,
-  };
-
-  if (
-    checkCollision(playerRect, horizontalObstRect) ||
-    checkCollision(playerRect, verticalObst1Rect) ||
-    checkCollision(playerRect, verticalObst2Rect)
-  ) {
-    gameOver = true;
+  const playerRect = getRect(p);
+  const rects = obstaclesEntity.getRects();
+  for (const r of rects) {
+    if (checkCollision(playerRect, r)) {
+      gameOver = true;
+      return;
+    }
   }
 }
 
@@ -166,10 +123,10 @@ document.addEventListener("keydown", (e) => {
       resetGame();
     } else {
       startGame();
-      if (y > CONFIG.player.jumpThresholdY) {
-        velocity = CONFIG.physics.jumpVelocity;
+      if (playerEntity.state.y > CONFIG.player.jumpThresholdY) {
+        playerEntity.jump(CONFIG.physics.jumpVelocity);
       } else {
-        velocity = CONFIG.physics.jumpVelocityFromGround;
+        playerEntity.jump(CONFIG.physics.jumpVelocityFromGround);
       }
       jumping = true;
     }
@@ -181,7 +138,7 @@ document.addEventListener("keydown", (e) => {
         resetGame();
     } else {
         startGame();
-      velocity = CONFIG.physics.canvasClickJumpVelocity;
+      playerEntity.jump(CONFIG.physics.canvasClickJumpVelocity);
         jumping = true;
     }
 });
@@ -278,39 +235,13 @@ function animate(now) {
       }
 
       if (gameStarted) {
-        y += velocity * dt * 60;
-        velocity += gravity * dt * 60;
+        playerEntity.applyPhysics(dt);
       }
 
-      // Limites da tela
-      if (y <= CONFIG.player.startY) {
-        y = CONFIG.player.startY;
-        velocity = 0;
-        jumping = false;
-      }
-      if (y >= CONFIG.bounds.ceiling) {
-        y = CONFIG.bounds.ceiling;
-        velocity = Math.min(velocity, 0);
-      }
+      // Limites e física do jogador são tratadas pelo playerEntity
 
       if (gameStarted) {
-          x1 -= obstacleVelocity * dt * 60;
-          if (x1 <= CONFIG.obstacles.offscreenX) {
-            x1 = CONFIG.obstacles.respawnX[0];
-            y1 = getRandomFloat(CONFIG.obstacles.spawnYRange[0], CONFIG.obstacles.spawnYRange[1]);
-          }
-
-          x2 -= obstacleVelocity * dt * 60;
-          if (x2 <= CONFIG.obstacles.offscreenX) {
-            x2 = CONFIG.obstacles.respawnX[1];
-            y2 = getRandomFloat(CONFIG.obstacles.spawnYRange[0], CONFIG.obstacles.spawnYRange[1]);
-          }
-
-          x3 -= obstacleVelocity * dt * 60;
-          if (x3 <= CONFIG.obstacles.offscreenX) {
-            x3 = CONFIG.obstacles.respawnX[2];
-            y3 = getRandomFloat(CONFIG.obstacles.spawnYRange[0], CONFIG.obstacles.spawnYRange[1]);
-          }
+          obstaclesEntity.advanceAll(obstacleVelocity, dt);
 
         scoreTimer += dt;
         while (scoreTimer >= CONFIG.score.intervalSeconds) {
@@ -334,10 +265,13 @@ function animate(now) {
     renderer.drawSprite(backgroundBuffers, [backgroundX, 0], true);
     renderer.drawSprite(backgroundBuffers, [backgroundX + 2, 0], true);
   }
-  renderer.drawSprite(horizontalBuffers, [x1, y1]);
-  renderer.drawSprite(verticalBuffers, [x2, y2]);
-  renderer.drawSprite(verticalBuffers, [x3, y3]);
-  renderer.drawSprite(playerBuffers, [player.x, y]);
+  const positions = obstaclesEntity.getPositions();
+  if (positions.length >= 3) {
+    renderer.drawSprite(horizontalBuffers, positions[0]);
+    renderer.drawSprite(verticalBuffers, positions[1]);
+    renderer.drawSprite(verticalBuffers, positions[2]);
+  }
+  renderer.drawSprite(playerBuffers, [player.x, player.y]);
 
   requestAnimationFrame(animate);
 }
