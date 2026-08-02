@@ -51,10 +51,10 @@
   box-shadow: var(--glow-danger-weak);
 }
 
-/* Overlay centering utility */
+/* Overlay centering utility — centro vertical alinhado ao canvas, não ao .game-frame */
 .overlay-center {
   position: absolute;
-  top: 50%;
+  top: calc(var(--canvas-offset-y, 0px) + var(--canvas-height, 540px) / 2);
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: var(--z-overlay);

@@ -33,33 +33,39 @@ body::before {
 }
 
 .game-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-game-container);
     --game-width: 670px;
     --game-height: 850px;
+    --visor-overhang: 110px;
     --game-scale: min(
         1,
         calc(min(90vw, var(--game-width)) / var(--game-width)),
-        calc((100dvh - 2 * var(--space-game-container)) / var(--game-height))
+        calc((100dvh - 2 * var(--space-game-container) - var(--visor-overhang)) / var(--game-height))
     );
-    padding-top: calc(var(--space-game-container) + 105px * max(0, 1 - var(--game-scale)));
+    position: relative;
+    width: calc(var(--game-width) * var(--game-scale));
+    height: calc((var(--game-height) + var(--visor-overhang)) * var(--game-scale));
+    margin: var(--space-game-container);
 }
 
 .game-stage {
-    position: relative;
+    position: absolute;
+    top: calc(var(--visor-overhang) * var(--game-scale));
+    left: 0;
     width: var(--game-width);
     height: var(--game-height);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     transform: scale(var(--game-scale));
-    transform-origin: top center;
+    transform-origin: top left;
+    /* Ajuste fino vertical do canvas na moldura: aumente para descer, diminua para subir */
+    --game-frame-offset-y: 10px;
 }
 
 #MolduraPixelArt {
     position: absolute;
     top: -10px;
+    left: 0;
     width: 670px;
     height: 785px;
     image-rendering: pixelated;
@@ -93,6 +99,10 @@ body::before {
 
 .game-frame {
     position: relative;
+    margin-top: var(--game-frame-offset-y);
+    /* Ajuste fino vertical do canvas na moldura: aumente para descer, diminua para subir */
+    --canvas-offset-y: 90px;
+    --canvas-height: 540px;
 }
 
 #loadingOverlay.hidden {
@@ -101,10 +111,10 @@ body::before {
 
 #loadingOverlay {
     position: absolute;
-    top: 80px;
+    top: var(--canvas-offset-y);
     left: 0;
-    width: 540px;
-    height: 540px;
+    width: var(--canvas-height);
+    height: var(--canvas-height);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -120,9 +130,9 @@ body::before {
 
 canvas {
     display: block;
-    width: 540px;
-    height: 540px;
-    top: 80px;
+    width: var(--canvas-height);
+    height: var(--canvas-height);
+    top: var(--canvas-offset-y);
     background: var(--canvas-bg);
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
@@ -182,7 +192,7 @@ canvas {
 #pauseBtn {
     position: absolute;
     top: 25px;
-    right: -5px;
+    right: 40px;
     z-index: var(--z-controls);
     padding: 0;
     border: none;
