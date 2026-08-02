@@ -1,84 +1,9 @@
 import { CONFIG } from './config.js';
+import { createRenderer } from './renderer.js';
 
 const pontuation = document.getElementById("visor");
 const canvas = document.getElementById("canvas");
-const gl = canvas.getContext("webgl");
-
-// Verifica se o contexto WebGL foi obtido
-if (!gl) {
-  console.error("WebGL não é suportado ou falhou ao inicializar.");
-  alert("Seu navegador não suporta WebGL. Tente usar um navegador moderno.");
-  throw new Error('WebGL unavailable');
-}
-
-// Vertex shader - CORRIGIDO: invertemos o Y para corrigir orientação
-const vsSource = `
-        attribute vec2 coordinates;
-        attribute vec3 aColor;
-        uniform vec2 translation;
-        uniform float isBackground;
-        varying vec3 vColor;
-        void main(void) {
-            vec2 pos = coordinates;
-            if (isBackground < 0.5) {
-                pos = vec2(coordinates.x, -coordinates.y);
-            }
-            gl_Position = vec4(pos + translation, 0.0, 1.0);
-            vColor = aColor;
-            gl_PointSize = 4.0;
-        }
-    `;
-
-// Fragment shader
-const fsSource = `
-        precision mediump float;
-        varying vec3 vColor;
-        void main(void) {
-            gl_FragColor = vec4(vColor, 1.0);
-        }
-    `;
-
-function createShader(type, source) {
-  const shader = gl.createShader(type);
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error("Erro ao compilar shader:", gl.getShaderInfoLog(shader));
-    gl.deleteShader(shader);
-    return null;
-  }
-  return shader;
-}
-
-// Inicializa programa
-const vertexShader = createShader(gl.VERTEX_SHADER, vsSource);
-const fragmentShader = createShader(gl.FRAGMENT_SHADER, fsSource);
-if (!vertexShader || !fragmentShader) {
-  console.error("Falha ao criar shaders.");
-  throw new Error('Shader creation failed');
-}
-
-const program = gl.createProgram();
-gl.attachShader(program, vertexShader);
-gl.attachShader(program, fragmentShader);
-gl.linkProgram(program);
-if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-  console.error("Erro ao vincular programa:", gl.getProgramInfoLog(program));
-  throw new Error('Program link failed');
-}
-gl.useProgram(program);
-
-const coordLoc = gl.getAttribLocation(program, "coordinates");
-const colorLoc = gl.getAttribLocation(program, "aColor");
-const transLoc = gl.getUniformLocation(program, "translation");
-const isBackgroundLoc = gl.getUniformLocation(program, "isBackground");
-
-function initBuffer(dataArray) {
-  const buf = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER, dataArray, gl.STATIC_DRAW);
-  return buf;
-}
+const renderer = createRenderer(canvas);
 
 // Definir dimensões dos sprites
 const spriteWidth = 100;
@@ -244,43 +169,30 @@ if (jsonData["ImagesJson/BackgroundPixels.json"].positionArray.length === 0) {
   jsonData["ImagesJson/BackgroundPixels.json"] = createFullBackground();
 }
 
-// Inicializa buffers
-const posBuffer = initBuffer(
-  jsonData["ImagesJson/JetPackGuyPixels.json"].positionArray
-);
-const colorBuffer = initBuffer(
+// Inicializa buffers via renderer
+const playerBuffers = renderer.createSpriteBuffers(
+  jsonData["ImagesJson/JetPackGuyPixels.json"].positionArray,
   jsonData["ImagesJson/JetPackGuyPixels.json"].colorArray
 );
-const vertexCount =
-  jsonData["ImagesJson/JetPackGuyPixels.json"].positionArray.length / 2;
+const vertexCount = playerBuffers.count;
 
-const posVerticalBuffer = initBuffer(
-  jsonData["ImagesJson/VerticalObstaclePixels.json"].positionArray
-);
-const colorVerticalBuffer = initBuffer(
+const verticalBuffers = renderer.createSpriteBuffers(
+  jsonData["ImagesJson/VerticalObstaclePixels.json"].positionArray,
   jsonData["ImagesJson/VerticalObstaclePixels.json"].colorArray
 );
-const vertexVerticalCount =
-  jsonData["ImagesJson/VerticalObstaclePixels.json"].positionArray.length / 2;
+const vertexVerticalCount = verticalBuffers.count;
 
-const posHorizontalBuffer = initBuffer(
-  jsonData["ImagesJson/HorizontalObstaclePixels.json"].positionArray
-);
-const colorHorizontalBuffer = initBuffer(
+const horizontalBuffers = renderer.createSpriteBuffers(
+  jsonData["ImagesJson/HorizontalObstaclePixels.json"].positionArray,
   jsonData["ImagesJson/HorizontalObstaclePixels.json"].colorArray
 );
-const vertexHorizontalCount =
-  jsonData["ImagesJson/HorizontalObstaclePixels.json"].positionArray.length /
-  2;
+const vertexHorizontalCount = horizontalBuffers.count;
 
-const posBackgroundBuffer = initBuffer(
-  jsonData["ImagesJson/BackgroundPixels.json"].positionArray
-);
-const colorBackgroundBuffer = initBuffer(
+const backgroundBuffers = renderer.createSpriteBuffers(
+  jsonData["ImagesJson/BackgroundPixels.json"].positionArray,
   jsonData["ImagesJson/BackgroundPixels.json"].colorArray
 );
-const vertexBackgroundCount =
-  jsonData["ImagesJson/BackgroundPixels.json"].positionArray.length / 2;
+const vertexBackgroundCount = backgroundBuffers.count;
 
 // Estado do jogo
 let y = CONFIG.player.startY,
@@ -440,27 +352,7 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-function draw(
-  buffer,
-  colorBuffer,
-  count,
-  mode,
-  translation,
-  isBackground = false
-) {
-  if (count === 0) return;
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.vertexAttribPointer(coordLoc, 2, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(coordLoc);
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  gl.vertexAttribPointer(colorLoc, 3, gl.FLOAT, false, 0, 0);
-  gl.enableVertexAttribArray(colorLoc);
-
-  gl.uniform2fv(transLoc, translation);
-  gl.uniform1f(isBackgroundLoc, isBackground ? 1.0 : 0.0);
-  gl.drawArrays(mode, 0, count);
-}
+// Rendering is delegated to src/renderer.js
 
 function drawGameOverText() {
   const gameOverDiv = document.createElement("div");
@@ -526,8 +418,7 @@ function animate(now) {
   const dt = Math.min((now - lastTime) / 1000, 0.05);
   lastTime = now;
 
-  gl.clearColor(0.02, 0.05, 0.15, 1);
-  gl.clear(gl.COLOR_BUFFER_BIT);
+  renderer.clear();
 
   // Só atualiza movimento se não estiver pausado e não estiver em game over
   if (!gameOver && !paused) {
@@ -596,45 +487,13 @@ function animate(now) {
 
   // Sempre desenha a cena (para mostrar overlay de pausa/game over)
   if (vertexBackgroundCount > 0) {
-    draw(
-      posBackgroundBuffer,
-      colorBackgroundBuffer,
-      vertexBackgroundCount,
-      gl.POINTS,
-      [backgroundX, 0],
-      true
-    );
-    draw(
-      posBackgroundBuffer,
-      colorBackgroundBuffer,
-      vertexBackgroundCount,
-      gl.POINTS,
-      [backgroundX + 2, 0],
-      true
-    );
+    renderer.drawSprite(backgroundBuffers, [backgroundX, 0], true);
+    renderer.drawSprite(backgroundBuffers, [backgroundX + 2, 0], true);
   }
-  draw(
-    posHorizontalBuffer,
-    colorHorizontalBuffer,
-    vertexHorizontalCount,
-    gl.POINTS,
-    [x1, y1]
-  );
-  draw(
-    posVerticalBuffer,
-    colorVerticalBuffer,
-    vertexVerticalCount,
-    gl.POINTS,
-    [x2, y2]
-  );
-  draw(
-    posVerticalBuffer,
-    colorVerticalBuffer,
-    vertexVerticalCount,
-    gl.POINTS,
-    [x3, y3]
-  );
-  draw(posBuffer, colorBuffer, vertexCount, gl.POINTS, [player.x, y]);
+  renderer.drawSprite(horizontalBuffers, [x1, y1]);
+  renderer.drawSprite(verticalBuffers, [x2, y2]);
+  renderer.drawSprite(verticalBuffers, [x3, y3]);
+  renderer.drawSprite(playerBuffers, [player.x, y]);
 
   requestAnimationFrame(animate);
 }
@@ -646,5 +505,5 @@ console.log("Vértices obstáculo vertical:", vertexVerticalCount);
 console.log("Vértices obstáculo horizontal:", vertexHorizontalCount);
 console.log("Vértices background:", vertexBackgroundCount);
 
-gl.viewport(0, 0, canvas.width, canvas.height);
+renderer.setViewport(canvas.width, canvas.height);
 requestAnimationFrame(animate);
