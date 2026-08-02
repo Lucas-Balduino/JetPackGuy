@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 5 em andamento (3/6)** · próxima tarefa: **5.4** — Transições e micro-animações de UI
+**Fase 5 em andamento (4/6)** · próxima tarefa: **5.5** — Responsividade real e controle por toque
 
 ---
 
@@ -406,7 +406,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 5.4 — Transições e micro-animações de UI
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** suavidade nas trocas de tela.
 - **Passos:**
   1. Em `components.css`, criar animações CSS: `.overlay-center` entra com fade + scale (ex.: `@keyframes overlay-in { from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); } }`, 200ms ease-out). Ajustar: o utilitário já centraliza com transform, então a animação deve preservar o translate.
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **25/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **26/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -544,12 +544,12 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 4.3 — Componentes base
 - [x] 4.4 — Página de documentação do design system
 
-### Fase 5 — UX e fluxo de telas (3/6)
+### Fase 5 — UX e fluxo de telas (4/6)
 
 - [x] 5.1 — Overlays declarativos
 - [x] 5.2 — Tela inicial (estado READY)
 - [x] 5.3 — Tela de morte com pontuação e recorde
-- [ ] 5.4 — Transições e micro-animações de UI
+- [x] 5.4 — Transições e micro-animações de UI
 - [ ] 5.5 — Responsividade real e controle por toque
 - [ ] 5.6 — Acessibilidade
 

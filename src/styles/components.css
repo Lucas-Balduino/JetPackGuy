@@ -60,6 +60,24 @@
   z-index: var(--z-overlay);
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes overlay-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.9);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  .overlay-center:not(.hidden) {
+    animation: overlay-in 200ms ease-out;
+  }
+}
+
 /* HUD text */
 .hud-text {
   font-family: var(--font-family-pixel);
