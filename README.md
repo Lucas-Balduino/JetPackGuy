@@ -24,7 +24,7 @@ Uma recriação em pixel art do clássico *JetPack Joyride*, feita com **WebGL**
 ```
 ├── index.html
 ├── style.css
-├── script.js
+├── src/                 # módulos do jogo (main, config, renderer, assets, entities, state, input)
 ├── Images/              # imagens (PNG) usadas pelo jogo
 ├── ImagesJson/          # JSONs com pixels dos sprites
 ├── Info/                # anotações e dimensões (histórico)

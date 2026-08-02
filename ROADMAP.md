@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 1 concluída (5/5)** · próxima tarefa: **2.7** — Módulo de input (input.js)
+**Fase 2 concluída (7/7)** · próxima tarefa: **3.1** — Otimizar as imagens PNG
 
 ---
 
@@ -135,7 +135,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ---
 
-## Fase 2 — Arquitetura em módulos
+## Fase 2 — Arquitetura em módulos ✅
 
 > **O que você aprende:** **separação de responsabilidades**. Um arquivo de 675 linhas que mistura renderização, física, input e DOM é difícil de manter. A divisão em módulos ES com responsabilidade única é o padrão de qualquer projeto profissional, e a **máquina de estados** é o padrão central de arquitetura de jogos.
 >
@@ -246,7 +246,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 2.7 — Módulo de input (input.js)
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** centralizar teclado e mouse.
 - **Passos:**
   1. Criar `src/input.js` exportando `setupInput({ onJump, onTogglePause })` que registra os listeners de `keydown` (Espaço, seta para cima, P) e `click` no canvas, chamando os callbacks.
@@ -521,7 +521,7 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 1.4 — Unificar a lógica de pontuação
 - [x] 1.5 — Carregamento paralelo dos assets
 
--### Fase 2 — Arquitetura em módulos (7/7)
+### Fase 2 — Arquitetura em módulos ✅ (7/7)
 
 - [x] 2.1 — Migrar para ES Modules
 - [x] 2.2 — Extrair configuração (config.js)
@@ -530,11 +530,6 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 2.5 — Extrair entidades e colisão (entities.js)
 - [x] 2.6 — Máquina de estados (state.js)
 - [x] 2.7 — Módulo de input (input.js)
-- [ ] 2.3 — Extrair o renderer WebGL (renderer.js)
-- [ ] 2.4 — Extrair o carregador de assets (assets.js)
-- [ ] 2.5 — Extrair entidades e colisão (entities.js)
-- [ ] 2.6 — Máquina de estados (state.js)
-- [ ] 2.7 — Módulo de input (input.js)
 
 ### Fase 3 — Assets e performance (0/3)
 

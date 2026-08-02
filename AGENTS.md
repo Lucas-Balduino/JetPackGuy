@@ -10,15 +10,19 @@ Recriação em pixel art do *Jetpack Joyride* com **WebGL puro**, sem biblioteca
 |---|---|
 | `index.html` | Estrutura da página: canvas, visor de pontuação, botão de pausa, moldura |
 | `style.css` | Todo o CSS — layout, moldura, HUD, overlays, media queries |
-| `script.js` | **Todo o jogo** (~675 linhas): shaders, buffers, carga de sprites, física, colisão, input e loop |
+| `src/main.js` | Ponto de entrada: liga renderer, assets, entidades, estado, input e loop |
+| `src/config.js` | Constantes de tuning (`CONFIG` congelado) |
+| `src/renderer.js` | Pipeline WebGL: shaders, buffers, `drawSprite` |
+| `src/assets.js` | Fetch/parse dos JSONs de pixels e fallbacks |
+| `src/entities.js` | Player, obstáculos, hitboxes e colisão AABB |
+| `src/state.js` | Máquina de estados (`READY`, `PLAYING`, `PAUSED`, `GAME_OVER`) |
+| `src/input.js` | Teclado e clique no canvas (callbacks) |
 | `ImagesJson/*.json` | Sprites como listas de pixels `{ x, y, color }` |
 | `Images/*.png` | Arte-fonte: moldura, visor, ícone de pausa e os sprites originais |
 | `Images/ImageConverter.py` | Converte PNG → JSON de pixels (roda fora do jogo, manualmente) |
 | `Info/*.txt` | Anotações da disciplina — **histórico, não especificação** |
 | `TelaMorte.html` | Removido na tarefa 0.2 |
 | `ROADMAP.md` | Plano de evolução em 8 fases; fonte das tarefas |
-
-Hoje o jogo inteiro vive em `script.js`. A Fase 2 do roadmap o divide em `src/` (`main.js`, `config.js`, `renderer.js`, `assets.js`, `entities.js`, `input.js`, `state.js`) — quando isso acontecer, atualize a tabela acima.
 
 ## Não leia estes arquivos por inteiro
 
@@ -61,4 +65,4 @@ Depois de **qualquer** mudança, jogue uma partida completa antes de commitar: v
 
 ## Manutenção deste arquivo
 
-Atualize-o quando a estrutura mudar, no mesmo commit da tarefa: Fase 2 (módulos em `src/`), Fase 3 (novo formato do background) e Fase 4 (design system em `src/styles/`).
+Atualize-o quando a estrutura mudar, no mesmo commit da tarefa: Fase 3 (novo formato do background) e Fase 4 (design system em `src/styles/`).
