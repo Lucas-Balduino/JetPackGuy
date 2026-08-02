@@ -79,6 +79,10 @@ body::before {
     position: relative;
 }
 
+#loadingOverlay.hidden {
+    display: none;
+}
+
 #loadingOverlay {
     position: absolute;
     top: 80px;
