@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 7 em andamento (2/3)** · próxima tarefa: **7.3** — README de portfólio
+**Fase 7 concluída ✅ (3/3)** · roadmap completo (35/35)
 
 ---
 
@@ -496,7 +496,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 7.3 — README de portfólio
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Passos:** reescrever o README com: badge/link "▶ Jogar agora" para o GitHub Pages; GIF de gameplay (gravar com ScreenToGif/Kap, salvar em `Images/gameplay.gif`, máx. 5 MB); seção **"Como funciona a renderização"** explicando a técnica de pixels→pontos WebGL (com trecho do shader); seção **"Design System"** com link para `design.html` publicado; seção **"Arquitetura"** com a árvore de `src/` e uma frase sobre cada módulo; roadmap de próximos passos.
 - **Critérios de aceite:** README renderiza no GitHub com GIF funcionando; todos os links (jogo, design system) funcionam.
 - **Commit:** `docs: README de portfólio com demo, arquitetura e design system`
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **33/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **35/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -560,8 +560,8 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 6.3 — Sons e botão de mudo
 - [x] 6.4 — Animação do contador de metros
 
-### Fase 7 — Vitrine de portfólio (2/3)
+### Fase 7 — Vitrine de portfólio ✅ (3/3)
 
 - [x] 7.1 — Deploy no GitHub Pages
 - [x] 7.2 — Favicon e meta tags Open Graph
-- [ ] 7.3 — README de portfólio
+- [x] 7.3 — README de portfólio
