@@ -227,13 +227,17 @@ function animate(now) {
     }
 
     checkAllCollisions();
+  }
 
+  if (state.is(States.PLAYING)) {
     const thrusting = playerEntity.state.velocity > 0;
     if (thrusting && !audio.isMuted()) {
       audio.startJetpack();
     } else {
       audio.stopJetpack();
     }
+  } else {
+    audio.stopJetpack();
   }
 
   if (vertexBackgroundCount > 0) {

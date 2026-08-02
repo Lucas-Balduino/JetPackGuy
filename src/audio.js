@@ -1,3 +1,5 @@
+import { CONFIG } from './config.js';
+
 const MUTE_KEY = 'jetpackguy:muted';
 
 function createNoiseBuffer(context, durationSeconds) {
@@ -11,12 +13,65 @@ function createNoiseBuffer(context, durationSeconds) {
   return buffer;
 }
 
+function buildJetpackGraph(context, jetpackCfg) {
+  const master = context.createGain();
+  master.gain.value = jetpackCfg.masterGain;
+  const sources = [];
+  const disconnect = [];
+
+  if (jetpackCfg.noise) {
+    const noiseCfg = jetpackCfg.noise;
+    const noiseBuffer = createNoiseBuffer(context, noiseCfg.bufferDuration);
+    const noiseSource = context.createBufferSource();
+    noiseSource.buffer = noiseBuffer;
+    noiseSource.loop = true;
+
+    let tail = noiseSource;
+    if (noiseCfg.filterType) {
+      const filter = context.createBiquadFilter();
+      filter.type = noiseCfg.filterType;
+      filter.frequency.value = noiseCfg.frequency;
+      filter.Q.value = noiseCfg.q;
+      noiseSource.connect(filter);
+      tail = filter;
+      disconnect.push(filter);
+    }
+
+    const noiseGain = context.createGain();
+    noiseGain.gain.value = noiseCfg.gain;
+    tail.connect(noiseGain);
+    noiseGain.connect(master);
+    disconnect.push(noiseGain);
+    sources.push(noiseSource);
+  }
+
+  if (jetpackCfg.oscillator) {
+    const oscCfg = jetpackCfg.oscillator;
+    const oscillator = context.createOscillator();
+    oscillator.type = oscCfg.type;
+    oscillator.frequency.value = oscCfg.frequency;
+    const oscGain = context.createGain();
+    oscGain.gain.value = oscCfg.gain;
+    oscillator.connect(oscGain);
+    oscGain.connect(master);
+    disconnect.push(oscGain);
+    sources.push(oscillator);
+  }
+
+  master.connect(context.destination);
+  disconnect.push(master);
+
+  for (const source of sources) {
+    source.start();
+  }
+
+  return { sources, disconnect };
+}
+
 export function createAudio() {
   let ctx = null;
   let muted = localStorage.getItem(MUTE_KEY) === 'true';
-  let jetpackSource = null;
-  let jetpackFilter = null;
-  let jetpackGain = null;
+  let jetpackNodes = null;
   let gestureInitDone = false;
 
   function ensureContext() {
@@ -57,40 +112,24 @@ export function createAudio() {
   }
 
   function startJetpack() {
-    if (muted || !ctx || jetpackSource) return;
-
-    const noiseBuffer = createNoiseBuffer(ctx, 0.08);
-    jetpackSource = ctx.createBufferSource();
-    jetpackSource.buffer = noiseBuffer;
-    jetpackSource.loop = true;
-
-    jetpackFilter = ctx.createBiquadFilter();
-    jetpackFilter.type = 'bandpass';
-    jetpackFilter.frequency.value = 900;
-    jetpackFilter.Q.value = 0.7;
-
-    jetpackGain = ctx.createGain();
-    jetpackGain.gain.value = 0.07;
-
-    jetpackSource.connect(jetpackFilter);
-    jetpackFilter.connect(jetpackGain);
-    jetpackGain.connect(ctx.destination);
-    jetpackSource.start();
+    if (muted || !ctx || jetpackNodes) return;
+    jetpackNodes = buildJetpackGraph(ctx, CONFIG.audio.jetpack);
   }
 
   function stopJetpack() {
-    if (!jetpackSource) return;
-    try {
-      jetpackSource.stop();
-    } catch (_) {
-      /* já parado */
+    if (!jetpackNodes) return;
+    for (const source of jetpackNodes.sources) {
+      try {
+        source.stop();
+      } catch (_) {
+        /* já parado */
+      }
+      source.disconnect();
     }
-    jetpackSource.disconnect();
-    jetpackFilter.disconnect();
-    jetpackGain.disconnect();
-    jetpackSource = null;
-    jetpackFilter = null;
-    jetpackGain = null;
+    for (const node of jetpackNodes.disconnect) {
+      node.disconnect();
+    }
+    jetpackNodes = null;
   }
 
   function playDeath() {
