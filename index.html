@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -14,27 +14,27 @@
 <body>
 <div class="game-container">
   <div class="game-stage">
-    <div id="visor">0000 m</div>
+    <div id="visor" aria-live="off" aria-label="Distância">0000 m</div>
         <button id="pauseBtn" class="btn-pixel" type="button" title="Pausar" aria-label="Pausar jogo">
       <img id="pauseBtnIcon" src="Images/PauseButton.png" alt="" width="86" height="100" />
     </button>
     <img id="MolduraPixelArt" src="Images/MolduraPixelArt.jpg" alt="" aria-hidden="true">
     <div class="game-frame">
-        <canvas id="canvas" width="540" height="540"></canvas>
+        <canvas id="canvas" width="540" height="540" aria-label="Área do jogo"></canvas>
         <div id="loadingOverlay">Carregando...</div>
-        <div id="startOverlay" class="overlay-center panel-pixel panel-pixel--neutral">
-            <h2>JETPACK GUY</h2>
+        <div id="startOverlay" class="overlay-center panel-pixel panel-pixel--neutral" role="dialog" aria-labelledby="startOverlayTitle">
+            <h2 id="startOverlayTitle">JETPACK GUY</h2>
             <p>Espaço, ↑ ou clique para voar</p>
             <button type="button" class="btn-pixel" id="startBtn">JOGAR</button>
         </div>
-        <div id="gameOverOverlay" class="overlay-center panel-pixel hidden">
-            <h2>GAME OVER</h2>
+        <div id="gameOverOverlay" class="overlay-center panel-pixel hidden" role="dialog" aria-live="polite" aria-labelledby="gameOverOverlayTitle">
+            <h2 id="gameOverOverlayTitle">GAME OVER</h2>
             <p id="gameOverDistance">0000 m</p>
             <p id="gameOverRecord">RECORDE: 0000 m</p>
             <p id="gameOverNewRecord" class="hidden">NOVO RECORDE!</p>
             <button type="button" class="btn-pixel" id="restartBtn">JOGAR DE NOVO</button>
         </div>
-        <div id="pauseOverlay" class="overlay-center hud-text hidden">PAUSADO</div>
+        <div id="pauseOverlay" class="overlay-center hud-text hidden" role="dialog" aria-label="Jogo pausado">PAUSADO</div>
     </div>
 
     <div class="instructions">

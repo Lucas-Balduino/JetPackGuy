@@ -1,6 +1,7 @@
 export function setupInput({ onJump, onTogglePause } = {}) {
   function keyHandler(e) {
     if (e.code === 'Space' || e.code === 'ArrowUp') {
+      if (e.target.closest('button')) return;
       e.preventDefault();
       if (onJump) onJump(e);
     } else if (e.code === 'KeyP') {

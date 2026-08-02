@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 5 em andamento (5/6)** · próxima tarefa: **5.6** — Acessibilidade
+**Fase 5 completa (6/6)** · próxima tarefa: **6.1** — Partículas do jetpack
 
 ---
 
@@ -429,7 +429,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 5.6 — Acessibilidade
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** o básico de a11y bem feito.
 - **Passos:**
   1. `alt` descritivo em todas as `<img>` (`#MolduraPixelArt`: `alt=""` + `aria-hidden="true"` por ser decorativa; ícone de pausa: `alt="Pausar"` ou usar `aria-label` no botão).
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **27/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **28/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -544,14 +544,14 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 4.3 — Componentes base
 - [x] 4.4 — Página de documentação do design system
 
-### Fase 5 — UX e fluxo de telas (5/6)
+### Fase 5 — UX e fluxo de telas ✅ (6/6)
 
 - [x] 5.1 — Overlays declarativos
 - [x] 5.2 — Tela inicial (estado READY)
 - [x] 5.3 — Tela de morte com pontuação e recorde
 - [x] 5.4 — Transições e micro-animações de UI
 - [x] 5.5 — Responsividade real e controle por toque
-- [ ] 5.6 — Acessibilidade
+- [x] 5.6 — Acessibilidade
 
 ### Fase 6 — Game feel (0/4)
 

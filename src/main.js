@@ -12,6 +12,7 @@ const loadingOverlay = document.getElementById("loadingOverlay");
 const startOverlay = document.getElementById("startOverlay");
 const gameOverOverlay = document.getElementById("gameOverOverlay");
 const pauseOverlay = document.getElementById("pauseOverlay");
+const pauseBtn = document.getElementById("pauseBtn");
 const instructionsEl = document.querySelector(".instructions");
 const renderer = createRenderer(canvas);
 
@@ -77,6 +78,7 @@ state.onChange((_from, to) => {
   startOverlay.classList.toggle("hidden", to !== States.READY);
   pauseOverlay.classList.toggle("hidden", to !== States.PAUSED);
   gameOverOverlay.classList.toggle("hidden", to !== States.GAME_OVER);
+  pauseBtn.setAttribute("aria-label", to === States.PAUSED ? "Continuar jogo" : "Pausar jogo");
   if (to === States.GAME_OVER) updateGameOverOverlay();
 });
 
