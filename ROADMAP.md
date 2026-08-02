@@ -86,7 +86,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 - **Critérios de aceite:** Espaço e seta para cima continuam fazendo o personagem voar; clique no canvas continua funcionando; a string `"Click"` não aparece mais em `script.js`.
 - **Commit:** `fix: corrige listener de teclado com expressão inválida`
 
-- ### 1.2 — Unificar velocidade inicial dos obstáculos
+### 1.2 — Unificar velocidade inicial dos obstáculos
 
 - **Status:** [x] concluído
 - **Objetivo:** o jogo deve reiniciar exatamente como começou.
