@@ -27,7 +27,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### Progresso atual
 
-**Fase 1 concluída (5/5)** · próxima tarefa: **2.2** — Extrair configuração (config.js)
+**Fase 1 concluída (5/5)** · próxima tarefa: **2.3** — Extrair o renderer WebGL (renderer.js)
 
 ---
 
@@ -165,7 +165,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ### 2.2 — Extrair configuração (config.js)
 
-- **Status:** [ ] pendente
+- **Status:** [x] concluído
 - **Objetivo:** eliminar números mágicos.
 - **Passos:**
   1. Criar `src/config.js` exportando um objeto congelado:
@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **9/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **10/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -521,10 +521,11 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 1.4 — Unificar a lógica de pontuação
 - [x] 1.5 — Carregamento paralelo dos assets
 
-### Fase 2 — Arquitetura em módulos (1/7)
+### Fase 2 — Arquitetura em módulos (2/7)
 
 - [x] 2.1 — Migrar para ES Modules
-- [ ] 2.2 — Extrair configuração (config.js)
+- [x] 2.2 — Extrair configuração (config.js)
+- [ ] 2.3 — Extrair o renderer WebGL (renderer.js)
 - [ ] 2.3 — Extrair o renderer WebGL (renderer.js)
 - [ ] 2.4 — Extrair o carregador de assets (assets.js)
 - [ ] 2.5 — Extrair entidades e colisão (entities.js)

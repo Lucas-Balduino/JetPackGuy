@@ -1,3 +1,5 @@
+import { CONFIG } from './config.js';
+
 const pontuation = document.getElementById("visor");
 const canvas = document.getElementById("canvas");
 const gl = canvas.getContext("webgl");
@@ -281,13 +283,13 @@ const vertexBackgroundCount =
   jsonData["ImagesJson/BackgroundPixels.json"].positionArray.length / 2;
 
 // Estado do jogo
-let y = -0.8,
+let y = CONFIG.player.startY,
   velocity = 0,
-  gravity = -0.001;
-const INITIAL_OBSTACLE_VELOCITY = 0.015;
-let x1 = 1.2,
-  x2 = 1.8,
-  x3 = 2.4;
+  gravity = CONFIG.physics.gravity;
+const INITIAL_OBSTACLE_VELOCITY = CONFIG.obstacles.initialVelocity;
+let x1 = CONFIG.obstacles.startX[0],
+  x2 = CONFIG.obstacles.startX[1],
+  x3 = CONFIG.obstacles.startX[2];
 let obstacleVelocity = INITIAL_OBSTACLE_VELOCITY;
 let y1 = 0,
   y2 = 0,
@@ -301,22 +303,22 @@ let paused = false;
 let scoreTimer = 0;
 let lastTime = null;
 
-const player = {
-  width: 0.08,
-  height: 0.08,
-  x: -0.7,
-  y: y,
-};
+  const player = {
+    width: CONFIG.player.width,
+    height: CONFIG.player.height,
+    x: CONFIG.player.x,
+    y: y,
+  };
 
-const horizontalObstacle = {
-  width: 0.25,
-  height: 0.06,
-};
+  const horizontalObstacle = {
+    width: CONFIG.obstacles.horizontal.width,
+    height: CONFIG.obstacles.horizontal.height,
+  };
 
-const verticalObstacle = {
-  width: 0.06,
-  height: 0.25,
-};
+  const verticalObstacle = {
+    width: CONFIG.obstacles.vertical.width,
+    height: CONFIG.obstacles.vertical.height,
+  };
 
 function startGame() {
   if (!gameStarted) {
@@ -359,7 +361,7 @@ function checkAllCollisions() {
   player.y = y;
 
   // Colisão com bordas da tela
-  if (y <= -0.85 || y >= 1) {
+    if (y <= CONFIG.bounds.deathFloor || y >= CONFIG.bounds.deathCeiling) {
     gameOver = true;
     return;
   }
@@ -408,22 +410,22 @@ document.addEventListener("keydown", (e) => {
       resetGame();
     } else {
       startGame();
-      if (y > -0.7) {
-        velocity = 0.023;
+      if (y > CONFIG.player.jumpThresholdY) {
+        velocity = CONFIG.physics.jumpVelocity;
       } else {
-        velocity = 0.03;
+        velocity = CONFIG.physics.jumpVelocityFromGround;
       }
       jumping = true;
     }
   }
 });
 
-canvas.addEventListener('click', () => {
+  canvas.addEventListener('click', () => {
     if (gameOver) {
         resetGame();
     } else {
         startGame();
-        velocity = 0.028;
+      velocity = CONFIG.physics.canvasClickJumpVelocity;
         jumping = true;
     }
 });
@@ -546,40 +548,40 @@ function animate(now) {
       }
 
       // Limites da tela
-      if (y <= -0.8) {
-        y = -0.8;
+      if (y <= CONFIG.player.startY) {
+        y = CONFIG.player.startY;
         velocity = 0;
         jumping = false;
       }
-      if (y >= 0.93) {
-        y = 0.93;
+      if (y >= CONFIG.bounds.ceiling) {
+        y = CONFIG.bounds.ceiling;
         velocity = Math.min(velocity, 0);
       }
 
       if (gameStarted) {
-        x1 -= obstacleVelocity * dt * 60;
-        if (x1 <= -1.5) {
-          x1 = 1.5;
-          y1 = getRandomFloat(-0.8, 0.8);
-        }
+          x1 -= obstacleVelocity * dt * 60;
+          if (x1 <= CONFIG.obstacles.offscreenX) {
+            x1 = CONFIG.obstacles.respawnX[0];
+            y1 = getRandomFloat(CONFIG.obstacles.spawnYRange[0], CONFIG.obstacles.spawnYRange[1]);
+          }
 
-        x2 -= obstacleVelocity * dt * 60;
-        if (x2 <= -1.5) {
-          x2 = 1.8;
-          y2 = getRandomFloat(-0.8, 0.8);
-        }
+          x2 -= obstacleVelocity * dt * 60;
+          if (x2 <= CONFIG.obstacles.offscreenX) {
+            x2 = CONFIG.obstacles.respawnX[1];
+            y2 = getRandomFloat(CONFIG.obstacles.spawnYRange[0], CONFIG.obstacles.spawnYRange[1]);
+          }
 
-        x3 -= obstacleVelocity * dt * 60;
-        if (x3 <= -1.5) {
-          x3 = 2.1;
-          y3 = getRandomFloat(-0.8, 0.8);
-        }
+          x3 -= obstacleVelocity * dt * 60;
+          if (x3 <= CONFIG.obstacles.offscreenX) {
+            x3 = CONFIG.obstacles.respawnX[2];
+            y3 = getRandomFloat(CONFIG.obstacles.spawnYRange[0], CONFIG.obstacles.spawnYRange[1]);
+          }
 
         scoreTimer += dt;
-        while (scoreTimer >= 0.1) {
-          scoreTimer -= 0.1;
+        while (scoreTimer >= CONFIG.score.intervalSeconds) {
+          scoreTimer -= CONFIG.score.intervalSeconds;
           points += 1;
-          obstacleVelocity += 0.00003;
+          obstacleVelocity += CONFIG.obstacles.acceleration;
           pontuation.textContent = points.toString().padStart(4, "0") + " m";
         }
 
