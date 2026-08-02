@@ -3,6 +3,7 @@ import { createRenderer } from './renderer.js';
 import { loadAllSprites } from './assets.js';
 import { createPlayer, createObstacles, checkCollision, getRect } from './entities.js';
 import { States, createStateMachine } from './state.js';
+import { setupInput } from './input.js';
 
 const pontuation = document.getElementById("visor");
 const canvas = document.getElementById("canvas");
@@ -125,31 +126,31 @@ function checkAllCollisions() {
   }
 }
 
-document.addEventListener("keydown", (e) => {
-  if (e.code === "Space" || e.code === "ArrowUp") {
-    e.preventDefault();
+// Centralize input handling in src/input.js
+setupInput({
+  onJump: (e) => {
     if (state.is(States.GAME_OVER)) {
       resetGame();
     } else {
       startGame();
-      if (playerEntity.state.y > CONFIG.player.jumpThresholdY) {
-        playerEntity.jump(CONFIG.physics.jumpVelocity);
+      if (e && e.type === 'click') {
+        playerEntity.jump(CONFIG.physics.canvasClickJumpVelocity);
       } else {
-        playerEntity.jump(CONFIG.physics.jumpVelocityFromGround);
+        if (playerEntity.state.y > CONFIG.player.jumpThresholdY) {
+          playerEntity.jump(CONFIG.physics.jumpVelocity);
+        } else {
+          playerEntity.jump(CONFIG.physics.jumpVelocityFromGround);
+        }
       }
       jumping = true;
     }
-  }
-});
-
-  canvas.addEventListener('click', () => {
-    if (state.is(States.GAME_OVER)) {
-        resetGame();
-    } else {
-        startGame();
-      playerEntity.jump(CONFIG.physics.canvasClickJumpVelocity);
-        jumping = true;
+  },
+  onTogglePause: () => {
+    if (!state.is(States.GAME_OVER)) {
+      if (state.is(States.PLAYING)) state.transition(States.PAUSED);
+      else if (state.is(States.PAUSED)) state.transition(States.PLAYING);
     }
+  }
 });
 
 document.getElementById("pauseBtn").onclick = function () {
@@ -158,15 +159,6 @@ document.getElementById("pauseBtn").onclick = function () {
     else if (state.is(States.PAUSED)) state.transition(States.PLAYING);
   }
 };
-
-document.addEventListener("keydown", (e) => {
-  if (e.code === "KeyP") {
-    if (!state.is(States.GAME_OVER)) {
-      if (state.is(States.PLAYING)) state.transition(States.PAUSED);
-      else if (state.is(States.PAUSED)) state.transition(States.PLAYING);
-    }
-  }
-});
 
 // Rendering is delegated to src/renderer.js
 

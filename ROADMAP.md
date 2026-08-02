@@ -505,7 +505,7 @@ Este roadmap foi desenhado para ser executado **uma tarefa por vez**, cada taref
 
 ## Resumo do progresso
 
-Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **14/35**.
+Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Contagem: **15/35**.
 
 ### Fase 0 — Higiene do repositório ✅ (3/3)
 
@@ -521,7 +521,7 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 1.4 — Unificar a lógica de pontuação
 - [x] 1.5 — Carregamento paralelo dos assets
 
--### Fase 2 — Arquitetura em módulos (6/7)
+-### Fase 2 — Arquitetura em módulos (7/7)
 
 - [x] 2.1 — Migrar para ES Modules
 - [x] 2.2 — Extrair configuração (config.js)
@@ -529,7 +529,7 @@ Visão rápida — marque cada tarefa aqui **e** no corpo dela ao concluir. Cont
 - [x] 2.4 — Extrair o carregador de assets (assets.js)
 - [x] 2.5 — Extrair entidades e colisão (entities.js)
 - [x] 2.6 — Máquina de estados (state.js)
-- [ ] 2.7 — Módulo de input (input.js)
+- [x] 2.7 — Módulo de input (input.js)
 - [ ] 2.3 — Extrair o renderer WebGL (renderer.js)
 - [ ] 2.4 — Extrair o carregador de assets (assets.js)
 - [ ] 2.5 — Extrair entidades e colisão (entities.js)
