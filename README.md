@@ -17,6 +17,7 @@ attribute vec2 coordinates;
 attribute vec4 aColor;
 uniform vec2 translation;
 uniform float isBackground;
+uniform float uPointSize;
 varying vec4 vColor;
 
 void main(void) {
@@ -26,11 +27,11 @@ void main(void) {
     }
     gl_Position = vec4(pos + translation, 0.0, 1.0);
     vColor = aColor;
-    gl_PointSize = 4.0;
+    gl_PointSize = uPointSize;
 }
 ```
 
-O uniform `isBackground` controla a inversão de Y: sprites do personagem/obstáculos precisam dela; o fundo, não. A proposta pedagógica do projeto é manter essa pipeline de pontos — não converter para texturas.
+O uniform `isBackground` controla a inversão de Y: sprites do personagem/obstáculos precisam dela; o fundo, não. O `uPointSize` é calculado a partir do espaçamento entre pixels em tela (`CONFIG.render.spriteScale`), para o sprite ficar nítido sem sobreposição. A proposta pedagógica do projeto é manter essa pipeline de pontos — não converter para texturas.
 
 ## Design System
 

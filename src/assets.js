@@ -1,5 +1,30 @@
-// Carregamento de sprites e fallbacks
+import { CONFIG } from './config.js';
+
+function parseColor(color) {
+  const match = /rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/.exec(color);
+  if (match) {
+    return [Number(match[1]), Number(match[2]), Number(match[3])];
+  }
+  if (color && color.startsWith && color.startsWith('#')) {
+    const hex = color.slice(1);
+    return [
+      parseInt(hex.substr(0, 2), 16),
+      parseInt(hex.substr(2, 2), 16),
+      parseInt(hex.substr(4, 2), 16),
+    ];
+  }
+  return [0, 0, 0];
+}
+
+function pointSizeForSpacing(scale, pixelSpan, canvasSize) {
+  const spacingPx = (scale / pixelSpan) * (canvasSize / 2);
+  return Math.max(1, Math.min(spacingPx * 1.05, 4));
+}
+
 export async function loadAllSprites() {
+  const spriteScale = CONFIG.render.spriteScale;
+  const canvasSize = CONFIG.render.canvasSize;
+
   async function getCompactBackgroundData(url) {
     try {
       const res = await fetch(url);
@@ -11,6 +36,7 @@ export async function loadAllSprites() {
         return {
           positionArray: new Float32Array([]),
           colorArray: new Float32Array([]),
+          pointSize: 1,
         };
       }
 
@@ -25,20 +51,23 @@ export async function loadAllSprites() {
         colors.push(data[i] / 255, data[i + 1] / 255, data[i + 2] / 255);
       }
 
+      const span = Math.max(width, height);
       return {
         positionArray: new Float32Array(positions),
         colorArray: new Float32Array(colors),
+        pointSize: pointSizeForSpacing(2, span, canvasSize),
       };
     } catch (error) {
       console.error('Erro ao carregar JSON compacto:', error);
       return {
         positionArray: new Float32Array([]),
         colorArray: new Float32Array([]),
+        pointSize: 1,
       };
     }
   }
 
-  async function getJsonData(url, w, h, isBackground = false) {
+  async function getJsonData(url, sourceSize = 100) {
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error(`Erro ao carregar ${url}: ${res.status}`);
@@ -49,50 +78,57 @@ export async function loadAllSprites() {
         return {
           positionArray: new Float32Array([]),
           colorArray: new Float32Array([]),
+          pointSize: 1,
+          visualWidth: spriteScale,
+          visualHeight: spriteScale,
         };
       }
+
+      let minX = Infinity;
+      let maxX = -Infinity;
+      let minY = Infinity;
+      let maxY = -Infinity;
+      for (const p of pixels) {
+        if (p.x < minX) minX = p.x;
+        if (p.x > maxX) maxX = p.x;
+        if (p.y < minY) minY = p.y;
+        if (p.y > maxY) maxY = p.y;
+      }
+
+      const spanX = Math.max(1, maxX - minX);
+      const spanY = Math.max(1, maxY - minY);
+      // Centraliza no conteúdo, mas escala pelo quadro-fonte (100)
+      // para o personagem não ocupar o mesmo tamanho que o obstáculo alto.
+      const centerX = (minX + maxX) / 2;
+      const centerY = (minY + maxY) / 2;
 
       const positions = [];
       const colors = [];
 
       for (const p of pixels) {
-        let x, y;
-        if (isBackground) {
-          x = (p.x / w) * 2 - 1;
-          y = -((p.y / h) * 2 - 1);
-        } else {
-          const scale = 0.3;
-          x = (p.x / w) * scale - scale / 2;
-          y = (p.y / h) * scale - scale / 2;
-        }
+        const x = ((p.x - centerX) / sourceSize) * spriteScale;
+        const y = ((p.y - centerY) / sourceSize) * spriteScale;
         positions.push(x, y);
 
-        const match = /rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/.exec(p.color);
-        let r = 0,
-          g = 0,
-          b = 0;
-        if (match) {
-          r = Number(match[1]);
-          g = Number(match[2]);
-          b = Number(match[3]);
-        } else if (p.color && p.color.startsWith && p.color.startsWith('#')) {
-          const hex = p.color.slice(1);
-          r = parseInt(hex.substr(0, 2), 16);
-          g = parseInt(hex.substr(2, 2), 16);
-          b = parseInt(hex.substr(4, 2), 16);
-        }
+        const [r, g, b] = parseColor(p.color);
         colors.push(r / 255, g / 255, b / 255);
       }
 
       return {
         positionArray: new Float32Array(positions),
         colorArray: new Float32Array(colors),
+        pointSize: pointSizeForSpacing(spriteScale, sourceSize, canvasSize),
+        visualWidth: (spanX / sourceSize) * spriteScale,
+        visualHeight: (spanY / sourceSize) * spriteScale,
       };
     } catch (error) {
       console.error('Erro ao carregar JSON:', error);
       return {
         positionArray: new Float32Array([]),
         colorArray: new Float32Array([]),
+        pointSize: 1,
+        visualWidth: spriteScale,
+        visualHeight: spriteScale,
       };
     }
   }
@@ -100,12 +136,12 @@ export async function loadAllSprites() {
   function createFallbackSprite(width, height, color) {
     const positions = [];
     const colors = [];
-    const scale = 0.1;
+    const maxSpan = Math.max(width, height);
 
     for (let x = 0; x < width; x += 2) {
       for (let y = 0; y < height; y += 2) {
-        const normX = (x / width) * scale - scale / 2;
-        const normY = (y / height) * scale - scale / 2;
+        const normX = ((x - width / 2) / maxSpan) * spriteScale;
+        const normY = ((y - height / 2) / maxSpan) * spriteScale;
         positions.push(normX, normY);
         colors.push(color[0], color[1], color[2]);
       }
@@ -114,6 +150,9 @@ export async function loadAllSprites() {
     return {
       positionArray: new Float32Array(positions),
       colorArray: new Float32Array(colors),
+      pointSize: pointSizeForSpacing(spriteScale, maxSpan / 2, canvasSize),
+      visualWidth: (width / maxSpan) * spriteScale,
+      visualHeight: (height / maxSpan) * spriteScale,
     };
   }
 
@@ -132,14 +171,14 @@ export async function loadAllSprites() {
     return {
       positionArray: new Float32Array(positions),
       colorArray: new Float32Array(colors),
+      pointSize: 6,
     };
   }
 
-  // Carrega os 4 JSONs de sprites em paralelo
   const [playerData, verticalData, horizontalData, backgroundData] = await Promise.all([
-    getJsonData('ImagesJson/JetPackGuyPixels.json', 100, 100, false),
-    getJsonData('ImagesJson/VerticalObstaclePixels.json', 100, 100, false),
-    getJsonData('ImagesJson/HorizontalObstaclePixels.json', 100, 100, false),
+    getJsonData('ImagesJson/JetPackGuyPixels.json'),
+    getJsonData('ImagesJson/VerticalObstaclePixels.json'),
+    getJsonData('ImagesJson/HorizontalObstaclePixels.json'),
     getCompactBackgroundData('ImagesJson/BackgroundPixels.compact.json'),
   ]);
 

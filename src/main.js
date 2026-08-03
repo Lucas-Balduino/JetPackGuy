@@ -28,25 +28,29 @@ const { player: playerData, vertical: verticalData, horizontal: horizontalData, 
 
 const playerBuffers = renderer.createSpriteBuffers(
   playerData.positionArray,
-  playerData.colorArray
+  playerData.colorArray,
+  playerData.pointSize
 );
 const vertexCount = playerBuffers.count;
 
 const verticalBuffers = renderer.createSpriteBuffers(
   verticalData.positionArray,
-  verticalData.colorArray
+  verticalData.colorArray,
+  verticalData.pointSize
 );
 const vertexVerticalCount = verticalBuffers.count;
 
 const horizontalBuffers = renderer.createSpriteBuffers(
   horizontalData.positionArray,
-  horizontalData.colorArray
+  horizontalData.colorArray,
+  horizontalData.pointSize
 );
 const vertexHorizontalCount = horizontalBuffers.count;
 
 const backgroundBuffers = renderer.createSpriteBuffers(
   backgroundData.positionArray,
-  backgroundData.colorArray
+  backgroundData.colorArray,
+  backgroundData.pointSize
 );
 const vertexBackgroundCount = backgroundBuffers.count;
 

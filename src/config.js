@@ -50,14 +50,21 @@ export const JETPACK_SOUND_PRESETS = Object.freeze({
 });
 
 export const CONFIG = Object.freeze({
-  player: { x: -0.7, startY: -0.8, width: 0.08, height: 0.08, jumpThresholdY: -0.7 },
+  render: Object.freeze({
+    canvasSize: 540,
+    // 0.4 clip ≈ 100 px no canvas 540 (Info/Dimensoes.txt)
+    spriteScale: 0.4,
+  }),
+  // Hitboxes alinhadas ao visual (quadro 100×100 + spriteScale 0.4)
+  // player ~37×42 → ~0.15×0.17; vertical ~26×94 → ~0.10×0.38; horizontal ~94×26 → ~0.38×0.10
+  player: { x: -0.7, startY: -0.8, width: 0.14, height: 0.16, jumpThresholdY: -0.7 },
   physics: { gravity: -0.001, jumpVelocity: 0.023, jumpVelocityFromGround: 0.03, canvasClickJumpVelocity: 0.028 },
   bounds: { floor: -0.8, ceiling: 0.93, deathFloor: -0.85, deathCeiling: 1 },
   obstacles: {
     initialVelocity: 0.015,
     acceleration: 0.00003,
-    horizontal: { width: 0.25, height: 0.06 },
-    vertical: { width: 0.06, height: 0.25 },
+    horizontal: { width: 0.36, height: 0.1 },
+    vertical: { width: 0.1, height: 0.36 },
     respawnX: [1.5, 1.8, 2.1],
     startX: [1.2, 1.8, 2.4],
     offscreenX: -1.5,

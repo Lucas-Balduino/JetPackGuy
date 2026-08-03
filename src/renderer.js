@@ -11,6 +11,7 @@ export function createRenderer(canvas) {
         attribute vec4 aColor;
         uniform vec2 translation;
         uniform float isBackground;
+        uniform float uPointSize;
         varying vec4 vColor;
         void main(void) {
             vec2 pos = coordinates;
@@ -19,7 +20,7 @@ export function createRenderer(canvas) {
             }
             gl_Position = vec4(pos + translation, 0.0, 1.0);
             vColor = aColor;
-            gl_PointSize = 4.0;
+            gl_PointSize = uPointSize;
         }
     `;
 
@@ -66,8 +67,9 @@ export function createRenderer(canvas) {
   const colorLoc = gl.getAttribLocation(program, 'aColor');
   const transLoc = gl.getUniformLocation(program, 'translation');
   const isBackgroundLoc = gl.getUniformLocation(program, 'isBackground');
+  const pointSizeLoc = gl.getUniformLocation(program, 'uPointSize');
 
-  function createSpriteBuffers(positionArray, colorArray) {
+  function createSpriteBuffers(positionArray, colorArray, pointSize = 1) {
     const posBuf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
     gl.bufferData(gl.ARRAY_BUFFER, positionArray, gl.STATIC_DRAW);
@@ -78,7 +80,7 @@ export function createRenderer(canvas) {
 
     const count = positionArray.length / 2;
     const colorComponents = colorArray.length === count * 4 ? 4 : 3;
-    return { posBuffer: posBuf, colorBuffer: colorBuf, count, colorComponents };
+    return { posBuffer: posBuf, colorBuffer: colorBuf, count, colorComponents, pointSize };
   }
 
   function clear() {
@@ -102,10 +104,11 @@ export function createRenderer(canvas) {
 
     gl.uniform2fv(transLoc, translation);
     gl.uniform1f(isBackgroundLoc, isBackground ? 1.0 : 0.0);
+    gl.uniform1f(pointSizeLoc, buffers.pointSize ?? 1);
     gl.drawArrays(gl.POINTS, 0, buffers.count);
   }
 
-  function drawPoints(positionArray, colorArray) {
+  function drawPoints(positionArray, colorArray, pointSize = 3) {
     const count = positionArray.length / 2;
     if (count === 0) return;
 
@@ -127,6 +130,7 @@ export function createRenderer(canvas) {
 
     gl.uniform2fv(transLoc, [0, 0]);
     gl.uniform1f(isBackgroundLoc, 0.0);
+    gl.uniform1f(pointSizeLoc, pointSize);
     gl.drawArrays(gl.POINTS, 0, count);
 
     gl.deleteBuffer(posBuf);
