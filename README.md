@@ -2,11 +2,15 @@
 
 Recriação em pixel art do *Jetpack Joyride* com **WebGL puro** — sem bibliotecas, sem bundler. Nasceu como trabalho de Computação Gráfica (UniCEUB) e foi evoluído para peça de portfólio, com foco em arquitetura, UX/UI e design system.
 
-[![▶ Jogar agora](https://img.shields.io/badge/%E2%96%B6_Jogar_agora-ffd000?style=for-the-badge&labelColor=0f0f23&color=ffd000)](https://Lucas-Balduino.github.io/JetPackGuy/)
+<p align="center">
+  <a href="https://Lucas-Balduino.github.io/JetPackGuy/">
+    <img src="https://img.shields.io/badge/%E2%96%B6_Jogar_agora-ffd000?style=for-the-badge&labelColor=0f0f23&color=ffd000" alt="▶ Jogar agora" />
+  </a>
+</p>
 
-**[▶ Jogar agora](https://Lucas-Balduino.github.io/JetPackGuy/)** · [Design System](https://Lucas-Balduino.github.io/JetPackGuy/design.html)
-
-![Gameplay do JetPack Guy](Images/gameplay.gif)
+<p align="center">
+  <img src="Images/gameplay.gif" alt="Gameplay do JetPack Guy" />
+</p>
 
 ## Como funciona a renderização
 
