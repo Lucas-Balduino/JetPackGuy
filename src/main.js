@@ -1,0 +1,334 @@
+import { CONFIG } from './config.js';
+import { createRenderer } from './renderer.js';
+import { loadAllSprites } from './assets.js';
+import { createPlayer, createObstacles, checkCollision, getRect } from './entities.js';
+import { States, createStateMachine } from './state.js';
+import { setupInput } from './input.js';
+import { getHighScore, saveHighScore } from './storage.js';
+import { createJetpackParticles } from './particles.js';
+import { createAudio } from './audio.js';
+
+const pontuation = document.getElementById("visor");
+const canvas = document.getElementById("canvas");
+const loadingOverlay = document.getElementById("loadingOverlay");
+const startOverlay = document.getElementById("startOverlay");
+const gameOverOverlay = document.getElementById("gameOverOverlay");
+const pauseOverlay = document.getElementById("pauseOverlay");
+const pauseBtn = document.getElementById("pauseBtn");
+const muteBtn = document.getElementById("muteBtn");
+const audio = createAudio();
+const instructionsEl = document.querySelector(".instructions");
+const renderer = createRenderer(canvas);
+
+if (instructionsEl && 'ontouchstart' in window) {
+  instructionsEl.innerHTML = '<b>Toque</b> para voar &nbsp;|&nbsp; <b>P</b> para pausar';
+}
+
+const { player: playerData, vertical: verticalData, horizontal: horizontalData, background: backgroundData } = await loadAllSprites();
+
+const playerBuffers = renderer.createSpriteBuffers(
+  playerData.positionArray,
+  playerData.colorArray,
+  playerData.pointSize
+);
+const vertexCount = playerBuffers.count;
+
+const verticalBuffers = renderer.createSpriteBuffers(
+  verticalData.positionArray,
+  verticalData.colorArray,
+  verticalData.pointSize
+);
+const vertexVerticalCount = verticalBuffers.count;
+
+const horizontalBuffers = renderer.createSpriteBuffers(
+  horizontalData.positionArray,
+  horizontalData.colorArray,
+  horizontalData.pointSize
+);
+const vertexHorizontalCount = horizontalBuffers.count;
+
+const backgroundBuffers = renderer.createSpriteBuffers(
+  backgroundData.positionArray,
+  backgroundData.colorArray,
+  backgroundData.pointSize
+);
+const vertexBackgroundCount = backgroundBuffers.count;
+
+const INITIAL_OBSTACLE_VELOCITY = CONFIG.obstacles.initialVelocity;
+let obstacleVelocity = INITIAL_OBSTACLE_VELOCITY;
+const playerEntity = createPlayer(CONFIG);
+const obstaclesEntity = createObstacles(CONFIG);
+let points = 0;
+const state = createStateMachine();
+const jetpackParticles = createJetpackParticles(renderer);
+let backgroundX = 0;
+let scoreTimer = 0;
+let lastTime = null;
+let firstFrameDrawn = false;
+let deathDistanceAnimationFrame = null;
+
+const reducedMotionQuery = typeof window.matchMedia === "function"
+  ? window.matchMedia("(prefers-reduced-motion: reduce)")
+  : null;
+
+function prefersReducedMotion() {
+  return Boolean(reducedMotionQuery && reducedMotionQuery.matches);
+}
+
+function stopDeathDistanceAnimation() {
+  if (deathDistanceAnimationFrame !== null) {
+    cancelAnimationFrame(deathDistanceAnimationFrame);
+    deathDistanceAnimationFrame = null;
+  }
+}
+
+function pulseScoreCounter() {
+  if (prefersReducedMotion()) return;
+  pontuation.classList.remove("score-pulse");
+  void pontuation.offsetWidth;
+  pontuation.classList.add("score-pulse");
+}
+
+function animateDeathDistance(finalPoints) {
+  const distanceEl = document.getElementById("gameOverDistance");
+
+  stopDeathDistanceAnimation();
+  if (prefersReducedMotion()) {
+    distanceEl.textContent = formatScore(finalPoints);
+    return;
+  }
+
+  const duration = 800;
+  const startTime = performance.now();
+  distanceEl.textContent = formatScore(0);
+
+  const tick = (now) => {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const currentPoints = Math.round(finalPoints * eased);
+    distanceEl.textContent = formatScore(currentPoints);
+
+    if (progress < 1) {
+      deathDistanceAnimationFrame = requestAnimationFrame(tick);
+      return;
+    }
+
+    deathDistanceAnimationFrame = null;
+    distanceEl.textContent = formatScore(finalPoints);
+  };
+
+  deathDistanceAnimationFrame = requestAnimationFrame(tick);
+}
+
+function formatScore(value) {
+  return value.toString().padStart(4, "0") + " m";
+}
+
+function updateMuteButton() {
+  muteBtn.textContent = audio.isMuted() ? "🔇" : "🔊";
+  const label = audio.isMuted() ? "Ativar sons" : "Silenciar sons";
+  muteBtn.setAttribute("aria-label", label);
+  muteBtn.title = label;
+}
+
+function updateGameOverOverlay() {
+  const recordEl = document.getElementById("gameOverRecord");
+  const newRecordEl = document.getElementById("gameOverNewRecord");
+  const previousHigh = getHighScore();
+  const isNewRecord = points > previousHigh;
+
+  if (isNewRecord) {
+    saveHighScore(points);
+    audio.playRecordBlip();
+  }
+  recordEl.textContent = "RECORDE: " + formatScore(isNewRecord ? points : previousHigh);
+  newRecordEl.classList.toggle("hidden", !isNewRecord);
+  animateDeathDistance(points);
+}
+
+updateMuteButton();
+audio.initOnFirstGesture();
+
+state.onChange((_from, to) => {
+  startOverlay.classList.toggle("hidden", to !== States.READY);
+  pauseOverlay.classList.toggle("hidden", to !== States.PAUSED);
+  gameOverOverlay.classList.toggle("hidden", to !== States.GAME_OVER);
+  const pauseLabel = to === States.PAUSED ? "Continuar jogo" : "Pausar jogo";
+  pauseBtn.setAttribute("aria-label", pauseLabel);
+  pauseBtn.title = to === States.PAUSED ? "Continuar" : "Pausar";
+  if (to !== States.PLAYING) {
+    audio.stopJetpack();
+  }
+  if (to === States.GAME_OVER) {
+    audio.playDeath();
+    canvas.classList.remove("canvas-shake");
+    void canvas.offsetWidth;
+    canvas.classList.add("canvas-shake");
+    updateGameOverOverlay();
+  }
+});
+
+canvas.addEventListener("animationend", (event) => {
+  if (event.animationName === "canvas-shake") {
+    canvas.classList.remove("canvas-shake");
+  }
+});
+
+function applyJump(e) {
+  if (e && e.type === 'click') {
+    playerEntity.jump(CONFIG.physics.canvasClickJumpVelocity);
+  } else if (playerEntity.state.y > CONFIG.player.jumpThresholdY) {
+    playerEntity.jump(CONFIG.physics.jumpVelocity);
+  } else {
+    playerEntity.jump(CONFIG.physics.jumpVelocityFromGround);
+  }
+}
+
+function startGame() {
+  state.transition(States.PLAYING);
+}
+
+function resetGameState() {
+  stopDeathDistanceAnimation();
+  playerEntity.reset();
+  obstaclesEntity.reset();
+  jetpackParticles.reset();
+  obstacleVelocity = INITIAL_OBSTACLE_VELOCITY;
+  points = 0;
+  scoreTimer = 0;
+  pontuation.textContent = "0000 m";
+}
+
+function resetGame() {
+  resetGameState();
+  state.force(States.READY);
+}
+
+function restartGame() {
+  resetGameState();
+  state.force(States.PLAYING);
+}
+
+function checkAllCollisions() {
+  const p = playerEntity.state;
+
+  if (p.y <= CONFIG.bounds.deathFloor || p.y >= CONFIG.bounds.deathCeiling) {
+    state.transition(States.GAME_OVER);
+    return;
+  }
+
+  const playerRect = getRect(p);
+  for (const r of obstaclesEntity.getRects()) {
+    if (checkCollision(playerRect, r)) {
+      state.transition(States.GAME_OVER);
+      return;
+    }
+  }
+}
+
+function togglePause() {
+  if (state.is(States.GAME_OVER)) return;
+  if (state.is(States.PLAYING)) state.transition(States.PAUSED);
+  else if (state.is(States.PAUSED)) state.transition(States.PLAYING);
+}
+
+setupInput({
+  onJump: (e) => {
+    if (state.is(States.GAME_OVER)) {
+      restartGame();
+      return;
+    }
+    if (state.is(States.READY)) startGame();
+    if (!state.is(States.PLAYING) && !state.is(States.PAUSED)) return;
+    applyJump(e);
+  },
+  onTogglePause: togglePause,
+});
+
+document.getElementById("pauseBtn").onclick = togglePause;
+muteBtn.onclick = () => {
+  audio.toggleMute();
+  updateMuteButton();
+};
+document.getElementById("startBtn").onclick = () => {
+  if (state.is(States.READY)) startGame();
+};
+document.getElementById("restartBtn").onclick = () => {
+  if (state.is(States.GAME_OVER)) restartGame();
+};
+
+function animate(now) {
+  if (lastTime === null) lastTime = now;
+  const dt = Math.min((now - lastTime) / 1000, 0.05);
+  lastTime = now;
+
+  renderer.clear();
+
+  if (state.is(States.PLAYING) || state.is(States.READY)) {
+    backgroundX -= obstacleVelocity * dt * 60;
+    if (backgroundX <= -2) {
+      backgroundX = 0;
+    }
+  }
+
+  if (state.is(States.PLAYING)) {
+    playerEntity.applyPhysics(dt);
+    obstaclesEntity.advanceAll(obstacleVelocity, dt);
+    jetpackParticles.update(dt, playerEntity.state, true);
+
+    scoreTimer += dt;
+    while (scoreTimer >= CONFIG.score.intervalSeconds) {
+      scoreTimer -= CONFIG.score.intervalSeconds;
+      points += 1;
+      obstacleVelocity += CONFIG.obstacles.acceleration;
+      pontuation.textContent = points.toString().padStart(4, "0") + " m";
+      if (points % 100 === 0) {
+        pulseScoreCounter();
+      }
+    }
+
+    checkAllCollisions();
+  }
+
+  if (state.is(States.PLAYING)) {
+    const thrusting = playerEntity.state.velocity > 0;
+    if (thrusting && !audio.isMuted()) {
+      audio.startJetpack();
+    } else {
+      audio.stopJetpack();
+    }
+  } else {
+    audio.stopJetpack();
+  }
+
+  if (vertexBackgroundCount > 0) {
+    renderer.drawSprite(backgroundBuffers, [backgroundX, 0], true);
+    renderer.drawSprite(backgroundBuffers, [backgroundX + 2, 0], true);
+  }
+  const positions = obstaclesEntity.getPositions();
+  if (positions.length >= 3) {
+    renderer.drawSprite(horizontalBuffers, positions[0]);
+    renderer.drawSprite(verticalBuffers, positions[1]);
+    renderer.drawSprite(verticalBuffers, positions[2]);
+  }
+  jetpackParticles.draw();
+  const player = playerEntity.state;
+  renderer.drawSprite(playerBuffers, [player.x, player.y]);
+
+  if (!firstFrameDrawn) {
+    firstFrameDrawn = true;
+    loadingOverlay.classList.add("hidden");
+  }
+
+  requestAnimationFrame(animate);
+}
+
+console.log("Inicializando jogo...");
+console.log("Vértices do jogador:", vertexCount);
+console.log("Vértices obstáculo vertical:", vertexVerticalCount);
+console.log("Vértices obstáculo horizontal:", vertexHorizontalCount);
+console.log("Vértices background:", vertexBackgroundCount);
+
+renderer.setViewport(canvas.width, canvas.height);
+requestAnimationFrame(animate);

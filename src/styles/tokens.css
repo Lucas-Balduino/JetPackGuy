@@ -1,0 +1,58 @@
+:root {
+  /* Colors */
+  --color-bg-deep: #0f0f23;
+  --color-bg-mid: #1a1a2e;
+  --color-bg-light: #16213e;
+  --color-surface: #183251;
+  --color-border: #000f30;
+  --color-text: #e0f7fa;
+  --color-accent: #ffd000;
+  --color-danger: #ff4444;
+  --color-white: #ffffff;
+
+  /* Typography */
+  --font-family-pixel: 'Pixelify Sans', monospace;
+  --font-size-sm: 14px;
+  --font-size-md: 20px;
+  --font-size-lg: 28px;
+  --font-size-xl: 35px;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Spacing (4px scale) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Borders & effects */
+  --radius-sm: 8px;
+  --radius-md: 15px;
+  --radius-lg: 25px;
+  --border-pixel: 5px solid var(--color-border);
+  --glow-danger: 0 0 15px var(--color-danger);
+  --shadow-text: 1px 1px 2px #000;
+
+  /* Layers */
+  --z-game: 1;
+  --z-hud: 10;
+  --z-controls: 110;
+  --z-overlay: 100;
+  --z-background: -1;
+
+  /* Utility colors with alpha or component-specific tokens (created for style compatibility) */
+  --overlay-bg: rgba(0, 0, 0, 0.85);
+  --canvas-bg: rgba(0, 0, 0, 0.2);
+  --border-faint: 2px solid rgba(224, 247, 250, 0.1);
+  --star-1: rgba(255,255,255,0.95);
+  --star-2: rgba(255,255,255,0.8);
+  --star-3: rgba(255,255,255,0.6);
+  --glow-danger-weak: 0 0 30px rgba(255,0,0,0.5);
+
+  /* Fine-grained spacing tokens used in the current stylesheet */
+  --space-game-container: 20px;
+}

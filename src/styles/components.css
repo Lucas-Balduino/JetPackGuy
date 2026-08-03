@@ -1,0 +1,162 @@
+:root {
+  /* component-specific adjustments should rely on tokens in tokens.css */
+}
+
+/* Button: pixel-art style */
+.btn-pixel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-family-pixel);
+  font-size: var(--font-size-md);
+  padding: calc(var(--space-2) + 4px) var(--space-4);
+  border: var(--border-pixel);
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  transition: filter 120ms ease, transform 60ms ease;
+}
+
+.btn-pixel:hover {
+  filter: brightness(1.08);
+}
+
+.btn-pixel:active {
+  transform: translateY(2px);
+}
+
+.btn-pixel:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Panel: overlays and dialogs */
+.panel-pixel {
+  background: var(--overlay-bg);
+  border-radius: var(--radius-md);
+  border: 3px solid var(--color-border);
+  padding: var(--space-6);
+  color: var(--color-text);
+  box-shadow: var(--glow-danger-weak);
+}
+
+.panel-pixel--neutral {
+  border-color: var(--color-border);
+}
+
+.panel-pixel--danger {
+  border-color: var(--color-danger);
+  box-shadow: var(--glow-danger-weak);
+}
+
+/* Overlay centering utility — centro vertical alinhado ao canvas, não ao .game-frame */
+.overlay-center {
+  position: absolute;
+  top: calc(var(--canvas-offset-y, 0px) + var(--canvas-height, 540px) / 2);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: var(--z-overlay);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes overlay-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.9);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  .overlay-center:not(.hidden) {
+    animation: overlay-in 200ms ease-out;
+  }
+
+  @keyframes score-pulse {
+    0% {
+      transform: translateX(-50%) scale(1);
+    }
+
+    50% {
+      transform: translateX(-50%) scale(1.08);
+    }
+
+    100% {
+      transform: translateX(-50%) scale(1);
+    }
+  }
+
+  #visor.score-pulse {
+    animation: score-pulse 120ms ease-out;
+  }
+}
+
+/* HUD text */
+.hud-text {
+  font-family: var(--font-family-pixel);
+  font-size: var(--font-size-xl);
+  color: var(--color-text);
+  text-shadow: var(--shadow-text);
+}
+
+#startOverlay {
+  text-align: center;
+}
+
+#startOverlay h2 {
+  margin: 0 0 var(--space-3) 0;
+  font-family: var(--font-family-pixel);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
+  text-shadow: var(--shadow-text);
+}
+
+#startOverlay p {
+  margin: 0 0 var(--space-4) 0;
+  font-family: var(--font-family-pixel);
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+}
+
+#gameOverOverlay {
+  text-align: center;
+}
+
+#gameOverOverlay h2 {
+  margin: 0 0 var(--space-3) 0;
+  font-family: var(--font-family-pixel);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-danger);
+  text-shadow: var(--glow-danger);
+}
+
+#gameOverDistance,
+#gameOverRecord,
+#gameOverNewRecord {
+  margin: 0 0 var(--space-2) 0;
+  font-family: var(--font-family-pixel);
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+}
+
+#gameOverRecord {
+  margin-bottom: var(--space-4);
+}
+
+#gameOverNewRecord {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
+}
+
+#pauseOverlay {
+  pointer-events: none;
+  text-align: center;
+  font-weight: var(--font-weight-bold);
+}

@@ -1,28 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8" />
-<title>JetPack Joyride</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>JetPack Guy</title>
+<meta name="description" content="Recriação em pixel art do Jetpack Joyride desenvolvida com WebGL puro, sem bibliotecas ou bundlers." />
+<link rel="icon" type="image/png" href="favicon.png" />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://Lucas-Balduino.github.io/JetPackGuy/" />
+<meta property="og:title" content="JetPack Guy — Jogo WebGL em Pixel Art" />
+<meta property="og:description" content="Recriação em pixel art do Jetpack Joyride desenvolvida com WebGL puro, sem bibliotecas ou bundlers." />
+<meta property="og:image" content="Images/og-cover.png" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="JetPack Guy — Jogo WebGL em Pixel Art" />
+<meta name="twitter:description" content="Recriação em pixel art do Jetpack Joyride desenvolvida com WebGL puro, sem bibliotecas ou bundlers." />
+<meta name="twitter:image" content="Images/og-cover.png" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="src/styles/tokens.css" />
 <link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="src/styles/components.css" />
 </head>
 <body>
 <div class="game-container">
-  
-    <div id="visor">0000 m</div>
-    <button id="pauseBtn" title="Pausar"><img id="pauseBtnIcon" src="Images/PauseIcon.png" /></button>
-    <img id="MolduraPixelArt" src="Images/MolduraPixelArt.png" alt="">
+  <div class="game-stage">
+    <div id="visor" aria-live="off" aria-label="Distância">0000 m</div>
+        <button id="muteBtn" class="btn-pixel" type="button" title="Silenciar" aria-label="Silenciar sons">🔊</button>
+        <button id="pauseBtn" class="btn-pixel" type="button" title="Pausar" aria-label="Pausar jogo">
+      <img id="pauseBtnIcon" src="Images/PauseButton.png" alt="" width="86" height="100" />
+    </button>
+    <img id="MolduraPixelArt" src="Images/MolduraPixelArt.jpg" alt="" aria-hidden="true">
     <div class="game-frame">
-        <canvas id="canvas" width="540" height="540"></canvas>
+        <canvas id="canvas" width="540" height="540" aria-label="Área do jogo"></canvas>
+        <div id="loadingOverlay">Carregando...</div>
+        <div id="startOverlay" class="overlay-center panel-pixel panel-pixel--neutral" role="dialog" aria-labelledby="startOverlayTitle">
+            <h2 id="startOverlayTitle">JETPACK GUY</h2>
+            <p>Espaço, ↑ ou clique para voar</p>
+            <button type="button" class="btn-pixel" id="startBtn">JOGAR</button>
+        </div>
+        <div id="gameOverOverlay" class="overlay-center panel-pixel hidden" role="dialog" aria-live="polite" aria-labelledby="gameOverOverlayTitle">
+            <h2 id="gameOverOverlayTitle">GAME OVER</h2>
+            <p id="gameOverDistance">0000 m</p>
+            <p id="gameOverRecord">RECORDE: 0000 m</p>
+            <p id="gameOverNewRecord" class="hidden">NOVO RECORDE!</p>
+            <button type="button" class="btn-pixel" id="restartBtn">JOGAR DE NOVO</button>
+        </div>
+        <div id="pauseOverlay" class="overlay-center hud-text hidden" role="dialog" aria-label="Jogo pausado">PAUSADO</div>
     </div>
 
     <div class="instructions">
         <b>Espaço</b> ou <b>Clique</b> para voar &nbsp;|&nbsp; <b>P</b> para pausar
     </div>
+
+    <p class="site-footer">
+        <a href="design.html" class="site-footer__link">Design System</a>
+    </p>
+  </div>
 </div>
 
-  <script src="script.js"></script>
+    <script type="module" src="src/main.js"></script>
 </body>
 </html>

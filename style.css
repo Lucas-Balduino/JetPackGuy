@@ -2,8 +2,8 @@
 /* Global reset */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-    font-family: 'Pixelify Sans', sans-serif;
-    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    font-family: var(--font-family-pixel);
+    background: linear-gradient(135deg, var(--color-bg-deep) 0%, var(--color-bg-mid) 50%, var(--color-bg-light) 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -21,11 +21,11 @@ body::before {
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(2px 2px at 20px 30px, #eee, transparent),
-        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
-        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-        radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
-        radial-gradient(2px 2px at 160px 30px, #fff, transparent);
+        radial-gradient(2px 2px at 20px 30px, var(--star-1), transparent),
+        radial-gradient(2px 2px at 40px 70px, var(--star-2), transparent),
+        radial-gradient(1px 1px at 90px 40px, var(--star-1), transparent),
+        radial-gradient(1px 1px at 130px 80px, var(--star-3), transparent),
+        radial-gradient(2px 2px at 160px 30px, var(--star-1), transparent);
     background-repeat: repeat;
     background-size: 200px 100px;
     z-index: -1;
@@ -33,209 +33,226 @@ body::before {
 }
 
 .game-container {
+    --game-width: 670px;
+    --game-height: 850px;
+    --visor-overhang: 110px;
+    --game-scale: min(
+        1,
+        calc(min(90vw, var(--game-width)) / var(--game-width)),
+        calc((100dvh - 2 * var(--space-game-container) - var(--visor-overhang)) / var(--game-height))
+    );
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-/* 
-.game-frame {
-    position: relative;
-    width: 600px;
-    height: 600px;
-    background: linear-gradient(45deg, #2a4a5a 0%, #1e3a4a 100%);
-    border: 8px solid #4a6a7a;
-    border-radius: 20px;
-    box-shadow: 
-        0 0 30px rgba(0,150,255,0.3),
-        inset 0 0 20px rgba(0,0,0,0.3),
-        0 10px 30px rgba(0,0,0,0.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    width: calc(var(--game-width) * var(--game-scale));
+    height: calc((var(--game-height) + var(--visor-overhang)) * var(--game-scale));
+    margin: var(--space-game-container);
 }
 
-.game-frame::before {
-    content: '';
+.game-stage {
     position: absolute;
-    top: 0;
+    top: calc(var(--visor-overhang) * var(--game-scale));
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, 
-        rgba(255,255,255,0.1) 0%, 
-        transparent 25%, 
-        transparent 75%, 
-        rgba(0,0,0,0.1) 100%);
-    pointer-events: none;
-    z-index: 5;
-} */
+    width: var(--game-width);
+    height: var(--game-height);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: scale(var(--game-scale));
+    transform-origin: top left;
 
-#MolduraPixelArt{
+    /*
+     * Alinhamento visual na moldura — ajuste fino aqui se a arte mudar.
+     * --game-frame-offset-y: desloca o bloco do canvas (aumente = desce).
+     * --canvas-offset-y: desloca o canvas dentro do bloco (aumente = desce).
+     * --pause-btn-top / --pause-btn-right: posição do botão de pausa na moldura.
+     */
+    --game-frame-offset-y: 10px;
+    --canvas-offset-y: 90px;
+    --canvas-height: 540px;
+    --pause-btn-top: 25px;
+    --pause-btn-right: 40px;
+}
+
+#MolduraPixelArt {
     position: absolute;
     top: -10px;
+    left: 0;
     width: 670px;
     height: 785px;
-
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
 }
 
-/* #visor {
-    position: absolute;
-    top: -50px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 220px;
-    height: 60px;
-    background: linear-gradient(135deg, #110000 0%, #330000 100%);
-    border: 3px solid #ff0000;
-    border-radius: 10px;
-    color: #ff0000;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 54px;
-    text-align: center;
-    z-index: 20;
-    text-shadow: 0 0 10px #ff0000;
-    box-shadow: 
-        0 0 20px #ff0000,
-        inset 0 0 10px rgba(255, 0, 0, 0.1);
-} */
 
 #visor {
-  background: url('Images/PixelArtVisor.png') no-repeat center center;
-  background-size: cover;
-  position: absolute;
-  top: -105px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 400px;
-  height: 100px;
-  color: #fff;
-  font-size: 35px;
-  line-height: 95px;
-  text-align: center;
-  z-index: 10;
-  /* Melhoria de legibilidade */
-  text-shadow: 1px 1px 2px #000;
-  font-weight: bold;
+    background: url('Images/PixelArtVisor.png') no-repeat center center;
+    background-size: cover;
+    position: absolute;
+    top: -105px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 100px;
+    color: var(--color-white);
+    font-size: var(--font-size-xl);
+    line-height: 95px;
+    text-align: center;
+    z-index: var(--z-hud);
+    /* Melhoria de legibilidade */
+    text-shadow: var(--shadow-text);
+    font-weight: var(--font-weight-bold);
+}
+
+.hidden {
+    display: none;
+}
+
+.game-frame {
+    position: relative;
+    margin-top: var(--game-frame-offset-y);
+}
+
+#loadingOverlay.hidden {
+    display: none;
+}
+
+#loadingOverlay {
+    position: absolute;
+    top: var(--canvas-offset-y);
+    left: 0;
+    width: var(--canvas-height);
+    height: var(--canvas-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--overlay-bg);
+    font-family: var(--font-family-pixel);
+    color: var(--color-text);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    z-index: var(--z-overlay);
+    border-radius: var(--radius-lg);
+    pointer-events: none;
 }
 
 canvas {
     display: block;
-    width: 540px;
-    height: 540px;
-    top: 80px;
-    background: rgba(0,0,0,0.2);
+    width: var(--canvas-height);
+    height: var(--canvas-height);
+    top: var(--canvas-offset-y);
+    background: var(--canvas-bg);
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
-    border: 2px solid rgba(255,255,255,0.1);
-    border-radius: 25px;
+    border: var(--border-faint);
+    border-radius: var(--radius-lg);
     position: relative;
-    z-index: 1;
-}
-
-/* Game Over overlay */
-#gameOverText {
-    font-family: 'Pixelify Sans', sans-serif !important;
-    background: rgba(0, 0, 0, 0.9);
-    padding: 30px;
-    border-radius: 15px;
-    border: 3px solid #ff0000;
-    text-shadow: 0 0 15px #ff0000;
-    box-shadow: 0 0 30px rgba(255,0,0,0.5);
+    z-index: var(--z-game);
 }
 
 .instructions {
     margin-top: 22px;
-    color: #e0f7fa;
-    font-size: 20px;
+    color: var(--color-text);
+    font-size: var(--font-size-md);
     text-align: center;
-    /* background: rgba(20,32,48,0.75); */
-    border-radius: 8px;
-    padding: 8px 24px;
-    /* box-shadow: 0 2px 12px 0 rgba(0,0,0,0.18); */
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-5);
     font-weight: 600;
     letter-spacing: 0.5px;
-    z-index: 10;
-    display: absolute;
+    z-index: var(--z-hud);
 }
 .instructions b {
-    color: #ffd000;
-    font-weight: 700;
+    color: var(--color-accent);
+    font-weight: var(--font-weight-bold);
 }
 
-/* Estilo do botão de pausa */
+.site-footer {
+    position: absolute;
+    left: 50%;
+    top: 730px;
+    transform: translateX(-50%);
+    margin: 0;
+    z-index: var(--z-hud);
+    text-align: center;
+    pointer-events: none;
+}
+
+.site-footer__link {
+    pointer-events: auto;
+    font-family: var(--font-family-pixel);
+    font-size: 11px;
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text);
+    opacity: 0.28;
+    text-decoration: none;
+    letter-spacing: 0.8px;
+}
+
+.site-footer__link:hover,
+.site-footer__link:focus-visible {
+    opacity: 0.7;
+    color: var(--color-accent);
+    outline: none;
+}
+
+#muteBtn {
+    position: absolute;
+    top: calc(var(--pause-btn-top) + 28px);
+    right: calc(var(--pause-btn-right) + 98px);
+    z-index: var(--z-controls);
+    min-width: 44px;
+    min-height: 44px;
+    padding: var(--space-2);
+    font-size: var(--font-size-md);
+    line-height: 1;
+}
+
+/* Botão de pausa — sprite isolado da moldura */
 #pauseBtn {
     position: absolute;
-    height: 100px;
-    width: 86px;
-    top: 25px;
-    right: -5px;
-    z-index: 110;
-    font-size: 15px;
-    padding: 4px 10px 4px 10px;
-    /* border-radius: 7px; */
-    border: 5px solid #000F30ff;
-    background: #183251ff;
-    color: #e0f7fa;
-    font-family: 'Pixelify Sans', monospace;
-    font-weight: bold;
-    letter-spacing: 1px;
-    box-shadow: none;
+    top: var(--pause-btn-top);
+    right: var(--pause-btn-right);
+    z-index: var(--z-controls);
+    padding: 0;
+    border: none;
+    background: transparent;
     cursor: pointer;
-    transition: 
-        background 0.2s, 
-        color 0.2s, 
-        border 0.2s, 
-        transform 0.1s;
     outline: none;
-    text-shadow: none;
 }
 
-#pauseBtn:hover, #pauseBtn:focus {
-    background: #235470;
-    /* color: #fff; */
-    border-color: #123e57;
-    /* transform: scale(1.06); */
+#pauseBtnIcon {
+    display: block;
+    width: 86px;
+    height: 100px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
 }
 
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .game-frame {
-        width: 90vw;
-        height: 90vw;
-        max-width: 500px;
-        max-height: 500px;
-    }
-    canvas {
-        width: calc(100% - 40px);
-        height: calc(100% - 100px);
-    }
-    #visor {
-        width: 180px;
-        height: 50px;
-        font-size: 16px;
-        line-height: 44px;
-        top: 15px;
-    }
+#pauseBtn:hover #pauseBtnIcon,
+#pauseBtn:focus-visible #pauseBtnIcon {
+    filter: brightness(1.12);
 }
 
-@media (max-width: 480px) {
-    .game-frame {
-        width: 95vw;
-        height: 95vw;
+#pauseBtn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    #canvas.canvas-shake {
+        animation: canvas-shake 300ms ease-out;
     }
-    #visor {
-        width: 150px;
-        height: 40px;
-        font-size: 14px;
-        line-height: 34px;
-        top: 10px;
+
+    @keyframes canvas-shake {
+        0% { transform: translate(0, 0); }
+        12% { transform: translate(-4px, 3px); }
+        24% { transform: translate(4px, -3px); }
+        36% { transform: translate(-3px, -2px); }
+        48% { transform: translate(3px, 2px); }
+        60% { transform: translate(-2px, 1px); }
+        72% { transform: translate(2px, -1px); }
+        84% { transform: translate(-1px, 0); }
+        100% { transform: translate(0, 0); }
     }
 }
