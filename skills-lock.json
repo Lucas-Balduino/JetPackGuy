@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "skills": {
+    "design-critique": {
+      "source": "anthropics/knowledge-work-plugins",
+      "sourceType": "github",
+      "skillPath": "design/skills/design-critique/SKILL.md",
+      "computedHash": "ef158c069ebac6747cfb9cefabdd3daaedbffd1cff1c359c46bcf303358cbb1e"
+    },
+    "design-system": {
+      "source": "anthropics/knowledge-work-plugins",
+      "sourceType": "github",
+      "skillPath": "design/skills/design-system/SKILL.md",
+      "computedHash": "12497053dd5456ed6a80e51826d17c584d422584a1d2f653b4038170e4a3348f"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "93f53fd1c0352d3d7ec17b8f73d7351bf76f4821e55d123c9d2abc2c53ba48e4"
+    },
+    "playwright-cli": {
+      "source": "microsoft/playwright-cli",
+      "sourceType": "github",
+      "skillPath": "skills/playwright-cli/SKILL.md",
+      "computedHash": "438b922468b7bb2ab5ce4a0f318fc65db93337f0df03908a5476effbae9487e6"
+    },
+    "seo-audit": {
+      "source": "anthropics/knowledge-work-plugins",
+      "sourceType": "github",
+      "skillPath": "marketing/skills/seo-audit/SKILL.md",
+      "computedHash": "fc681c9ebb5a6e4bdaca74a1746c04eac7cd82e4b8a67298a3b1faf77a394e2e"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "computedHash": "f3bc47f890f42a44db1007ab390709ec368e4b8c089baee6b0007182236ac474"
+    },
+    "webapp-testing": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/webapp-testing/SKILL.md",
+      "computedHash": "3f14af7f5690695209c22fbf8c8d133769a86d64892602c09bb13f135e14e857"
+    }
+  }
+}

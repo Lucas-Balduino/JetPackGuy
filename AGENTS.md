@@ -29,6 +29,9 @@ Recriação em pixel art do *Jetpack Joyride* com **WebGL puro**, sem biblioteca
 | `Info/*.txt` | Anotações da disciplina — **histórico, não especificação** |
 | `TelaMorte.html` | Removido na tarefa 0.2 |
 | `ROADMAP.md` | Plano de evolução em 8 fases; fonte das tarefas |
+| `SKILLS.md` | Catálogo das skills de agente: quando usar, restrições e manutenção |
+| `.agents/skills/` | Skills instaladas no projeto (Cursor lê daqui). Não é runtime do jogo |
+| `skills-lock.json` | Versões/hashes das skills — não editar à mão |
 
 ## Não leia estes arquivos por inteiro
 
@@ -45,7 +48,11 @@ Servidor local é obrigatório — o `fetch` dos JSONs falha em `file://`:
 npx serve .
 ```
 
-Depois de **qualquer** mudança, jogue uma partida completa antes de commitar: voar (Espaço, seta para cima ou clique), morrer, reiniciar, pausar com `P` e com o botão. Console sem erros.
+Depois de **qualquer** mudança, jogue uma partida completa antes de commitar: voar (Espaço, seta para cima ou clique), morrer, reiniciar, pausar com `P` e com o botão. Console sem erros. A skill `webapp-testing` (ver [`SKILLS.md`](SKILLS.md)) pode automatizar esse checklist; não substitui o critério de aceite se o teste não cobrir o fluxo.
+
+## Skills de agente
+
+O catálogo, o “quando usar” e os comandos de update estão em [`SKILLS.md`](SKILLS.md). Antes de polir UI, auditar a11y, estender o design system ou testar no browser, leia o `SKILL.md` da skill correspondente em `.agents/skills/`. Skills **não** autorizam React, Tailwind, Three.js, Phaser nem qualquer dependência nova no jogo.
 
 ## Conceitos do domínio
 
@@ -64,11 +71,12 @@ Depois de **qualquer** mudança, jogue uma partida completa antes de commitar: v
 
 ## Não faça
 
-- Adicionar frameworks, bundlers ou dependências. O projeto é HTML/CSS/JS servido direto, e isso é intencional.
+- Adicionar frameworks, bundlers ou dependências. O projeto é HTML/CSS/JS servido direto, e isso é intencional. Playwright e scripts em `.agents/skills/` ficam fora do runtime.
+- Editar arquivos em `.agents/skills/` à mão (o `skills-lock.json` valida o hash).
 - Refatorar, renomear ou reformatar arquivos fora do escopo da tarefa atual.
 - Escrever comentário para explicar a mudança feita ou justificar o código. Comentário só para restrição que o código não consegue mostrar.
 - Tratar `Info/TODO.txt` como backlog — o backlog é o `ROADMAP.md`.
 
 ## Manutenção deste arquivo
 
-Atualize-o quando a estrutura mudar, no mesmo commit da tarefa: Fase 3 (novo formato do background) e Fase 4 (design system em `src/styles/`).
+Atualize-o quando a estrutura mudar, no mesmo commit da tarefa: Fase 3 (novo formato do background), Fase 4 (design system em `src/styles/`) e o catálogo em `SKILLS.md` / `.agents/skills/` quando skills forem adicionadas ou removidas.

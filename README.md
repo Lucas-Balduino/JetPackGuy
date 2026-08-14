@@ -85,6 +85,10 @@ Abra o endereço indicado no terminal (em geral `http://localhost:3000`).
 | Mudo | botão 🔊/🔇 |
 | Reiniciar | `Espaço` / clique / botão na tela de morte |
 
+## Skills de agente
+
+Para quem for evoluir o projeto no Cursor: o catálogo está em [`SKILLS.md`](SKILLS.md) (design, a11y, testes no browser, SEO da página publicada). As skills vivem em `.agents/skills/` e **não** entram no jogo — o runtime continua sem bibliotecas.
+
 ## Próximos passos
 
 O roadmap das 8 fases (higiene → bugs → módulos → performance → design system → UX → game feel → vitrine) está em [`ROADMAP.md`](ROADMAP.md). Com a Fase 7 concluída, próximos passos naturais:
@@ -92,6 +96,7 @@ O roadmap das 8 fases (higiene → bugs → módulos → performance → design 
 - Polir arte e níveis (novos obstáculos / power-ups)
 - Expandir o design system com mais componentes documentados
 - Gravações e screenshots adicionais para o portfólio
+- Usar as skills de [`SKILLS.md`](SKILLS.md) para auditoria de UI/a11y, testes de partida e SEO do GitHub Pages
 
 ## Licença
 
